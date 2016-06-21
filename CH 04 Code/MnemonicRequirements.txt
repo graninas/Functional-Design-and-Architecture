@@ -1,0 +1,131 @@
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Run: once a second
+
+scenario:
+    Read temperature from @therm, result: @t1(@time, @temp, @therm)
+    If @temp < -10C then
+        register @t1
+        log problem @t1
+        raise alarm "Outside temperature lower than bound"
+    If @temp in range [-10, 50]C then
+        register @t1
+    If @temp > 50C then
+        register @t1
+        log problem @t1
+        raise alarm "Outside temperature higher than bound"
+
+register (@time, @tempCelsius, @device):
+    Convert @temp to Kelvin, result: @tempKelvin
+    Store in database (@time, @tempKelvin, @device)
+
+
+    
+Read thermometers - temperature
+Read pressure sensors - pressure
+Read clock - timings
+Read accelerometer - g-force
+
+Store value into database (sensors measurements, calculations, device parameters, logs)
+Get archive value from database (sensor measurements, calculations, device parameters, logs)
+Send command to device (start, stop, open, close, turn on, turn off, etc.)
+Get actual parameters of device (status, faults, state)
+Log event (can be storing value into database)
+Raise alarm with message (can be sending command to alarm device)
+
+Make calculations with values
+
+    
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Run: once a second
+
+scenario:
+    Read temperature from @therm, result: @t1(@time, @temp, @therm)
+    If @temp < -10C then
+        register @t1
+        log problem @t1
+        raise alarm "Outside temperature lower than bound"
+    If @temp in range [-10, 50]C then
+        register @t1
+    If @temp > 50C then
+        register @t1
+        log problem @t1
+        raise alarm "Outside temperature higher than bound"
+
+register (@time, @tempCelsius, @device):
+    Convert @temp to Kelvin, result: @tempKelvin
+    Store in database (@time, @tempKelvin, @device)
+
+
+
+
+Раз в 1 сек
+    val <-  скрипт A.script
+    Если val в пределах [a,b] -> скрипт (B.script val)
+    Если val в пределах (b,c] -> скрипт (C.script val)
+    Если val в пределах (c,d] -> do
+        скрипт (D.script val1)
+        val2 <- расчет (X.calc val)
+        скрипт (D.script val2)
+    Иначе -> событие E1.event
+
+По наступлению события E1.event
+     скрипт E.script
+
+Функционально-декларативный вариант:
+
+Раз в 1 сек -> \dt -> Событие (E3.event dt)    
+После 10 сек . Раз в 1 сек . Вечно -> \dt -> Событие (E3.event dt)
+После 10 сек . Раз в 2 сек . До 20 сек -> \dt -> Событие (E3.event dt)
+В момент x сек -> \dt -> Скрипт (H.script dt)
+
+Изменение val (val <- A.script) -> do
+    Если val в пределах [a,b] -> событие (E2.event val)
+    Если val в пределах (b,c] -> событие (E3.event val)
+    Если val в пределах (c,d] -> изменение val2 (val2 <- X.calc val)
+    Иначе -> событие E1.event
+
+Изменение значения (val1, val2) -> do
+     скрипт (D.script val1)
+     скрипт (D.script val2)
+
+Cобытиe (E2.event val) -> do
+     скрипт 
+
+Состояние val1 = do
+    val2 <- скрипт G.script
+    returnA $ val1 + dt*val2
+
+Реактивный вариант:
+
+val1 <- скрипт A.script                             -- Скрипт
+val2 <- раз в 1 сек . датчик "000:001"              -- Датчик (тоже скрипт)
+val3 <- если val1 в пределах [a,b] -> val1 + val2   -- Выражение
+        если val1 в пределах (b,c] -> val2
+        иначе -> 0
+
+Изменение val3 -> do
+    скрипт (D.script val3)
+    событие (E.event val3)
+
+val1 = value scriptA
+val2 = every (second 1) 
+
+Требования:
+1. Отмена скрипта.
+2. Fail-сценарий.
+3. Асинхронный вызов сценария.
+4. Сценарии могут возвращать и не возвращать значения.
+5. Математические вычисления и преобразования.
+6. Внешние устройства для вычислений и преобразований (н-р FPGA).
+7. External DSL.
+8. Возможность вывести изменение значения на график.
+9. Доступ к актуальным данным с датчиков.
+10. Доступ к архивным данным.
+11. Мнемосхема, которую можно запустить на исполнение.
+12. Поддержка разных источников данных.
+13. eDSL.
+14. 
+-}
+

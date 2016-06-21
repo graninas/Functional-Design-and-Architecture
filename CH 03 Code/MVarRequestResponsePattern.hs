@@ -29,7 +29,7 @@ worker pipe@(request, response) f = do
 
 
 {-
--- A better wersion of worker and listen: recursion is hidden.
+-- A better version of worker and listen: recursion is hidden.
 listen :: Pipe a b -> (a -> b) -> IO ()
 listen pipe@(request, response) f = do
     a <- takeMVar request
