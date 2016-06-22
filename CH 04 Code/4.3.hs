@@ -2,7 +2,7 @@
 module ControllerDSL where
 
 import Control.Monad.Free
-import qualified Control.Monad.State as S
+import qualified Control.Monad.State as S (liftIO)
 import qualified Control.Monad.Trans.State as S
 import Prelude hiding (read)
 import qualified Data.Map as M
@@ -64,10 +64,6 @@ class Monad m => Interpreter m where
     onGet  :: Controller -> Property -> m Value
     onRead :: Controller -> SensorIndex -> Parameter -> m Measurement
     onRun  :: Controller -> Command -> m CommandResult
-    onSet _ _ _  = return ()
-    onGet _ _    = return (StringValue "")
-    onRead _ _ _ = return (Measurement (FloatValue 0.0))
-    onRun _ _    = return (Left "Unknown")
     
 
 interpret :: (Monad m, Interpreter m) => ControllerScript a -> m a
@@ -91,17 +87,19 @@ controller :: Controller
 controller = Controller "test"
 sensor :: SensorIndex
 sensor = "thermometer 00:01"
+version = Version
+temperature = Temperature
 
 process :: Value -> ControllerScript String
 process (StringValue "1.0") = do
-    temp <- read controller sensor Temperature
+    temp <- read controller sensor temperature
     return (show temp)
 process (StringValue v) = return ("Not supported: " ++ v)
-process _ = error "Value type mistmatch."
+process _ = error "Value type mismatch."
 
 script :: ControllerScript String
 script = do
-    v <- get controller Version
+    v <- get controller version
     process v
    
     
@@ -130,50 +128,81 @@ interpret'' (Free (Run c cmd next)) = do
     print ("Run", c, cmd)
     interpret'' (next (Right "OK."))
 
-{-
-interpret (Pure a) = return a
-interpret (Free (Set c p v next))   = print "Set" >> interpret' next
-interpret (Free (Get c p next))     = print "Get" (next (StringValue "1.0"))
-interpret (Free (Read c si p next)) = print c >> print si >> print p >> interpret' (next (toKelvin 1.1))
-interpret (Free (Run c cmd next))   = print c >> print cmd >> interpret' (next (Right "OK."))
--}
-    
-type Key = (Controller, String)
-type Mock = M.Map Key Value
-type MockStateM a = S.State Mock a
-
-type MockIOStateM = S.StateT Mock IO
+type Mock = M.Map String Value
+type MockState = S.State Mock
+type MockIOState = S.StateT Mock IO
 
 emptyMock :: Mock
 emptyMock = M.empty
 
 toKelvin v = Measurement (FloatValue v)
+mkKey a b = show (a, b)
+toMeasurement Pressure v = Measurement v
+toMeasurement Temperature v = Measurement v
 
-instance Interpreter MockIOStateM where
-    onSet  c p v  = S.liftIO (print c >> print v >> print p >> return ())
-    onGet  c p    = S.liftIO (print c >> print p >> return (StringValue "1.0"))
-    onRead c si p = S.liftIO (print c >> print si >> print p >> return (toKelvin 1.1))
-    onRun  c cmd  = S.liftIO (print c >> print cmd >> return (Right "OK."))
+-- Stateful mocking interpreter
+instance Interpreter MockState where
+    onSet c prop v = do
+        let key = mkKey c prop
+        state <- S.get
+        S.put (M.insert key v state)
+    onGet c prop = do
+        let key = mkKey c prop
+        state <- S.get
+        case M.lookup key state of
+             Nothing -> error ("No property was set for " ++ key)
+             Just v -> return v
+    onRead c si par = do
+        let key = mkKey (mkKey c par) si
+        state <- S.get
+        case M.lookup key state of
+             Nothing -> error ("No readings available for " ++ key)
+             Just v -> return (toMeasurement par v)
+    onRun c cmd = do
+        let key = mkKey c cmd
+        state <- S.get
+        case M.lookup key state of
+             Nothing -> error ("Command not supported: " ++ key)
+             Just v -> return (Right (show v))
 
-test :: IO ()
-test = do
+-- Impure stateful interpreter
+instance Interpreter MockIOState where
+    onSet  c prop v = S.liftIO (print c >> print v >> print prop >> return ())
+    onGet  c prop   = S.liftIO (print c >> print prop >> return (StringValue "1.0"))
+    onRead c si par = S.liftIO (print c >> print si >> print par >> return (toKelvin 1.1))
+    onRun  c cmd    = S.liftIO (print c >> print cmd >> return (Right "OK."))
+
+-- Just impure interpreter
+instance Interpreter IO where
+    onSet c prop v = print ("Set", c, v, prop)
+    onGet c prop = do
+        print ("Get", c, prop)
+        return (StringValue "1.0")
+    onRead c si par = do
+        print ("Read", c, si, par)
+        return (toKelvin 1.1)
+    onRun c cmd = do
+        print ("Run", c, cmd)
+        return (Right "OK.")
+
+mock :: Mock
+mock = M.fromList
+    [ (mkKey controller version, StringValue "1.0")
+    , (mkKey (mkKey controller temperature) sensor, FloatValue 33.1)]
+        
+scriptTest = do
+    let (r, s) = S.runState (interpret script) mock
+    print r
+    print s
+    
+interpretersTest :: IO ()
+interpretersTest = do
     r1 <- interpret'' script
     r2 <- S.evalStateT (interpret script) emptyMock
     print r1
     print r2
     print (r1 == r2)
     
-{-
-mkKey a b = show a ++ show b
-
-interpret :: ControllerScript () -> 
-interpret (Pure ()) = return ()
-interpret (Free (Get c p next)) = do
-    let k = mkKey c p
-    state <- get
-    M.lookup k state
+test :: IO String
+test = interpret script
     
-interpret (Free (Set c p v next))   = ...
-interpret (Free (Read c si p next)) = ...
-interpret (Free (Run c cmd next))   = ...
--}
