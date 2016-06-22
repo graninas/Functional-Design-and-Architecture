@@ -3,59 +3,69 @@ Given: outside thermometer @therm
 Run: once a second
 
 scenario:
-    Read temperature from @therm, result: @t1(@time, @temp, @therm)
-    If @temp < -10C then
-        register @t1
-        log problem @t1
+    Read temperature from @therm, result: @t(@time, @temp, @therm)
+    If @temp < -10C Then
+        register @t
+        log problem @t
         raise alarm "Outside temperature lower than bound"
-    If @temp in range [-10, 50]C then
-        register @t1
-    If @temp > 50C then
-        register @t1
-        log problem @t1
+    Else If @temp > 50C Then
+        register @t
+        log problem @t
         raise alarm "Outside temperature higher than bound"
+    Else register @t
 
 register (@time, @tempCelsius, @device):
-    Convert @temp to Kelvin, result: @tempKelvin
+    @tempCelsius + 273.15, result: @tempKelvin
     Store in database (@time, @tempKelvin, @device)
-
-
     
 Read thermometers - temperature
 Read pressure sensors - pressure
 Read clock - timings
 Read accelerometer - g-force
-
 Store value into database (sensors measurements, calculations, device parameters, logs)
 Get archive value from database (sensor measurements, calculations, device parameters, logs)
 Send command to device (start, stop, open, close, turn on, turn off, etc.)
 Get actual parameters of device (status, faults, state)
 Log event (can be storing value into database)
 Raise alarm with message (can be sending command to alarm device)
-
 Make calculations with values
 
-    
+
 Scenario: monitor outside thermometer temperature
 Given: outside thermometer @therm
-Run: once a second
 
-scenario:
-    Read temperature from @therm, result: @t1(@time, @temp, @therm)
-    If @temp < -10C then
-        register @t1
-        log problem @t1
-        raise alarm "Outside temperature lower than bound"
-    If @temp in range [-10, 50]C then
-        register @t1
-    If @temp > 50C then
-        register @t1
-        log problem @t1
-        raise alarm "Outside temperature higher than bound"
+// Stream of results of the thermometer
+stream @therm_monitor <for @t in @therm_measurements>:
+    Store in database @t
+    run script @check_temperature(@t), result: @res
+    If @res == (Failure, @message) Then
+        log problem @t
+        raise alarm @message
+    return @res
 
-register (@time, @tempCelsius, @device):
-    Convert @temp to Kelvin, result: @tempKelvin
-    Store in database (@time, @tempKelvin, @device)
+// Stream of measurements of the thermometer
+stream @therm_measurements <once a second>:
+    run script @therm_temperature, result: @t
+    return @t
+
+// Script that reads value from the thermometer
+script @therm_temperature:
+    Read temperature from @therm, result: @t(@time, @tempCelsius, @therm)
+    @tempCelsius + 273.15, result: @tempKelvin
+    return (@time, @tempKelvin, @therm)
+    
+// Script that validates temperature
+script @check_temperature (@time, @temp, @therm):
+    If @temp < 263.15K Then
+        return (Failure, "Outside temperature lower than bound for " + @therm)
+    Else If @temp > 323.15K Then
+        return (Failure, "Outside temperature higher than bound for " + @therm)
+    Else return Success
+
+
+
+
+
 
 
 
