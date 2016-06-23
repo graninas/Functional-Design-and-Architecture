@@ -3,16 +3,16 @@ Given: outside thermometer @therm
 Run: once a second
 
 scenario:
-    Read temperature from @therm, result: @t(@time, @temp, @therm)
+    Read temperature from @therm, result: @reading(@time, @temp, @therm)
     If @temp < -10C Then
-        register @t
-        log problem @t
+        register @reading
+        log problem @reading
         raise alarm "Outside temperature lower than bound"
     Else If @temp > 50C Then
-        register @t
-        log problem @t
+        register @reading
+        log problem @reading
         raise alarm "Outside temperature higher than bound"
-    Else register @t
+    Else register @reading
 
 register (@time, @tempCelsius, @device):
     @tempCelsius + 273.15, result: @tempKelvin
@@ -35,27 +35,27 @@ Scenario: monitor outside thermometer temperature
 Given: outside thermometer @therm
 
 // Stream of results of the thermometer
-stream @therm_monitor <for @t in @therm_measurements>:
-    Store in database @t
-    run script @check_temperature(@t), result: @res
-    If @res == (Failure, @message) Then
-        log problem @t
+stream therm_monitor <for @reading in therm_readings>:
+    Store in database @reading
+    run script validate_temperature(@reading), result: @result
+    If @result == (Failure, @message) Then
+        log problem @reading
         raise alarm @message
-    return @res
+    return @result
 
 // Stream of measurements of the thermometer
-stream @therm_measurements <once a second>:
-    run script @therm_temperature, result: @t
-    return @t
+stream therm_readings <once a second>:
+    run script therm_temperature(), result: @reading
+    return @reading
 
 // Script that reads value from the thermometer
-script @therm_temperature:
-    Read temperature from @therm, result: @t(@time, @tempCelsius, @therm)
+script therm_temperature:
+    Read temperature from @therm, result: @reading(@time, @tempCelsius, @therm)
     @tempCelsius + 273.15, result: @tempKelvin
     return (@time, @tempKelvin, @therm)
     
 // Script that validates temperature
-script @check_temperature (@time, @temp, @therm):
+script validate_temperature (@time, @temp, @therm):
     If @temp < 263.15K Then
         return (Failure, "Outside temperature lower than bound for " + @therm)
     Else If @temp > 323.15K Then
@@ -65,77 +65,70 @@ script @check_temperature (@time, @temp, @therm):
 
 
 
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Evaluation: run arrow therm_monitorA(@therm)
+
+arrow therm_monitorA [In: @therm, Out: ()]
+    @therm          >---- periodicA (seconds 1) ----> (@time, @therm)
+    (@time, @therm) >---- therm_temperatureA    ----> @reading
+    @reading        >---- process_temperatureA  ----> ()
+    return ()
+
+arrow therm_temperatureA [In: (@time, @therm), Out: @reading]
+    therm_temperatureS(@therm) >---- run_scriptA ----> @temp
+    return @reading(@time, @temp, @therm)
+
+arrow process_temperatureA [In: @reading,  Out: ()]
+    @reading            >---- store_in_databaseA    ----> ()
+    @reading            >---- validate_temperatureA ----> @result
+    (@reading, @result) >---- analyze_failuresA     ----> ()
+    return ()
+    
+arrow store_in_databaseA [In: @reading, Out: ()]:
+    store_in_databaseS(@reading) >---- run_scriptA ----> ()
+    return ()
+
+arrow validate_temperatureA [In: @reading, Out: @result]
+    validate_temperatureS(@reading) >---- run_scriptA ----> @result
+    return @result
+
+arrow analyze_failuresA [In: @value, Out: ()]
+    analyze_failuresS(@value) >---- run_scriptA ----> ()
+    return ()
+
+script store_in_databaseS (@reading):
+    <some script goes here>
+    
+script validate_temperatureS (@reading):
+    <some script goes here>
+
+script analyze_failuresS (@value):
+    <some script goes here>
+
+    
+    
+    
+    
+    
+    ???
+
+    
 
 
 
-
-
-Раз в 1 сек
-    val <-  скрипт A.script
-    Если val в пределах [a,b] -> скрипт (B.script val)
-    Если val в пределах (b,c] -> скрипт (C.script val)
-    Если val в пределах (c,d] -> do
-        скрипт (D.script val1)
-        val2 <- расчет (X.calc val)
-        скрипт (D.script val2)
-    Иначе -> событие E1.event
-
-По наступлению события E1.event
-     скрипт E.script
-
-Функционально-декларативный вариант:
-
-Раз в 1 сек -> \dt -> Событие (E3.event dt)    
-После 10 сек . Раз в 1 сек . Вечно -> \dt -> Событие (E3.event dt)
-После 10 сек . Раз в 2 сек . До 20 сек -> \dt -> Событие (E3.event dt)
-В момент x сек -> \dt -> Скрипт (H.script dt)
-
-Изменение val (val <- A.script) -> do
-    Если val в пределах [a,b] -> событие (E2.event val)
-    Если val в пределах (b,c] -> событие (E3.event val)
-    Если val в пределах (c,d] -> изменение val2 (val2 <- X.calc val)
-    Иначе -> событие E1.event
-
-Изменение значения (val1, val2) -> do
-     скрипт (D.script val1)
-     скрипт (D.script val2)
-
-Cобытиe (E2.event val) -> do
-     скрипт 
-
-Состояние val1 = do
-    val2 <- скрипт G.script
-    returnA $ val1 + dt*val2
-
-Реактивный вариант:
-
-val1 <- скрипт A.script                             -- Скрипт
-val2 <- раз в 1 сек . датчик "000:001"              -- Датчик (тоже скрипт)
-val3 <- если val1 в пределах [a,b] -> val1 + val2   -- Выражение
-        если val1 в пределах (b,c] -> val2
-        иначе -> 0
-
-Изменение val3 -> do
-    скрипт (D.script val3)
-    событие (E.event val3)
-
-val1 = value scriptA
-val2 = every (second 1) 
-
-Требования:
-1. Отмена скрипта.
-2. Fail-сценарий.
-3. Асинхронный вызов сценария.
-4. Сценарии могут возвращать и не возвращать значения.
-5. Математические вычисления и преобразования.
-6. Внешние устройства для вычислений и преобразований (н-р FPGA).
+Requirements:
+1. Script aborting.
+2. Fail-scenario.
+3. Async scripts call.
+4. Scripts can return values.
+5. Math calculations.
+6. External devices for calculations (FPGA).
 7. External DSL.
-8. Возможность вывести изменение значения на график.
-9. Доступ к актуальным данным с датчиков.
-10. Доступ к архивным данным.
-11. Мнемосхема, которую можно запустить на исполнение.
-12. Поддержка разных источников данных.
-13. eDSL.
-14. 
--}
+8. Posting values to graph.
+9. Reading actual data from sensors.
+10. Access to archive data for sensors and devices.
+11. Scheme of network that can be run.
+12. Different data sources.
+13. Embedded DSL that can be translated to external DSL.
 
