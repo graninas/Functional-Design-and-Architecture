@@ -70,31 +70,31 @@ Given: outside thermometer @therm
 Evaluation: run arrow therm_monitorA(@therm)
 
 arrow therm_monitorA [In: @therm, Out: ()]
-    @therm          >---- periodicA (seconds 1) ----> (@time, @therm)
-    (@time, @therm) >---- therm_temperatureA    ----> @reading
-    @reading        >---- process_temperatureA  ----> ()
+    (@time, @therm) <---- periodicA (seconds 1) ----< @therm
+    @reading        <---- therm_temperatureA    ----< (@time, @therm)
+    ()              <---- process_temperatureA  ----< @reading
     return ()
 
 arrow therm_temperatureA [In: (@time, @therm), Out: @reading]
-    therm_temperatureS(@therm) >---- run_scriptA ----> @temp
+    @temp <---- run_scriptA ----< therm_temperatureS(@therm)
     return @reading(@time, @temp, @therm)
 
 arrow process_temperatureA [In: @reading,  Out: ()]
-    @reading            >---- store_in_databaseA    ----> ()
-    @reading            >---- validate_temperatureA ----> @result
-    (@reading, @result) >---- analyze_failuresA     ----> ()
+    ()      <---- store_in_databaseA    ----< @reading
+    @result <---- validate_temperatureA ----< @reading
+    ()      <---- analyze_failuresA     ----< (@reading, @result)
     return ()
     
 arrow store_in_databaseA [In: @reading, Out: ()]:
-    store_in_databaseS(@reading) >---- run_scriptA ----> ()
+    () <---- run_scriptA ----< store_in_databaseS(@reading)
     return ()
 
 arrow validate_temperatureA [In: @reading, Out: @result]
-    validate_temperatureS(@reading) >---- run_scriptA ----> @result
+    @result <---- run_scriptA ----< validate_temperatureS(@reading)
     return @result
 
 arrow analyze_failuresA [In: @value, Out: ()]
-    analyze_failuresS(@value) >---- run_scriptA ----> ()
+    () <---- run_scriptA ----< analyze_failuresS(@value)
     return ()
 
 script store_in_databaseS (@reading):
@@ -107,15 +107,6 @@ script analyze_failuresS (@value):
     <some script goes here>
 
     
-    
-    
-    
-    
-    ???
-
-    
-
-
 
 Requirements:
 1. Script aborting.
