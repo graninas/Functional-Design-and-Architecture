@@ -1,0 +1,32 @@
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Run: once a second
+
+scenario:
+    Read temperature from @therm, result: @reading(@time, @temp, @therm)
+    If @temp < -10C Then
+        register @reading
+        log problem @reading
+        raise alarm "Outside temperature lower than bound"
+    Else If @temp > 50C Then
+        register @reading
+        log problem @reading
+        raise alarm "Outside temperature higher than bound"
+    Else register @reading
+
+register (@time, @tempCelsius, @device):
+    @tempCelsius + 273.15, result: @tempKelvin
+    Store in database (@time, @tempKelvin, @device)
+    
+Possible actions:
+Read thermometers - temperature
+Read pressure sensors - pressure
+Read clock - timings
+Read accelerometer - g-force
+Store value into database (sensors measurements, calculations, device parameters, logs)
+Get archive value from database (sensor measurements, calculations, device parameters, logs)
+Send command to device (start, stop, open, close, turn on, turn off, etc.)
+Get actual parameters of device (status, faults, state)
+Log event (can be storing value into database)
+Raise alarm with message (can be sending command to alarm device)
+Make calculations with values

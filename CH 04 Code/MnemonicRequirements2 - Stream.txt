@@ -1,0 +1,30 @@
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+
+// Stream of results of the thermometer
+stream therm_monitor <for @reading in therm_readings>:
+    Store in database @reading
+    run script validate_temperature(@reading), result: @result
+    If @result == (Failure, @message) Then
+        log problem @reading
+        raise alarm @message
+    return @result
+
+// Stream of measurements of the thermometer
+stream therm_readings <once a second>:
+    run script therm_temperature(), result: @reading
+    return @reading
+
+// Script that reads value from the thermometer
+script therm_temperature:
+    Read temperature from @therm, result: @reading(@time, @tempCelsius, @therm)
+    @tempCelsius + 273.15, result: @tempKelvin
+    return (@time, @tempKelvin, @therm)
+    
+// Script that validates temperature
+script validate_temperature (@time, @temp, @therm):
+    If @temp < 263.15K Then
+        return (Failure, "Outside temperature lower than bound for " + @therm)
+    Else If @temp > 323.15K Then
+        return (Failure, "Outside temperature higher than bound for " + @therm)
+    Else return Success

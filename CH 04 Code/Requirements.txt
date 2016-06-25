@@ -1,0 +1,17 @@
+    
+
+Requirements:
+1. Script aborting.
+2. Fail-scenario.
+3. Async scripts call.
+4. Scripts can return values.
+5. Math calculations.
+6. External devices for calculations (FPGA).
+7. External DSL.
+8. Posting values to graph.
+9. Reading actual data from sensors.
+10. Access to archive data for sensors and devices.
+11. Scheme of network that can be run.
+12. Different data sources.
+13. Embedded DSL that can be translated to external DSL.
+

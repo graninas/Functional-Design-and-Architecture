@@ -1,0 +1,46 @@
+Scenario: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Evaluation: once a second, run arrow thermMonitorA(@therm)
+
+arrow thermMonitorA [In: @therm, Out: ()]
+    (@time, @therm) <---- second getTimeA      ----< ((), @therm)
+    @reading        <---- thermTemperatureA    ----< (@time, @therm)
+    ()              <---- processTemperatureA  ----< @reading
+    return ()
+
+arrow thermTemperatureA [In: (@time, @therm), Out: @reading]
+    @temp <---- runScriptA ----< thermTemperatureS(@therm)
+    return @reading(@time, @temp, @therm)
+
+arrow processTemperatureA [In: @reading,  Out: ()]
+    ()      <---- storeInDatabaseA     ----< @reading
+    @result <---- validateTemperatureA ----< @reading
+    ()      <---- analyzeFailuresA     ----< @result
+    return ()
+    
+arrow storeInDatabaseA [In: @reading, Out: ()]:
+    () <---- runScriptA ----< storeInDatabaseS(@reading)
+    return ()
+
+arrow validateTemperatureA [In: @reading, Out: @result]
+    @result <---- runScriptA ----< validateTemperatureS(@reading)
+    return @result
+
+arrow analyzeFailuresA [In: @result, Out: ()]
+    () <---- runScriptA ----< analyzeFailuresS(@result)
+    return ()
+
+script storeInDatabaseS (@reading):
+    <some script goes here>
+    
+script validateTemperatureS (@reading):
+    <some script goes here>
+
+script analyzeFailuresS (@value):
+    <some script goes here>
+    
+-------------------------------------------
+
+thermMonitorA = thermTemperatureA
+             >>> (storeInDatabaseA &&& validateTemperatureA)
+             >>> second analyzeFailuresA
