@@ -12,17 +12,10 @@ import Control
 
 import ArrEff
 
--- dummy types
-type Time = Int
-data ValidationResult = Success
-                      | Failure String
-
-type SensorInstance = (Controller, SensorIndex)
-type Reading = (Time, SensorInstance, Measurement)
-
 -- arrow type
 type FlowArr b c = ArrEffFree Control b c
-
+data ValidationResult = Success
+                      | Failure String
 
 -- This is a dummy arrow to demonstrate there can be some effectful arrows instead this one.
 getTimeA :: FlowArr b Time
@@ -31,7 +24,7 @@ getTimeA = aConst 4
 toKelvinA :: FlowArr Measurement Measurement
 toKelvinA = arr toKelvin
 
-thermMonitorA :: FlowArr SensorInstance (Reading, String)
+thermMonitorA :: FlowArr SensorInstance Reading
 thermMonitorA = 
       duplicateA                               -- (inst, inst)
   >>> second (thermTemperatureA >>> toKelvinA) -- (inst, tempK)
@@ -39,40 +32,48 @@ thermMonitorA =
   >>> first getTimeA                           -- (time, (inst, tempK))
   >>> (arr $ \(t, (inst, m)) -> (t, inst, m))  -- (time, inst, tempK) = reading
   >>> duplicateA                               -- (reading, reading)
-                                               -- (reading, ((), result))        
-  >>> second (storeInDatabaseA &&& validateTemperatureA)
-  >>> second (second analyzeFailuresA)         -- (reading, ((), resStr))
-  >>> (arr $ \(reading, (_, resStr)) -> (reading, resStr))
+  >>> second (storeReadingA &&& validateReadingA) -- (reading, ((), result))
+  >>> second (second alarmOnFailA)                -- (reading, ((), ()))
+  >>> takeFirstA
 
-thermMonitorA' :: FlowArr SensorInstance (Reading, String)
+thermMonitorA' :: FlowArr SensorInstance Reading
 thermMonitorA' = proc sensorInst -> do
     tempK <- toKelvinA <<< thermTemperatureA -< sensorInst
     time  <- getTimeA -< ()
     
     let reading = (time, sensorInst, tempK)
     
-    ((), result) <- (storeInDatabaseA &&& validateTemperatureA) -< reading
-    resStr       <- analyzeFailuresA -< result
-    returnA      -< (reading, resStr)
+    ()      <- storeReadingA    -< reading
+    result  <- validateReadingA -< reading
+    ()      <- alarmOnFailA     -< result
+    returnA -< reading
 
-readTemperatureScript :: SensorInstance -> Script Measurement
-readTemperatureScript (cont, idx) = controllerScript $ C.read cont idx temperature
+readSensor :: Parameter -> SensorInstance -> Script Measurement
+readSensor p (cont, idx) = controllerScript $ C.read cont idx p
+
+alarmOnFail :: ValidationResult -> Script ()
+alarmOnFail Success       = infrastructureScript $ return ()
+alarmOnFail (Failure msg) = infrastructureScript $ alarm msg
+
+validateReading :: Reading -> ValidationResult
+validateReading (_, si, Measurement (FloatValue tempK)) =
+    if (tempK < 263.15)
+    then Failure (show (si, "Temperature lower than bound"))
+    else if (tempK > 323.15)
+         then Failure (show (si, "Temperature higher than bound"))
+         else Success
 
 thermTemperatureA :: FlowArr SensorInstance Measurement
-thermTemperatureA = mArr (evalScript . readTemperatureScript)
+thermTemperatureA = mArr (evalScript . readSensor temperature)
 
-processTemperatureA :: FlowArr Reading ()
-processTemperatureA = undefined
+storeReadingA :: FlowArr Reading ()
+storeReadingA = mArr (evalScript . infrastructureScript . storeReading)
 
-storeInDatabaseA :: FlowArr Reading ()
-storeInDatabaseA = undefined
+validateReadingA :: FlowArr Reading ValidationResult
+validateReadingA = arr validateReading
 
-validateTemperatureA :: FlowArr Reading ValidationResult
-validateTemperatureA = undefined
-
-analyzeFailuresA :: FlowArr ValidationResult String
-analyzeFailuresA = undefined
-
+alarmOnFailA :: FlowArr ValidationResult ()
+alarmOnFailA = mArr (evalScript . alarmOnFail)
 
 
 test = do

@@ -20,6 +20,7 @@ data Measurement = Measurement Value
 data Parameter = Temperature | Pressure
   deriving (Show)
   
+ 
 -- Dummy types, should be designed later
 data Property = Version | Status | SensorsList
   deriving (Show)
@@ -29,6 +30,10 @@ type CommandResult = Either String String
 data Controller = Controller String
   deriving (Show)
 type SensorIndex = String
+type Time = Int
+type SensorInstance = (Controller, SensorIndex)
+type Reading = (Time, SensorInstance, Measurement)
+
   
 -- Parametrized type for a free eDSL
 data Procedure a

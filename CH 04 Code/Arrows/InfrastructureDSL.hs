@@ -9,17 +9,26 @@ import ControllerDSL
 type ValueSource = String
 type Receiver = Value -> IO ()
 
-type DbValue = (ValueSource, Measurement, (String, Float))
+logReceiver :: Receiver
+logReceiver = \v -> print v
+
+alarmReceiver = \v -> print ("WARNING!", v)
 
 -- TODO: can be storing of value unified with SendTo?
-data Action a = StoreValue DbValue a
+data Action a = StoreReading Reading a
               | SendTo Receiver Value a
   deriving (Functor)
 
 type InfrastructureScript a = Free Action a
 
-storeValue :: DbValue -> InfrastructureScript ()
-storeValue val = liftF $ StoreValue val ()
+storeReading :: Reading -> InfrastructureScript ()
+storeReading reading = liftF $ StoreReading reading ()
 
 sendTo :: Receiver -> Value -> InfrastructureScript ()
 sendTo r v = liftF (SendTo r v ())
+
+logMsg :: String -> InfrastructureScript ()
+logMsg = sendTo logReceiver . StringValue
+
+alarm :: String -> InfrastructureScript ()
+alarm = sendTo alarmReceiver . StringValue
