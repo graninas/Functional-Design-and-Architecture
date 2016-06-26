@@ -3,6 +3,7 @@ module ArrowDSL where
 
 import Control.Arrow
 import Control.Category
+import Control.Monad.Free
 import Prelude hiding ((.))
 
 import ControllerDSL as C
@@ -24,8 +25,8 @@ getTimeA = aConst 4
 toKelvinA :: FlowArr Measurement Measurement
 toKelvinA = arr toKelvin
 
-thermMonitorA :: FlowArr SensorInstance Reading
-thermMonitorA = 
+thermMonitorA' :: FlowArr SensorInstance Reading
+thermMonitorA' = 
       duplicateA                               -- (inst, inst)
   >>> second (thermTemperatureA >>> toKelvinA) -- (inst, tempK)
   >>> (arr $ \x -> ((), x))                    -- ((), (inst, tempK))
@@ -36,8 +37,8 @@ thermMonitorA =
   >>> second (second alarmOnFailA)                -- (reading, ((), ()))
   >>> takeFirstA
 
-thermMonitorA' :: FlowArr SensorInstance Reading
-thermMonitorA' = proc sensorInst -> do
+thermMonitorA :: FlowArr SensorInstance Reading
+thermMonitorA = proc sensorInst -> do
     tempK <- toKelvinA <<< thermTemperatureA -< sensorInst
     time  <- getTimeA -< ()
     
@@ -75,9 +76,40 @@ validateReadingA = arr validateReading
 alarmOnFailA :: FlowArr ValidationResult ()
 alarmOnFailA = mArr (evalScript . alarmOnFail)
 
+interpretControlProgram :: ControlProgram a -> IO a
+interpretControlProgram (Pure a) = return a
+interpretControlProgram (Free (EvalScript scr next)) = do
+    res <- interpretScript scr
+    interpretControlProgram (next res)
+
+interpretScript (ControllerScript scr) = interpretControllerScript scr
+interpretScript (InfrastructureScript scr) = interpretInfrastructureScript scr
+
+interpretControllerScript (Pure a) = return a
+interpretControllerScript (Free (Get c p next)) = do
+    print ("Get", c, p)
+    interpretControllerScript (next (StringValue "ggg"))
+interpretControllerScript (Free (Set c p v next)) = do
+    print ("Get", c, p, v)
+    interpretControllerScript next
+interpretControllerScript (Free (Read c si p next)) = do
+    print ("Read", c, si, p)
+    interpretControllerScript (next (Measurement . FloatValue $ 33.3))
+interpretControllerScript (Free (Run c cmd next)) = do
+    print ("Run", c, cmd)
+    interpretControllerScript (next (Right "OK."))
+
+interpretInfrastructureScript (Pure a) = return a
+interpretInfrastructureScript (Free (StoreReading r next)) = do
+    print ("StoreReading", r)
+    interpretInfrastructureScript next
+interpretInfrastructureScript (Free (SendTo r v next)) = do
+    print ("SendTo", v)
+    r v
+    interpretInfrastructureScript next
 
 test = do
-    
-    
+    let sensorInst = (Controller "boosters", "00:01")
+    runFreeArr interpretControlProgram thermMonitorA sensorInst
     
     print ""

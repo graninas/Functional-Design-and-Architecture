@@ -29,30 +29,51 @@ evalDataAccessScript scr = evalScript (DataAccessScript scr)
 evalComputationScript scr = evalScript (ComputationScript scr)
 
 -- example:
-
-info = "[INF]"
-err = "[ERR]"
-controller = Controller "boosters"
-start = Command "start"
-
+controlProgram :: ControlProgram ()
+controlProgram = do
+    logMessage info "Control program started."
+    results <- startEngines
+    mapM_ checkResult results
+    
 logMessage :: String -> String -> ControlProgram ()
 logMessage severity str = do
     time <- evalInfrastructureScript getCurrentTime
     let msg = show (time, severity, str)
     evalInfrastructureScript (logMsg msg)
+    
+startBoosters :: ControllerScript CommandResult
+startBoosters = run boostersController start
 
-startEngines :: ControlProgram CommandResult
-startEngines = evalControllerScript $ run controller start
+startRotaryEngines :: ControllerScript CommandResult
+startRotaryEngines = run rotaryEnginesController start
+    
+startEngines :: ControlProgram [CommandResult]
+startEngines = do
+    result1 <- evalControllerScript startBoosters
+    result2 <- evalControllerScript startRotaryEngines
+    return [result1, result2]
+    
+checkResult :: CommandResult -> ControlProgram ()
+checkResult (Left failed) = do
+    let errorMsg = "Start engines failed"
+    logMessage err errorMsg
+    evalInfrastructureScript (alarm errorMsg)
+checkResult (Right succeeded) = 
+    logMessage info "Start engines succeeded"
+    
+info = "[INF]"
+err = "[ERR]"
+boostersController = Controller "boosters"
+rotaryEnginesController = Controller "rotary engines"
+start = Command "start"
 
-controlProgram :: ControlProgram ()
-controlProgram = do
-    logMessage info "Control program started."
-    result <- startEngines
-    case result of
-         Left failed -> do
-             logMessage err "Start engines failed"
-             evalInfrastructureScript (alarm "Start engines failed")
-         Right succeeded -> logMessage info "Start engines succeeded"
+
+
+
+    
+
+
+
          
-         
+
          

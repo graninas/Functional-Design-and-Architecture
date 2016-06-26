@@ -2,45 +2,68 @@ Scenario: monitor outside thermometer temperature
 Given: outside thermometer @therm
 Evaluation: once a second, run arrow thermMonitorA(@therm)
 
-arrow thermMonitorA [In: @therm, Out: ()]
-    (@time, @therm) <---- second getTimeA      ----< ((), @therm)
-    @reading        <---- thermTemperatureA    ----< (@time, @therm)
-    ()              <---- processTemperatureA  ----< @reading
-    return ()
+arrow thermMonitorA [In: @therm, Out: (@time, @therm, @tempK)]
+    @tempC <---- thermTemperatureA ----< @therm
+    @tempK <---- toKelvinA         ----< @tempC
+    @time  <---- getTimeA          ----< ()
+    ()     <---- processReadingA   ----< (@time, @therm, @tempK)
+    return (@time, @therm, @tempK)
 
-arrow thermTemperatureA [In: (@time, @therm), Out: @reading]
-    @temp <---- runScriptA ----< thermTemperatureS(@therm)
-    return @reading(@time, @temp, @therm)
+arrow thermTemperatureA [In: @therm, Out: @tempC]
+    @tempC <---- runScriptA ----< thermTemperatureS(@therm)
+    return @tempC
 
-arrow processTemperatureA [In: @reading,  Out: ()]
-    ()      <---- storeInDatabaseA     ----< @reading
-    @result <---- validateTemperatureA ----< @reading
-    ()      <---- analyzeFailuresA     ----< @result
+arrow processReadingA [In: (@time, @therm, @tempK),  Out: ()]
+    ()      <---- storeReadingA    ----< @reading
+    @result <---- validateReadingA ----< @reading
+    ()      <---- alarmOnFailA     ----< @result
     return ()
     
-arrow storeInDatabaseA [In: @reading, Out: ()]:
-    () <---- runScriptA ----< storeInDatabaseS(@reading)
+arrow storeReadingA [In: @reading, Out: ()]:
+    () <---- runScriptA ----< storeReadingS(@reading)
     return ()
 
-arrow validateTemperatureA [In: @reading, Out: @result]
-    @result <---- runScriptA ----< validateTemperatureS(@reading)
+arrow validateReadingA [In: @reading, Out: @result]
+    @result <---- runScriptA ----< validateReadingS(@reading)
     return @result
 
-arrow analyzeFailuresA [In: @result, Out: ()]
-    () <---- runScriptA ----< analyzeFailuresS(@result)
+arrow alarmOnFailA [In: @result, Out: ()]
+    () <---- runScriptA ----< alarmOnFailS(@result)
     return ()
 
-script storeInDatabaseS (@reading):
+script storeReadingS (@reading):
     <some script goes here>
     
-script validateTemperatureS (@reading):
+script validateReadingS (@reading):
     <some script goes here>
 
-script analyzeFailuresS (@value):
+script alarmOnFailS (@value):
     <some script goes here>
     
 -------------------------------------------
 
-thermMonitorA = thermTemperatureA
-             >>> (storeInDatabaseA &&& validateTemperatureA)
-             >>> second analyzeFailuresA
+
+
+thermMonitorA' :: FlowArr SensorInstance Reading
+thermMonitorA' = proc sensorInst -> do
+    tempK <- toKelvinA <<< thermTemperatureA -< sensorInst
+    time  <- getTimeA -< ()
+    
+    let reading = (time, sensorInst, tempK)
+    
+    ()      <- storeReadingA    -< reading
+    result  <- validateReadingA -< reading
+    ()      <- alarmOnFailA     -< result
+    returnA -< reading
+
+    
+thermMonitorA = 
+      duplicateA                                  -- (inst, inst)
+  >>> second (thermTemperatureA >>> toKelvinA)    -- (inst, tempK)
+  >>> (arr $ \x -> ((), x))                       -- ((), (inst, tempK))
+  >>> first getTimeA                              -- (time, (inst, tempK))
+  >>> (arr $ \(t, (inst, m)) -> (t, inst, m))     -- (time, inst, tempK) = reading
+  >>> duplicateA                                  -- (reading, reading)
+  >>> second (storeReadingA &&& validateReadingA) -- (reading, ((), result))
+  >>> second (second alarmOnFailA)                -- (reading, ((), ()))
+  >>> takeFirstA
