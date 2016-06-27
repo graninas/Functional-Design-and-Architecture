@@ -14,9 +14,10 @@ logReceiver = \v -> print v
 
 alarmReceiver = \v -> print ("WARNING!", v)
 
--- TODO: can be storing of value unified with SendTo?
+-- TODO: remove store reading from here to DataAccessScript
 data Action a = StoreReading Reading a
               | SendTo Receiver Value a
+              | GetCurrentTime (Time -> a)
   deriving (Functor)
 
 type InfrastructureScript a = Free Action a
@@ -32,3 +33,9 @@ logMsg = sendTo logReceiver . StringValue
 
 alarm :: String -> InfrastructureScript ()
 alarm = sendTo alarmReceiver . StringValue
+
+getCurrentTime :: InfrastructureScript Time
+getCurrentTime = liftF (GetCurrentTime id)
+
+
+

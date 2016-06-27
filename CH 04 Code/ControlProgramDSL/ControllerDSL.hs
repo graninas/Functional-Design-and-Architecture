@@ -90,4 +90,5 @@ temperature = Temperature
 pressure = Pressure
 
 toKelvin (Measurement (FloatValue v)) = Measurement . FloatValue $ v + 273.15
-        
+
+

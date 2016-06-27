@@ -36,3 +36,6 @@ alarm = sendTo alarmReceiver . StringValue
 
 getCurrentTime :: InfrastructureScript Time
 getCurrentTime = liftF (GetCurrentTime id)
+
+
+
