@@ -8,6 +8,13 @@ import ScriptingDSL as S
 import Control
 import Interpreters
 
+logReceiver :: Receiver
+logReceiver = \v -> print v
+
+alarmReceiver :: Receiver
+alarmReceiver = \v -> print ("WARNING!", v)
+
+
 controlProgram :: ControlProgram ()
 controlProgram = do
     logMessage "[INF]" "Control program started."
