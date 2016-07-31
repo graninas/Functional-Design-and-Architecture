@@ -55,7 +55,6 @@ newtype Device = DeviceImpl (M.Map ComponentIndex DeviceComponent)
 blankDevice :: Device
 blankDevice = DeviceImpl M.empty
 
-
 makeDevice :: Hdl -> Device
 makeDevice hdl = makeDevice' hdl blankDevice
   where
