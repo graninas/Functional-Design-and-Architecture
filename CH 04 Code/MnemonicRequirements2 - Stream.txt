@@ -1,6 +1,11 @@
 Scenario: monitor outside thermometer temperature
 Given: outside thermometer @therm
 
+// Stream of measurements of the thermometer
+stream therm_readings <once a second>:
+    run script therm_temperature(), result: @reading
+    return @reading
+
 // Stream of results of the thermometer
 stream therm_monitor <for @reading in therm_readings>:
     Store in database @reading
@@ -9,11 +14,6 @@ stream therm_monitor <for @reading in therm_readings>:
         log problem @reading
         raise alarm @message
     return @result
-
-// Stream of measurements of the thermometer
-stream therm_readings <once a second>:
-    run script therm_temperature(), result: @reading
-    return @reading
 
 // Script that reads value from the thermometer
 script therm_temperature:
