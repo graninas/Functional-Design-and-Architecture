@@ -1,7 +1,7 @@
 module Main where
 
 import qualified Data.Map as Map
-import Data.Char (toLower, isAlphaNum)
+import Data.Char (toLower, isAlpha)
 import Control.Monad.Trans.State
 import Control.Monad.Trans.Reader
 import Control.Monad.Trans (lift)
@@ -19,7 +19,7 @@ collectStats ws = lift $ mapM_ (modify.countWord) ws
 tokenize :: String -> WordStatMonad [String]
 tokenize txt = do
     Config ignore norm <- ask
-    let normalize ch = if isAlphaNum ch then ch else ' '
+    let normalize ch = if isAlpha ch then ch else ' '
     let transform1 = if ignore then map toLower else id
     let transform2 = if norm then map normalize else id
     lift . lift $ print ("Ignoring case: " ++ show ignore)
