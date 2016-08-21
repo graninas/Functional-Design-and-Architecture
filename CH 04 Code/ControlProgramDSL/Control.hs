@@ -18,7 +18,7 @@ evalScript :: S.Script a -> ControlProgram a
 evalScript scr = F.liftF (EvalScript scr id)
 
 class Monad m => Interpreter m where
-    onEvalScript :: forall b. S.Script b -> m b
+    onEvalScript :: S.Script b -> m b
 
 interpret :: (Monad m, Interpreter m) => ControlProgram a -> m a
 interpret (F.Pure a) = return a
