@@ -5,8 +5,10 @@ import Control.Monad.Free
 import ControllerDSL as C
 import InfrastructureDSL as I
 import ScriptingDSL as S
-import Control
-import Interpreters
+import Control as Ctrl
+import CustomInterpreters
+import qualified InterpreterInstances as II
+import Types
 
 controlProgram :: ControlProgram ()
 controlProgram = do
@@ -37,7 +39,6 @@ checkResult (Left failed) = do
 checkResult (Right succeeded) = 
     logMessage "[INF]" "Start engines succeeded"
 
-    
-
-    
-test = interpretControlProgram controlProgram
+test1, test2 :: IO ()    
+test1 = interpretControlProgram controlProgram
+test2 = Ctrl.interpret controlProgram

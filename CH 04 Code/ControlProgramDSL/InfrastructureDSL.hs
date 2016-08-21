@@ -3,8 +3,7 @@ module InfrastructureDSL where
 
 import Control.Monad.Free
 import Prelude hiding (read)
-
-import ControllerDSL
+import Types
 
 type ValueSource = String
 type Receiver = Value -> IO ()
@@ -37,5 +36,20 @@ alarm = sendTo alarmReceiver . StringValue
 getCurrentTime :: InfrastructureScript Time
 getCurrentTime = liftF (GetCurrentTime id)
 
+class Monad m => Interpreter m where
+    onStoreReading :: Reading -> m ()
+    onSendTo :: Receiver -> Value -> m ()
+    onGetCurrentTime :: m Time
 
-
+interpret :: (Monad m, Interpreter m) => InfrastructureScript a -> m a
+interpret (Pure a) = return a
+interpret (Free (StoreReading r next)) = do
+    onStoreReading r
+    interpret next
+interpret (Free (SendTo r v next)) = do
+    onSendTo r v
+    interpret next
+interpret (Free (GetCurrentTime nextF)) = do
+    v <- onGetCurrentTime
+    interpret (nextF v)
+    

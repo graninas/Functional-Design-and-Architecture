@@ -1,3 +1,4 @@
+{-# LANGUAGE KindSignatures #-}
 module Main where
 
 import qualified Data.Map as Map
@@ -8,13 +9,18 @@ import Control.Monad.Trans (lift)
 
 data Config = Config { caseIgnoring :: Bool, normalization :: Bool }
 type WordStatistics = Map.Map String Int
-type WordStatStack a = ReaderT Config (StateT WordStatistics IO) a
+
+type WordStatStateStack = StateT WordStatistics IO
+type WordStatStack a = ReaderT Config WordStatStateStack a
 
 countWord :: String -> WordStatistics -> WordStatistics
 countWord w stat = Map.insertWith (+) w 1 stat
 
-collectStats :: [String] -> WordStatStack WordStatistics
-collectStats ws = lift $ mapM_ (modify.countWord) ws >> get
+collectStats :: [String] -> WordStatStateStack WordStatistics
+collectStats ws = do
+    lift $ print $ "Words: " ++ show ws
+    mapM_ (modify.countWord) ws
+    get
 
 tokenize :: String -> WordStatStack [String]
 tokenize txt = do
@@ -32,7 +38,7 @@ tokenize txt = do
 calculateStats :: String -> WordStatStack WordStatistics
 calculateStats txt = do
     wordTokens <- tokenize txt
-    collectStats wordTokens
+    lift $ collectStats wordTokens
     
 main :: IO ()
 main = do
