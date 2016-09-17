@@ -24,6 +24,8 @@ interpretComponentSt (ControllerDef c idx next) = do
 makeDeviceSt :: Hdl () -> State Device ()
 makeDeviceSt hdl = interpretFreeSt hdl
 
+
+
 interpretFree :: Device -> Hdl () -> Device
 interpretFree device (Pure _)    = device
 interpretFree device (Free comp) = interpretComponent device comp
