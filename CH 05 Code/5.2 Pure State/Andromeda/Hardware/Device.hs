@@ -1,7 +1,7 @@
 module Andromeda.Hardware.Device where
 
 import Andromeda.Hardware.HDL
-import Andromeda.Hardware.Parameter
+import Andromeda.Hardware.Types
 
 import qualified Data.Map as M
 

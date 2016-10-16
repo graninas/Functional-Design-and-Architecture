@@ -1,6 +1,6 @@
 module Andromeda.Hardware.HDL where
 
-import Andromeda.Hardware.Parameter
+import Andromeda.Hardware.Types
 import Control.Monad.Free
 
 type Guid = String

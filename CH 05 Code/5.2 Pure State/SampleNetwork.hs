@@ -1,8 +1,7 @@
-module SampleDeviceNetwork where
+module SampleNetwork where
 
-import Andromeda.Hardware.Parameter
-import Andromeda.Hardware.HDL
-import Andromeda.Hardware.HNDL
+import Andromeda.Hardware
+import Andromeda.Simulator
 
 aaaManufacturer = "AAA Inc."
 guid1 = "3539390d-f189-4434-bd9e-d39e494a869a"
@@ -64,3 +63,6 @@ boostersNozzle1P   = (boostersAddr, nozzle1PCompIdx)
 boostersNozzle2T   = (boostersAddr, nozzle2TCompIdx)
 boostersNozzle2P   = (boostersAddr, nozzle2PCompIdx)
 boostersController = (boostersAddr, boostersControllerCompIdx)
+
+
+
