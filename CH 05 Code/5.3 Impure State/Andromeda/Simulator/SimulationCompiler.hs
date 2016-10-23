@@ -1,8 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 module Andromeda.Simulator.SimulationCompiler where
 
 import Andromeda.Hardware
@@ -18,6 +13,9 @@ import Control.Concurrent.STM
 import Control.Lens
 import Data.Maybe
 import Data.IORef
+
+-- Simple compiler that doesn't use Interpreter type classes for HDL and HNDL.
+-- To see the compiler that does, see "Impure State with IORef" sample.
 
 compileTerminalUnit
     :: SimulationModel
@@ -72,56 +70,3 @@ compileHndl model (Free component) = compileNetworkComponent model component
 
 compileSimModel :: Hndl () -> IO SimulationModel
 compileSimModel hndl = compileHndl emptySimModel hndl
-    
-
--- TODO: compiler
-{-
-sensorWorker sn@(SensorNode vsTVar vgTVar prodTMvar) = do
-    prod <- liftIO $ atomically $ waitProducing prodTMvar
-    liftIO $ atomically $ processValueSource prod vsTVar vgTVar
-    threadDelay workerThreadsDelay
-    sensorWorker sn
-
-instance HdlInterpreter SimCompilerState where
-   onSensorDef compDef compIdx par = do
-       debugPrint ("Compiling SensorDef", compIdx, compDef)
-       assertNoSensor compIdx
-       sn <- mkDefaultSensorNode par
-       liftIO $ forkIO $ sensorWorker sn
-       composingDevice . composingSensors . at compIdx %= (const $ Just sn)
-   onControllerDef compDef compIdx = do
-       debugPrint ("Compiling ControllerDef", compIdx, compDef)
-       assertNoController compIdx
-       cn <- mkDefaultControllerNode
-       composingDevice . composingController .= (Just (compIdx, cn))
-
-instance HndlInterpreter SimCompilerState where
-   onDeviceDef pa hdl d = do
-       debugPrint ("Compiling DeviceDef", pa, d)
-       interpretHdl hdl
-       m <- use $ composingDevice . composingSensors
-       let m' = M.mapKeys (\compIdx -> (pa, compIdx)) m
-       simulationModel . sensorsModel %= (M.union m')
-       composingDevice .= emptyComposingDevice
-       return $ mkDeviceInterface pa
-   onTerminalUnitDef pa d = do
-       debugPrint ("Compiling TerminalUnitDef", pa)
-       return $ mkTerminalUnitInterface pa
-   onLogicControlDef pa d = do
-       debugPrint ("Compiling LogicControlDef", pa)
-       return $ mkInterface pa
-   onLinkedDeviceDef (DeviceInterface rdi) (TerminalUnitInterface tui) = do
-       debugPrint ("Compiling LinkedDeviceDef", rdi, tui)
-       return ()
-   onLinkDef interf tui = do
-       debugPrint "Compiling ConnectionDef"
-       return ()
-
----- public interface:
-
-compileSimModel :: Hndl () -> IO SimulationModel
-compileSimModel hndl = do
-    let compiler = interpretHndl hndl
-    (CompilerState m _ _) <- S.execStateT compiler emptyCompilerState
-    return m
-    -}

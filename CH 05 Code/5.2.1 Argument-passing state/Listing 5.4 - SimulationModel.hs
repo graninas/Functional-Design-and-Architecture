@@ -12,12 +12,12 @@ data TerminalUnitNode = TerminalUnitNode
 
 type SensorsModel = M.Map ComponentInstanceIndex SensorNode
 type ControllersModel = M.Map ComponentInstanceIndex ControllerNode
-type TerminalUnitModel = M.Map PhysicalAddress TerminalUnitNode
+type TerminalUnitsModel = M.Map PhysicalAddress TerminalUnitNode
 
 data SimulationModel = SimulationModel
     { sensorsModel :: SensorsModel
     , controllersModel :: ControllersModel
-    , terminalUnitsModel :: TerminalUnitModel
+    , terminalUnitsModel :: TerminalUnitsModel
     }
     
 emptySimModel = SimulationModel M.empty M.empty M.empty
@@ -43,7 +43,7 @@ updateControllersModel simModel =
         newControllers = M.map updateLog oldControllers
     in newControllers
 
-updateTerminalUnitsModel :: SimulationModel -> TerminalUnitModel
+updateTerminalUnitsModel :: SimulationModel -> TerminalUnitsModel
 updateTerminalUnitsModel simModel =
     let oldTerminalUnits = terminalUnitsModel simModel
         newTerminalUnits = M.map updateUnit oldTerminalUnits
