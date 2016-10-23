@@ -31,27 +31,27 @@ updateLog = undefined
 updateUnit :: TerminalUnitNode -> TerminalUnitNode
 updateUnit = undefined
 
-updateSensorsModel :: SimulationModel -> SimulationModel
+updateSensorsModel :: SimulationModel -> SensorsModel
 updateSensorsModel simModel =
     let oldSensors = sensorsModel simModel
         newSensors = M.map updateValue oldSensors
-    in simModel {sensorsModel = newSensors}
+    in newSensors
 
-updateControllersModel :: SimulationModel -> SimulationModel
+updateControllersModel :: SimulationModel -> ControllersModel
 updateControllersModel simModel =
     let oldControllers = controllersModel simModel
         newControllers = M.map updateLog oldControllers
-    in simModel {controllersModel = newControllers}
+    in newControllers
 
-updateTerminalUnitsModel :: SimulationModel -> SimulationModel
+updateTerminalUnitsModel :: SimulationModel -> TerminalUnitModel
 updateTerminalUnitsModel simModel =
     let oldTerminalUnits = terminalUnitsModel simModel
         newTerminalUnits = M.map updateUnit oldTerminalUnits
-    in simModel {terminalUnitsModel = newTerminalUnits}
+    in newTerminalUnits
 
 updateSimulationModel :: SimulationModel -> SimulationModel
 updateSimulationModel simModel =
-    let simModel'   = updateSensorsModel simModel
-        simModel''  = updateControllersModel simModel'
-        simModel''' = updateTerminalUnitsModel simModel''
-    in simModel'''
+    let newSensors = updateSensorsModel simModel
+        newControllers = updateControllersModel simModel
+        newTerminalUnits = updateTerminalUnitsModel simModel
+    in SimulationModel newSensors newControllers newTerminalUnits

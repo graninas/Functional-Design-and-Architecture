@@ -14,15 +14,21 @@ import Data.Maybe
 
 data ValueGenerator = NoGenerator
                     | StepGenerator (Measurement -> Measurement)
-
+                    
+instance Show ValueGenerator where
+    show NoGenerator = "NoGenerator"
+    show _ = ""
+                    
 type ComponentInstanceIndex = (PhysicalAddress, ComponentIndex)
 
 data ControllerNode = ControllerNode
+  deriving Show
 data SensorNode = SensorNode
     { value :: Measurement
     , valueGenerator :: ValueGenerator
     , producing :: Bool
     }
+  deriving Show
 data TerminalUnitNode = TerminalUnitNode
 
 type SensorsModel     = M.Map ComponentInstanceIndex SensorNode
@@ -50,6 +56,7 @@ updateValue node@(SensorNode val gen False) = node
 updateLog :: ControllerNode -> ControllerNode
 updateLog = undefined
 
+-- TODO: rename this (in the book it's called updateUnit)
 updateSomething :: TerminalUnitNode -> TerminalUnitNode
 updateSomething = undefined
 

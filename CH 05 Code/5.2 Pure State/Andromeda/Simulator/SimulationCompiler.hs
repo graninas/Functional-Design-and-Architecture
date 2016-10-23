@@ -3,7 +3,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module Andromeda.Simulator.Simulation where
+module Andromeda.Simulator.SimulationCompiler where
 
 import Andromeda.Hardware
 import Andromeda.Simulator.SimulationModel
@@ -42,6 +42,13 @@ compileNetworkComponent model (TerminalUnitDef addr next) =
     let (model', iface) = compileTerminalUnit model addr
         nextHndl = next iface
     in compileHndl model' nextHndl
+compileNetworkComponent model (LogicControlDef addr next) =
+    compileHndl model (next (LogicControlInterface addr))
+compileNetworkComponent model (LinkedDeviceDef _ _ next) =
+    compileHndl model next
+compileNetworkComponent model (LinkDef _ _ next) =
+    compileHndl model next
+    
     
 compileHndl :: SimulationModel -> Hndl () -> SimulationModel
 compileHndl model (Pure _) = model
