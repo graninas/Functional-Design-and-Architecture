@@ -6,7 +6,7 @@
 module Andromeda.Simulator.SimulationCompiler where
 
 import Andromeda.Hardware
-import Andromeda.Simulator.SimulationModel
+import Andromeda.Simulator.Simulation
 
 import qualified Data.Map as M
 import qualified Control.Monad.Trans.State as S
@@ -31,12 +31,15 @@ makeLenses ''CompilerState
 
 type SimCompilerState = S.StateT CompilerState IO
 
-compileSensorNode :: Parameter -> SimCompilerState SensorNode
-compileSensorNode par = do
-    tvVal <- liftIO $ newTVarIO $ toMeasurement par
-    tvGen <- liftIO $ newTVarIO NoGenerator
-    tvProducing <- liftIO $ newTVarIO False
+compileSensorNodeTrans :: Parameter -> STM SensorNode
+compileSensorNodeTrans par = do
+    tvVal <- newTVar $ toMeasurement par
+    tvGen <- newTVar NoGenerator
+    tvProducing <- newTVar False
     return (SensorNode tvVal tvGen tvProducing)
+
+compileSensorNode :: Parameter -> SimCompilerState SensorNode
+compileSensorNode = liftIO . atomically . compileSensorNodeTrans
 
 {-
 -- Compilation with lenses example

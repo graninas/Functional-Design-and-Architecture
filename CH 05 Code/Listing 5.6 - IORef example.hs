@@ -24,7 +24,7 @@ main = do
     let worker1 = forever $ increaseValue refVal
     let worker2 = forever $ printValue refVal
     threadId1 <- forkIO worker1
-    threadId2 <- forkIO  worker2
+    threadId2 <- forkIO worker2
     threadDelay (5 * second)
     killThread threadId1
     killThread threadId2

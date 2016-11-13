@@ -49,29 +49,29 @@ instance HdlInterpreter SimCompilerState where
 -}
 
 instance HdlInterpreter SimCompilerState where
-   onSensorDef compDef compIdx par = do
-       node <- compileSensorNode par
-       CompilerState addr ss cs ts  <- S.get
-       let newSensors = M.insert (addr, compIdx) node ss
-       S.put $ CompilerState addr newSensors cs ts
-   onControllerDef compDef compIdx =
-       return () -- not implemented
-
-setupAddress addr = do
-    CompilerState _ ss cs ts <- S.get
-    S.put $ CompilerState addr ss cs ts
-    
+    onSensorDef compDef compIdx par = do
+        node <- compileSensorNode par
+--       CompilerState addr ss cs ts  <- S.get
+--       let newSensors = M.insert (addr, compIdx) node ss
+--       S.put $ CompilerState addr newSensors cs ts
+        addr <- use currentPhysicalAddress
+        let appendToMap = M.insert (addr, compIdx) node
+        composingSensors %= appendToMap
+    onControllerDef compDef compIdx =
+        return () -- not implemented
+      
 instance HndlInterpreter SimCompilerState where
-   onDeviceDef addr hdl = do
-        setupAddress addr
+    onDeviceDef addr hdl = do
+        currentPhysicalAddress .= addr
         interpretHdl hdl
         return $ mkDeviceInterface addr
-   onTerminalUnitDef addr = 
+    onTerminalUnitDef addr = 
         return $ mkTerminalUnitInterface addr
-   onLogicControlDef addr = 
+    onLogicControlDef addr = 
         return $ mkLogicControlInterface addr
-   onLinkedDeviceDef _ _ = return () -- not implemented
-   onLinkDef _ _ = return () -- not implemented
+    onLinkedDeviceDef _ _ = return () -- not implemented
+    onLinkDef _ _ = return () -- not implemented
+
 
 ---- public interface:
 

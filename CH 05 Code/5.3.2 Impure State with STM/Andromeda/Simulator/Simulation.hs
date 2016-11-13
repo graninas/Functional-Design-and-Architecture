@@ -1,4 +1,4 @@
-module Andromeda.Simulator.SimulationModel where
+module Andromeda.Simulator.Simulation where
 
 import Andromeda.Hardware
 
@@ -13,6 +13,7 @@ import Control.Lens
 import Data.Maybe
 import Data.IORef
 import Data.Traversable as T (mapM)
+import Data.Time.Clock as Time
 
 
 data ValueGenerator = NoGenerator
@@ -81,6 +82,7 @@ stopSensorWorker (_, threadId) = killThread threadId
 stopSensorsSimulation :: SensorsHandles -> IO ()
 stopSensorsSimulation handles = void $ T.mapM stopSensorWorker handles
 
+-- TODO: replace exception by Mabye.
 readSensorNodeValue 
     :: ComponentInstanceIndex 
     -> SensorsHandles
