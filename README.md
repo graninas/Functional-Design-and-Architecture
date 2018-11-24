@@ -25,11 +25,11 @@ You might also want to check the Andromeda project that is a showcase project fo
 
 [Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
 
-The `Node` project created by me and my team for Enecuum blockchain is the most advanced production code in Haskell built using the ideas of this book:
+The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell built using the ideas of this book:
 
 [Node Framework](https://github.com/graninas/Node)
 
-I also was working for Juspay. In there, we have created two big projects in PureScript with the same central ideas of Free monads and architecture. The Presto framework for building mobile apps was published. The most of code (including Free eDSL and runtime) is designed and written by me:
+I also was working for Juspay (India, Bangalore). In there, we have created two big projects in PureScript with the same central ideas of Free monads and architecture. The Presto framework for building mobile apps was published. The most of code (including Free eDSL and runtime) is designed and written by me:
 
 [PureScript Presto](https://github.com/graninas/purescript-presto)
 
