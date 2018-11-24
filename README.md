@@ -1,4 +1,4 @@
-# Functional-Design-and-Architecture
+# Functional Design and Architecture
 Code and materials for book "Functional Design and Architecture"
 
 The book is focusing on these topics:
