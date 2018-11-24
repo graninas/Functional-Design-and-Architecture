@@ -23,8 +23,14 @@ The book is 50% done. 5 chapters are published online:
 
 You might also want to check the Andromeda project that is a showcase project for this book:
 
-https://github.com/graninas/Andromeda
+[Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
 
-The `Node` project created by me and my team is the most advanced production code in Haskell built using the ideas of this book:
+The `Node` project created by me and my team for Enecuum blockchain is the most advanced production code in Haskell built using the ideas of this book:
 
-https://github.com/graninas/Node
+[Node Framework](https://github.com/graninas/Node)
+
+I also was working for Juspay. In there, we have created two big projects in PureScript with the same central ideas of Free monads and architecture. The Presto framework for building mobile apps was published. The most of code (including Free eDSL and runtime) is designed and written by me:
+
+[PureScript Presto](https://github.com/graninas/purescript-presto)
+
+Another project I was working on with some other great India developers was about distributed persistable resumable workflows, in PureScript, Node.JS and RabbitMQ. This project is not published yet.
