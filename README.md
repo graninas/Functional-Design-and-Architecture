@@ -21,9 +21,15 @@ The book is 50% done. 5 chapters are published online:
 - [Chapter 4: Domain model design](https://docs.google.com/document/d/1UU-y4XaagexudLHWrrL9HeLClM6XobUqxRHL8Vdq2oc/edit?usp=sharing)
 - [Chapter 5: Application state](https://docs.google.com/document/d/1v9RYc5GbUytS7shH0_8OWX_IOrliwCIH8-SMl8fGBSA/edit?usp=sharing)
 
+# Additional materials
+
+### Andromeda
+
 You might also want to check the Andromeda project that is a showcase project for this book:
 
 [Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
+
+### Enecuum Node project  
 
 The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell built using the ideas of this book:
 
@@ -31,6 +37,8 @@ The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK 
 - [Why Haskell?](https://medium.com/@ENQBlockchain/why-haskell-eacb087f3adb)
 - [Enecuum Framework possibilities](https://medium.com/@ENQBlockchain/enecuum-framework-possibilities-d4fa49c3ea40)
 - [Enecuum Framework possibilities, Part 2](https://medium.com/@ENQBlockchain/enecuum-framework-possibilities-part-2-7c8ff65c1c4e)
+
+### Juspay PureScript Presto Framework
 
 I also was working for Juspay (India, Bangalore). In there, we have created two big projects in PureScript with the same central ideas of Free monads and architecture. The Presto framework for building mobile apps was published. The most of code (including Free eDSL and runtime) is designed and written by me:
 
