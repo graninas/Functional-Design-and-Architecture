@@ -17,5 +17,5 @@ https://www.reddit.com/r/haskell/comments/6ck72h/functional_design_and_architect
 You might also want to check the Andromeda project that is a showcase project for this book:
 https://github.com/graninas/Andromeda
 
-The `Node` project by Enecuum is the most advanced production code in Haskell built using the ideas of this book:
-https://github.com/Enecuum/Node
+The `Node` project created by me and my team is the most advanced production code in Haskell built using the ideas of this book:
+https://github.com/graninas/Node
