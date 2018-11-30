@@ -44,4 +44,4 @@ I also was working for Juspay (India, Bangalore). In there, we have created two 
 
 [PureScript Presto](https://github.com/graninas/purescript-presto)
 
-Another project I was working on with some other great India developers was about distributed persistable resumable workflows, in PureScript, Node.JS and RabbitMQ. This project is not published yet.
+Another project I was working on with some other great India developers was about distributed persistable resumable workflows, in PureScript, Node.JS and RabbitMQ. This project is not published yet, but it also based on Free monad architecture. Moreover, persistency of workflows and ability to pause them at any time is achieved due to special interpreters utilizing a RecorderT transformer.
