@@ -31,12 +31,9 @@ You might also want to check the Andromeda project that is a showcase project fo
 
 ### Enecuum Node project  
 
-The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell built using the ideas of this book:
+The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell built using the ideas of this book. I've wrote a detailed post about it:
 
-[Node Framework](https://github.com/graninas/Node)
-- [Why Haskell?](https://medium.com/@ENQBlockchain/why-haskell-eacb087f3adb)
-- [Enecuum Framework possibilities](https://medium.com/@ENQBlockchain/enecuum-framework-possibilities-d4fa49c3ea40)
-- [Enecuum Framework possibilities, Part 2](https://medium.com/@ENQBlockchain/enecuum-framework-possibilities-part-2-7c8ff65c1c4e)
+[Enecuum Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
 
 ### Juspay PureScript Presto Framework
 
