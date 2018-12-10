@@ -35,7 +35,7 @@ The `Node` project created by me and my team for Enecuum blockchain (Enecuum HK 
 
 The Enecuum Node Framework makes building of network acting nodes simple. It allows to handle concurrent state (with STM), work with KV database, host TCP, UDP and JSON-RPC servers, write network clients, interactible CLIs and more. The code of the nodes will be testable, safe and well-maintainable.
 
-I've wrote a detailed post about it:
+This framework can be a reasonable replacement for Cloud Haskell. I've wrote a detailed post about framework usage and architecture:
 
 [Enecuum Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
 
