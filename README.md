@@ -31,7 +31,7 @@ You might also want to check the Andromeda project that is a showcase project fo
 
 ### Enecuum Node project  
 
-The [Node](https://github.com/Enecuum/Node) project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell built using the ideas of this book.
+The [Node](https://github.com/Enecuum/Node) project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell based the ideas of this book.
 
 The Enecuum Node Framework makes building of network acting nodes simple. It allows to handle concurrent state (with STM), work with KV database, host TCP, UDP and JSON-RPC servers, write network clients, interactible CLIs and more. The code of the nodes will be testable, safe and well-maintainable.
 
