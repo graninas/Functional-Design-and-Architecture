@@ -37,7 +37,7 @@ The Enecuum Node Framework makes building of network acting nodes simple. It all
 
 This framework can be a reasonable replacement for Cloud Haskell. I've wrote a detailed post about framework usage and architecture:
 
-[Enecuum Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
+[Building network actors with Enecuum Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
 
 ### Juspay PureScript Presto Framework
 
