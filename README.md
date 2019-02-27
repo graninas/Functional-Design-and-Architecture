@@ -1,6 +1,13 @@
 # Functional Design and Architecture
 Code and materials for book "Functional Design and Architecture"
 
+### Support the book!
+
+- [Patreon page](https://www.patreon.com/functional_design_and_architecture)
+- [Paypal donations](paypal.me/graninas)
+
+### What this book about?
+
 The book is focusing on these topics:
 * Architecture modelling, requirements analysis, subsystems design from FP point of view;
 * Embedded and external DSLs in domain modelling;
