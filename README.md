@@ -1,6 +1,8 @@
 # Functional Design and Architecture
 Code and materials for book "Functional Design and Architecture"
 
+Book page: [link](https://graninas.com/functional-design-and-architecture-book)
+
 ### Support the book!
 
 - [Patreon page](https://www.patreon.com/functional_design_and_architecture)
