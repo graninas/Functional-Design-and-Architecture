@@ -32,6 +32,10 @@ The book is 50% done. 5 chapters are published online:
 
 # Additional materials
 
+### References list
+
+[List](https://drive.google.com/open?id=19nMC6zU0DBmX0JgiKecYziHO51TSOB1pgqvVbG0yf1Q)
+
 ### Andromeda
 
 You might also want to check the Andromeda project that is a showcase project for this book:
