@@ -1,9 +1,10 @@
 module Main where
 
-import Data.IORef (IORef, newIORef, writeIORef, readIORef, modifyIORef)
-import Control.Concurrent (forkIO, threadDelay)
-import Control.Monad (forever, void)
-import System.Random (randomRIO)
+import           Control.Concurrent (forkIO, threadDelay)
+import           Control.Monad      (forever, void)
+import           Data.IORef         (IORef, modifyIORef, newIORef, readIORef,
+                                     writeIORef)
+import           System.Random      (randomRIO)
 
 data Meteor = Meteor
   { size :: Int
@@ -13,9 +14,10 @@ data Meteor = Meteor
 
 type ReportingChannel = IORef [Meteor]
 
+getRandomMeteor :: IO Meteor
 getRandomMeteor = do
   rndSize <- randomRIO (1, 100)
-  rndMass <- randomRIO (rndSize * 1, rndSize * 10)
+  rndMass <- randomRIO (rndSize, rndSize * 10)
   pure $ Meteor rndSize rndMass
 
 reportMeteor :: ReportingChannel -> Meteor -> IO ()
@@ -43,10 +45,11 @@ trackingCenter ch = do
   print $ "Reported: " <> show (length reported)
   threadDelay 10000
 
-main :: IO ()
-main = do
+app :: IO ()
+app = do
   ch <- newIORef []
-
   forkIO $ forever $ astronomer ch
-
   forever $ trackingCenter ch
+
+main :: IO ()
+main = app
