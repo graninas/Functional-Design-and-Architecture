@@ -2,7 +2,9 @@ module Main where
 
 import           Control.Concurrent.STM
 
-import           ThreadBookkeeping
+import           App
+import           Lang
+import           Runtime
 
 main :: IO ()
 main = do
