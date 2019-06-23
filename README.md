@@ -6,7 +6,7 @@ Book page: [link](https://graninas.com/functional-design-and-architecture-book)
 ### Support the book!
 
 - [Patreon page](https://www.patreon.com/functional_design_and_architecture)
-- [Paypal donations](paypal.me/graninas)
+- [Paypal donations](https://www.paypal.me/graninas)
 
 ### What this book about?
 
