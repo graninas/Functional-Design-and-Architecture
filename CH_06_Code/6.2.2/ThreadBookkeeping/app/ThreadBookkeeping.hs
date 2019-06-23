@@ -118,7 +118,6 @@ increaseProcessCount maxCount psVar = do
 decreaseProcessCount :: TVar Int -> STM ()
 decreaseProcessCount psVar = modifyTVar psVar (\x -> x - 1)
 
--- TODO: use STM
 -- Interpreting the AppF language.
 interpretAppF :: Runtime -> AppF a -> IO a
 interpretAppF rt (EvalLang act next) = do
