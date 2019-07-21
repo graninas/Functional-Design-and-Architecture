@@ -1,7 +1,7 @@
 # Functional Design and Architecture
 Code and materials for book "Functional Design and Architecture"
 
-Book page: [link](https://graninas.com/functional-design-and-architecture-book)
+[Book page](https://graninas.com/functional-design-and-architecture-book)
 
 ### Support the book!
 
@@ -22,6 +22,7 @@ The book is focusing on these topics:
 
 The book is 50% done. 5 chapters are published online:
 
+- [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Book folder (Google Drive)](https://drive.google.com/open?id=0B1Rdr1fbS6M9SjlKUk1zMVNjOVU)
 - [Table of Contents](https://docs.google.com/document/d/1bh9Sa0rIGzU9Z88N_TJF6BtgHD_QLYdh1nK-yLKn_IU/edit?usp=sharing)
 - [Chapter 1: What is software design?](https://docs.google.com/document/d/16pMEo0A-4GTnHqRn63yu73VqJ92M_pQYEd-t6tTiTcg/edit?usp=sharing)
@@ -34,23 +35,28 @@ The book is 50% done. 5 chapters are published online:
 
 ### References list
 
-[List](https://drive.google.com/open?id=19nMC6zU0DBmX0JgiKecYziHO51TSOB1pgqvVbG0yf1Q)
+[References List](https://drive.google.com/open?id=19nMC6zU0DBmX0JgiKecYziHO51TSOB1pgqvVbG0yf1Q)
+
 
 ### Andromeda
 
-You might also want to check the Andromeda project that is a showcase project for this book:
+This is the first project created specially for the book. It demonstrates the ideas from the book in a standalone application simulating a SCADA system for spaceships.
 
 [Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
 
-### Enecuum Node project  
+### Hydra
 
-The [Node](https://github.com/Enecuum/Node) project created by me and my team for Enecuum blockchain (Enecuum HK Limited, Hong Kong) is the most advanced production code in Haskell based the ideas of this book.
+This is the second project created for the book. It's a framework similar to the Node framework for building multithreaded and concurrent applications in Haskell using the approaches and patterns from the book. It's interesting that the project has three different engines: Final Tagless, Free Monad and Church Encoded Free Monad, - and you can see the differences between these approaches by checking the different implementations of the same application.
 
-The Enecuum Node Framework makes building of network acting nodes simple. It allows to handle concurrent state (with STM), work with KV database, host TCP, UDP and JSON-RPC servers, write network clients, interactible CLIs and more. The code of the nodes will be testable, safe and well-maintainable.
+### Node project  
+
+The [Node](https://github.com/graninas/Node) is the most advanced production code in Haskell based the ideas of this book.
+
+The Node Framework makes building of network acting nodes simple. It allows to handle concurrent state (with STM), work with KV database, host TCP, UDP and JSON-RPC servers, write network clients, interactible CLIs and more. The code of the nodes will be testable, safe and well-maintainable.
 
 This framework can be a reasonable replacement for Cloud Haskell. I've wrote a detailed post about framework usage and architecture:
 
-[Building network actors with Enecuum Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
+[Building network actors with Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
 
 ### Juspay PureScript Presto Framework
 
