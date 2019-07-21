@@ -8,7 +8,7 @@ Book page: [link](https://graninas.com/functional-design-and-architecture-book)
 - [Patreon page](https://www.patreon.com/functional_design_and_architecture)
 - [Paypal donations](https://www.paypal.me/graninas)
 
-### What this book about?
+### What this book is about?
 
 The book is focusing on these topics:
 * Architecture modelling, requirements analysis, subsystems design from FP point of view;
