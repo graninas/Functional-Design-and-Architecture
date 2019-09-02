@@ -1,86 +1,51 @@
-package native.core {
+import Native.Core._
 
-    abstract class Temperature
-        
-    case class Kelvin(value: Float) extends Temperature
-    case class Celsius(value: Float) extends Temperature
-
-    object utils {
-      def toCelsius(data: Float) : Float = data - 273.15f
-      def toCelsius(data: native.core.Temperature) : Float =
-          data match {
-              case native.core.Kelvin(v)  => toCelsius(v)
-              case native.core.Celsius(v) => v
-          }
-    }
-
-
-    object thermometer {
-        def getData() = {
-                println("Thermometer returned data.")
-                Kelvin(100.0f)
-            }
-    }
-}
-
-package server {
-    object connection {
-        def send(name: String, dataType: String, v: Float) = {
-            println("Sended: ")
-            println(v)
+object Observer {
+   def readAndSendTemperature() {
+      def toCelsius(data: Native.Core.Temperature) : Float =
+        data match {
+          case Native.Core.Kelvin(v) => 273.15f - v
+          case Native.Core.Celsius(v) => v
         }
-    }
+
+      val received = Native.Core.Thermometer.read()
+      val inCelsius = toCelsius(received)
+      val corrected = inCelsius - 12.5f    // defected device!
+      ServerContext.Connection.send("temperature", "T-201A", corrected)
+   }
 }
 
-trait ISensor {
-    def getData() : Float
-    def getName() : String
-    def getDataType() : String
-}
-trait IConnection {
-    def send(name: String, dataType: String, v: Float)
+object L11 extends App {
+  Observer.readAndSendTemperature();
 }
 
-final class Receiver extends IConnection {
-    def send(name: String, dataType: String, v: Float) =
-        server.connection.send(name, dataType, v)
-}
-
-final class Thermometer extends ISensor {
-    val correction = -12.5f
-    def transform(data: native.core.Temperature) : Float =
-        native.core.utils.toCelsius(data) + correction
-
-    def getName() : String = "T-201A"
-    def getDataType() : String = "temperature"
-    def getData() : Float = {
-        val data = native.core.thermometer.getData()
-        transform(data)
-    }
-}
-
-final class Observer (s: ISensor, c: IConnection) {
-    val sensor: ISensor = s
-    val connection: IConnection = c
-
-    def readAndSendData() {
-        val data = sensor.getData()
-        val sensorName = sensor.getName()
-        val dataType = sensor.getDataType()
-        connection.send(sensorName, dataType, data)
-    }
-}
-
-object L11 {
-
-    def observeThermometerData() {
-        val t = new Thermometer()
-        val r = new Receiver()
-        val observer = new Observer(t, r)
-        observer.readAndSendData()
-    }
-
-    def main(args: Array[String]) {
-        observeThermometerData()        
-    }
+object Misc {
+	object PureExamples {
+		def max(a: Float, b: Float): Float = {
+			math.max(a, b)
+		}
+		
+		def calc(a: Int, b: Int, c: Float) : Float = {
+			val sum = a + b
+			val average = sum / 2
+			max(average, c)
+		}
+	}
+	
+	object ImpureExamples {
+		def launchMissle() {
+			println("aa")
+		}
+		
+		def max(a: Float, b: Float): Float = {
+			launchMissle()
+			math.max(a, b)
+		}
+		
+		def calc(a: Int, b: Int, c: Float) : Float = {
+			val sum = a + b
+			val average = sum / 2
+			max(average, c)
+		}
+	}
 }

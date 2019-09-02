@@ -1,46 +1,32 @@
-package native.light {
-
-    trait ILampSwitcher {
-        def switch(onOff: Boolean)
-    }
-    
-    class DaylightLamp (n: String, v: Int, onOff: Boolean)
-           extends ILampSwitcher {
-        var isOn: Boolean = onOff
-        var value: Int = v
-        val name: String = n
-        def switch(onOff: Boolean) {
-            isOn = onOff
-            println("Lamp " + name + " switched: " + isOn)
-        }
-    }
-    
-    class TableLamp (n: String, onOff: Boolean)
-            extends ILampSwitcher {
-        var isOn: Boolean = onOff
-        val name: String = n
-        def switch(onOff: Boolean) = {
-            isOn = onOff
-            println("Lamp " + name + " switched: " + isOn)
-            // Debug: will remove it later!
-            throw new Exception("switched")
-        }
-    }
-}
-
-object L17 {
-
-    var d1 = new native.light.DaylightLamp("G1", 100, false)
-    var d2 = new native.light.DaylightLamp("G2", 100, false)
-    var t1 = new native.light.TableLamp("T1", false)
-
-    def turnAllOff(lamps: List[native.light.ILampSwitcher]) {
-        lamps.foreach(_.switch(false))
-    }
-
-    def main(args: Array[String]) {
-        var lamps = List(d1, d2, t1)
-    
-        turnAllOff(lamps)
-    }
+object L17 extends App {
+	import L12.{ISensor, IConnection, Observer}
+	import L15.{Receiver}
+	
+	final class HighAccuracyThermometer {
+		def name() : String = "HAT-53-2"
+		def getKelvin() : Float = {
+			Native.Core.HighAccuracyThermometer.read()
+		}
+	}
+	
+	final class HAThermometerAdapter(val thermometer: HighAccuracyThermometer) extends ISensor {
+		def getData() : Float = {
+			val data = thermometer.getKelvin()
+			Native.Core.Utils.toCelsius(data)
+		}
+		def getName() : String = thermometer.name()
+		def getDataType() : String = "temperature"
+	}
+	
+	object Worker {
+		def observeThermometerData() {
+			val hatMismatched = new HighAccuracyThermometer()
+			val hatAdapted = new HAThermometerAdapter(hatMismatched)
+			val r = new Receiver()
+			val observer = new Observer(hatAdapted, r)
+			observer.readAndSendData()
+		}
+	}
+	
+	Worker.observeThermometerData()
 }
