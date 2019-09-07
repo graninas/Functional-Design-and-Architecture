@@ -31,7 +31,10 @@ The book is 60% done. 6 chapters are published online:
 - [Chapter 4: Domain model design](https://docs.google.com/document/d/1UU-y4XaagexudLHWrrL9HeLClM6XobUqxRHL8Vdq2oc/edit?usp=sharing)
 - [Chapter 5: Application state](https://docs.google.com/document/d/1v9RYc5GbUytS7shH0_8OWX_IOrliwCIH8-SMl8fGBSA/edit?usp=sharing)
 - [Chapter 6: Multithreading and Concurrency](https://docs.google.com/document/d/1dUSt146dZ_t7SL1AHAm-VRsdYjC9gJb3totRR0qGy_0/edit?usp=sharing)
-
+- Chapter 7: Persistence
+- Chapter 8: Business logic design
+- Chapter 9: Type level design
+- Chapter 10: Testing
 
 # Additional materials
 
