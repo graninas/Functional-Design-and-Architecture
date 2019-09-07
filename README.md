@@ -20,7 +20,7 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-The book is 50% done. 5 chapters are published online:
+The book is 60% done. 6 chapters are published online:
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Book folder (Google Drive)](https://drive.google.com/open?id=0B1Rdr1fbS6M9SjlKUk1zMVNjOVU)
@@ -30,6 +30,8 @@ The book is 50% done. 5 chapters are published online:
 - [Chapter 3: Subsystems and services](https://docs.google.com/document/d/1sRQ4766p2dtgj76IpZMz-rMwglLixm17Y-r2D7NcdHQ/edit?usp=sharing)
 - [Chapter 4: Domain model design](https://docs.google.com/document/d/1UU-y4XaagexudLHWrrL9HeLClM6XobUqxRHL8Vdq2oc/edit?usp=sharing)
 - [Chapter 5: Application state](https://docs.google.com/document/d/1v9RYc5GbUytS7shH0_8OWX_IOrliwCIH8-SMl8fGBSA/edit?usp=sharing)
+- [Chapter 6: Multithreading and Concurrency](https://docs.google.com/document/d/1dUSt146dZ_t7SL1AHAm-VRsdYjC9gJb3totRR0qGy_0/edit?usp=sharing)
+
 
 # Additional materials
 
