@@ -63,7 +63,7 @@ This framework can be a reasonable replacement for Cloud Haskell. I've wrote a d
 
 [Building network actors with Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
 
-### Automatic White-Box Testing with Free Monads (showcase)
+### Automatic White-Box Testing with Free Monads (article and showcase)
 
 This is a showcase project demonstrating an approach to white-box testing. I've developed this approach for Juspay and then ported it to Haskell (with help of other folks). The approach can be used for regression testing.
 
