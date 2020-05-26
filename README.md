@@ -1,12 +1,8 @@
 # Functional Design and Architecture
 Code and materials for book "Functional Design and Architecture"
 
-[Book page](https://graninas.com/functional-design-and-architecture-book)
-
-### Support the book!
-
-- [Patreon page](https://www.patreon.com/functional_design_and_architecture)
-- [Paypal donations](https://www.paypal.me/graninas)
+- [Buy the book on Leanpub](https://leanpub.com/functional-design-and-architecture)
+- [Support the book on Patreon](https://www.patreon.com/functional_design_and_architecture)
 
 ### What this book is about?
 
@@ -20,7 +16,7 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-The book is 80% done. 8 chapters are published online:
+The book is 80% done. 8 chapters are published online (in draft form):
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Acknowledges](https://docs.google.com/document/d/1bfSceZlCf5r4lRPg3Aif75ez_U1yuy-Kt6smFW_3Bhs/edit?usp=sharing)
@@ -41,7 +37,6 @@ The book is 80% done. 8 chapters are published online:
 ### References list
 
 [References List](https://drive.google.com/open?id=19nMC6zU0DBmX0JgiKecYziHO51TSOB1pgqvVbG0yf1Q)
-
 
 ### Andromeda
 
