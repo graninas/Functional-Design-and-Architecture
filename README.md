@@ -16,7 +16,7 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-The book is 80% done. 8 chapters are published online (in draft form):
+The book is 90% done. 8 chapters are published online (in draft form):
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Acknowledges](https://docs.google.com/document/d/1bfSceZlCf5r4lRPg3Aif75ez_U1yuy-Kt6smFW_3Bhs/edit?usp=sharing)
@@ -29,8 +29,7 @@ The book is 80% done. 8 chapters are published online (in draft form):
 - [Chapter 6: Multithreading and Concurrency](https://docs.google.com/document/d/1dUSt146dZ_t7SL1AHAm-VRsdYjC9gJb3totRR0qGy_0/edit?usp=sharing)
 - [Chapter 7: Persistence](https://docs.google.com/document/d/1vhOMz6FMuEVUoURinbGIspi0_npIqV19LUOL0F7x0Mk/edit?usp=sharing)
 - [Chapter 8: Business logic design](https://docs.google.com/document/d/1B65yb_YxlhnhbJOLJlXd90IknHNKePZrrIds_El82To/edit?usp=sharing)
-- Chapter 9: Type level design
-- Chapter 10: Testing
+- Chapter 9: Testing
 
 # Additional materials
 
