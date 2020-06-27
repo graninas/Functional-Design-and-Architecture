@@ -16,7 +16,7 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-The book is 90% done. 8 chapters are published online (in draft form):
+The book is 100% done, 0% edited (WIP).
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Acknowledges](https://docs.google.com/document/d/1bfSceZlCf5r4lRPg3Aif75ez_U1yuy-Kt6smFW_3Bhs/edit?usp=sharing)
