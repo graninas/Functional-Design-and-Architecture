@@ -29,7 +29,7 @@ The book is 90% done. 8 chapters are published online (in draft form):
 - [Chapter 6: Multithreading and Concurrency](https://docs.google.com/document/d/1dUSt146dZ_t7SL1AHAm-VRsdYjC9gJb3totRR0qGy_0/edit?usp=sharing)
 - [Chapter 7: Persistence](https://docs.google.com/document/d/1vhOMz6FMuEVUoURinbGIspi0_npIqV19LUOL0F7x0Mk/edit?usp=sharing)
 - [Chapter 8: Business logic design](https://docs.google.com/document/d/1B65yb_YxlhnhbJOLJlXd90IknHNKePZrrIds_El82To/edit?usp=sharing)
-- Chapter 9: Testing
+- [Chapter 9: Testing](https://docs.google.com/document/d/1rKa4uy3TDj9urFm0YG14bhRy61Ra4LIVcToEa6wH7RE/edit?usp=sharing)
 
 # Additional materials
 
