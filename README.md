@@ -2,7 +2,6 @@
 Code and materials for book "Functional Design and Architecture"
 
 - [Buy the book on Leanpub](https://leanpub.com/functional-design-and-architecture)
-- [Support the book on Patreon](https://www.patreon.com/functional_design_and_architecture)
 
 ### What this book is about?
 
