@@ -18,7 +18,6 @@ The book is focusing on these topics:
 The draft of book is published online. You'll find links here. Buy this book, and you'll get access to the complete edition (once it's done) along with additional learning materials (6+ educational videos).
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
-- [Acknowledges](https://docs.google.com/document/d/1bfSceZlCf5r4lRPg3Aif75ez_U1yuy-Kt6smFW_3Bhs/edit?usp=sharing)
 - [Table of Contents](https://docs.google.com/document/d/1bh9Sa0rIGzU9Z88N_TJF6BtgHD_QLYdh1nK-yLKn_IU/edit?usp=sharing)
 - [Chapter 1: What is software design?](https://docs.google.com/document/d/16pMEo0A-4GTnHqRn63yu73VqJ92M_pQYEd-t6tTiTcg/edit?usp=sharing)
 - [Chapter 2: Architecture of the application](https://docs.google.com/document/d/1A0vnhwGxv1d4PyqdE0jPcutLcI_L5szlnPTqlhOSqMs/edit?usp=sharing)
