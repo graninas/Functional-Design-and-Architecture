@@ -15,7 +15,7 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-The draft of book is published online. You'll find links here. Buy this book, and you'll get access to the complete edition (once it's done) along with additional learning materials (6+ educational videos).
+The draft of book is published online. You'll find links here. Buy this book, and you'll get access to the complete edition along with additional learning materials (6+ educational videos).
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
 - [Table of Contents](https://docs.google.com/document/d/1bh9Sa0rIGzU9Z88N_TJF6BtgHD_QLYdh1nK-yLKn_IU/edit?usp=sharing)
