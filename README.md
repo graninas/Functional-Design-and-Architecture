@@ -1,7 +1,7 @@
 # Functional Design and Architecture
 Code and materials for my book "Functional Design and Architecture"
 
-- [Buy the book on Leanpub](https://leanpub.com/functional-design-and-architecture)
+- [Buy "Functional Deisgn and Architecture" on Leanpub](https://leanpub.com/functional-design-and-architecture) (_e-book only or a paper book; send me your PurchaseID so I could provide you a paper copy._)
 
 _N.B. I'm currently working on the second book, [Pragmatic Type Level Design](https://www.patreon.com/pragmatic_type_level_design). Your support will be highly appreciated!_
 
