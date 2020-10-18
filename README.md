@@ -3,7 +3,7 @@ Code and materials for my book "Functional Design and Architecture"
 
 - [Buy "Functional Deisgn and Architecture" on Leanpub](https://leanpub.com/functional-design-and-architecture) (_e-book only or a paper book; send me your PurchaseID so I could provide you a paper copy._)
 
-_N.B. I'm currently working on the second book, [Pragmatic Type Level Design](https://www.patreon.com/pragmatic_type_level_design). [This is a repo](https://github.com/graninas/Pragmatic-Type-Level-Design) with code samples for this book. Your support will be highly appreciated!_
+_N.B. I'm currently working on the second book, [Pragmatic Type Level Design](https://www.patreon.com/pragmatic_type_level_design). Your support will be highly appreciated!_
 
 ### What this book is about?
 
