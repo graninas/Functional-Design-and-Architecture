@@ -2,6 +2,7 @@
 Code and materials for my book "Functional Design and Architecture"
 
 - [Book page](https://graninas.com/functional-design-and-architecture-book)
+- [Buy eBook on LeanPub](https://leanpub.com/functional-design-and-architecture)
 
 - [Buy "Functional Deisgn and Architecture" on Leanpub](https://leanpub.com/functional-design-and-architecture) (_e-book only or a paper book; send me your PurchaseID so I could provide you a paper copy._)
 
