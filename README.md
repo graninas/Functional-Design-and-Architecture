@@ -1,6 +1,8 @@
 # Functional Design and Architecture
 Code and materials for my book "Functional Design and Architecture"
 
+- [Book page](https://graninas.com/functional-design-and-architecture-book)
+
 - [Buy "Functional Deisgn and Architecture" on Leanpub](https://leanpub.com/functional-design-and-architecture) (_e-book only or a paper book; send me your PurchaseID so I could provide you a paper copy._)
 
 _N.B. I'm currently working on the second book, [Pragmatic Type Level Design](https://www.patreon.com/pragmatic_type_level_design). Your support will be highly appreciated!_
@@ -16,20 +18,6 @@ The book is focusing on these topics:
 * Inversion of Control in FP (using Free monadic eDSLs);
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
-
-The draft of book is published online. You'll find links here. Buy this book, and you'll get access to the complete edition along with additional learning materials (6+ educational videos).
-
-- [Book page](https://graninas.com/functional-design-and-architecture-book)
-- [Table of Contents](https://docs.google.com/document/d/1bh9Sa0rIGzU9Z88N_TJF6BtgHD_QLYdh1nK-yLKn_IU/edit?usp=sharing)
-- [Chapter 1: What is software design?](https://docs.google.com/document/d/16pMEo0A-4GTnHqRn63yu73VqJ92M_pQYEd-t6tTiTcg/edit?usp=sharing)
-- [Chapter 2: Architecture of the application](https://docs.google.com/document/d/1A0vnhwGxv1d4PyqdE0jPcutLcI_L5szlnPTqlhOSqMs/edit?usp=sharing)
-- [Chapter 3: Subsystems and services](https://docs.google.com/document/d/1sRQ4766p2dtgj76IpZMz-rMwglLixm17Y-r2D7NcdHQ/edit?usp=sharing)
-- [Chapter 4: Domain model design](https://docs.google.com/document/d/1UU-y4XaagexudLHWrrL9HeLClM6XobUqxRHL8Vdq2oc/edit?usp=sharing)
-- [Chapter 5: Application state](https://docs.google.com/document/d/1v9RYc5GbUytS7shH0_8OWX_IOrliwCIH8-SMl8fGBSA/edit?usp=sharing)
-- [Chapter 6: Multithreading and Concurrency](https://docs.google.com/document/d/1dUSt146dZ_t7SL1AHAm-VRsdYjC9gJb3totRR0qGy_0/edit?usp=sharing)
-- [Chapter 7: Persistence](https://docs.google.com/document/d/1vhOMz6FMuEVUoURinbGIspi0_npIqV19LUOL0F7x0Mk/edit?usp=sharing)
-- [Chapter 8: Business logic design](https://docs.google.com/document/d/1B65yb_YxlhnhbJOLJlXd90IknHNKePZrrIds_El82To/edit?usp=sharing)
-- [Chapter 9: Testing](https://docs.google.com/document/d/1rKa4uy3TDj9urFm0YG14bhRy61Ra4LIVcToEa6wH7RE/edit?usp=sharing)
 
 # Additional materials
 
