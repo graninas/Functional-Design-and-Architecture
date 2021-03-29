@@ -18,19 +18,21 @@ The book is focusing on these topics:
 * Applicability of mainstream techniques and approaches such as UML, SOLID, GRASP;
 * Interaction with impure subsystems.
 
-# Additional materials
-
 ### References list
 
 [References List](https://drive.google.com/open?id=19nMC6zU0DBmX0JgiKecYziHO51TSOB1pgqvVbG0yf1Q)
 
-### Andromeda
+# Accompanying projects
+
+### The Andromeda project
 
 This is the first project created specially for the book. It demonstrates the ideas from the book in a standalone application simulating a SCADA system for spaceships.
 
 [Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
 
-### Hydra
+N.B. The project is quite outdated. Haskell has changed a lot since then. I'm working on its resurrection currently.
+
+### The Hydra project
 
 The [Hydra](https://github.com/graninas/Hydra) project is the second project created for the book. It's a framework similar to the Node framework for building multithreaded and concurrent applications in Haskell using the approaches and patterns from the book. It's interesting that the project has three different engines: Final Tagless, Free Monad and Church Encoded Free Monad, - and you can see the differences between these approaches by checking the different implementations of the same application.
 
@@ -66,6 +68,8 @@ The Node Framework makes building of distributed applications simple. It allows 
 This framework can be a reasonable replacement for Cloud Haskell. I've wrote a detailed post about framework usage and architecture:
 
 [Building network actors with Node Framework](https://gist.github.com/graninas/9beb8df5d88dda5fa21c47ce9bcb0e16)
+
+# Additional materials
 
 ### Automatic White-Box Testing with Free Monads (article and showcase)
 
