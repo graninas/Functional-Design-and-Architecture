@@ -36,7 +36,7 @@ The [Hydra](https://github.com/graninas/Hydra) project is the second project cre
 
 # Real-world applications of the ideas from the book
 
-### Juspay's Haskell EulerHS Framework
+### Juspay's Haskell EulerHS framework
 
 This is a modern, full-fledged Free monad based Haskell framework for building web backends and console applications built by me and my team. EulerHS is an "older brother" of the Hydra framework and also is based on my ideas from the book. EulerHS is a default option for all the new projects at the financial company Juspay (Bangalore, India).
 
@@ -53,7 +53,7 @@ The Presto.Core framework is used for building mobile apps. It was the first Fre
 
 Presto.Backend is intended for building web backends. It derives the design of components directly from Presto.Core. Presto.Backend was by my teammates, not me; although I've designed a recording-replying mechanism for white-box testing and improved the framework in a various places.
 
-### Juspay PureScript Workflows Engine
+### Juspay's PureScript workflows engine
 
 Another project I was working on with some other great India developers was about distributed persistable resumable and typed workflows, in PureScript, Node.JS and RabbitMQ. This project is not published yet, but it also based on the Free monad architecture. Persistency of workflows and ability to pause them at any time is achieved due to special interpreters utilizing the RecorderT transformer.
 
