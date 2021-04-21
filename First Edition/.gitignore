@@ -22,3 +22,7 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 .bin/
+
+
+trash
+*.class

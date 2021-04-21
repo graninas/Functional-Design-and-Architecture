@@ -1,28 +1,3 @@
-package native.core {
-
-    abstract class Temperature
-        
-    case class Kelvin(value: Float) extends Temperature
-    case class Celsius(value: Float) extends Temperature
-
-    object utils {
-      def toCelsius(data: Float) : Float = data - 273.15f
-      def toCelsius(data: native.core.Temperature) : Float =
-          data match {
-              case native.core.Kelvin(v)  => toCelsius(v)
-              case native.core.Celsius(v) => v
-          }
-    }
-
-
-    object thermometer {
-        def getData() = {
-                println("Thermometer returned data.")
-                Kelvin(100.0f)
-            }
-    }
-}
-
 package server {
     object connection {
         def send(name: String, dataType: String, v: Float) = {
@@ -81,6 +56,6 @@ object L11 {
     }
 
     def main(args: Array[String]) {
-        observeThermometerData()        
+        observeThermometerData()
     }
 }

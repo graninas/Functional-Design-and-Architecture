@@ -1,4 +1,4 @@
-name:                Pragmatic-Type-Level-Design
+name:                Functional-Design-And-Architecture
 version:             0.0.0.1
 github:              "graninas/Functional-Design-and-Architecture"
 license:             BSD3
@@ -56,4 +56,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - hspec
-    - Pragmatic-Type-Level-Design
+    - Functional-Design-And-Architecture

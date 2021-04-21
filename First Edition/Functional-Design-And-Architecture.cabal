@@ -1,0 +1,157 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: f85dd42ba55b2a83d8f3f6d7a233685c2c7c1e01d308b7a310eed38e4e17226c
+
+name:           Functional-Design-And-Architecture
+version:        0.0.0.1
+homepage:       https://github.com/graninas/Functional-Design-and-Architecture#readme
+bug-reports:    https://github.com/graninas/Functional-Design-and-Architecture/issues
+author:         Alexander Granin
+maintainer:     graninas@gmail.com
+copyright:      Granin A.S. 2021
+license:        BSD3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/graninas/Functional-Design-and-Architecture
+
+library
+  exposed-modules:
+      BookSamples.CH01.ImpurePureLogic
+      BookSamples.CH01.L12
+      BookSamples.CH01.L13
+      BookSamples.CH01.Native.Core.Thermometer
+      BookSamples.CH01.ServerContext.Connection
+      BookSamples.CH01.TypesystemShowcase
+      BookSamples.CH02.ScenarioDSL4Advanced
+      BookSamples.CH03.AlgebraicHdl
+      BookSamples.CH03.AskAndPrintIO
+      BookSamples.CH03.Device
+      BookSamples.CH03.FactorialInStateMonad
+      BookSamples.CH03.FactorialInStateTMonad
+      BookSamples.CH03.FactorialStateNested
+      BookSamples.CH03.FreeMonadHdl
+      BookSamples.CH03.HardwareSubsystem
+      BookSamples.CH03.MonadsAsSubsystems
+      BookSamples.CH03.MonadStack
+      BookSamples.CH03.MonadsTransformers
+      BookSamples.CH03.MVarRequestResponsePattern
+      BookSamples.CH03.Services.ImpureStateless.Andromeda.Common.Logger
+      BookSamples.CH03.Services.ImpureStateless.Andromeda.Hardware.Device
+      BookSamples.CH03.Services.ImpureStateless.Andromeda.Hardware.HDL
+      BookSamples.CH03.Services.ImpureStateless.Andromeda.Hardware.Runtime
+      BookSamples.CH03.Services.ImpureStateless.Andromeda.Hardware.Service
+      BookSamples.CH03.Services.ImpureStateless.DeviceTest
+      BookSamples.CH03.Services.ImpureStateless.Hardware
+      BookSamples.CH03.Services.ImpureStateless.HardwareTest
+      BookSamples.CH03.Services.ImpureStateless.TestData
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Common.Logger
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Common.Pipe
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Hardware.Device
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Hardware.HDL
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Hardware.RemoteService
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Hardware.Runtime
+      BookSamples.CH03.Services.ImpureStatelessRemote.Andromeda.Hardware.Service
+      BookSamples.CH03.Services.ImpureStatelessRemote.DeviceTest
+      BookSamples.CH03.Services.ImpureStatelessRemote.Hardware
+      BookSamples.CH03.Services.ImpureStatelessRemote.HardwareTest
+      BookSamples.CH03.Services.ImpureStatelessRemote.TestData
+      BookSamples.CH03.Services.PureStateless.Andromeda.Hardware.Device
+      BookSamples.CH03.Services.PureStateless.Andromeda.Hardware.HDL
+      BookSamples.CH03.Services.PureStateless.Andromeda.Hardware.Runtime
+      BookSamples.CH03.Services.PureStateless.Andromeda.Hardware.Service
+      BookSamples.CH03.Services.PureStateless.DeviceTest
+      BookSamples.CH03.Services.PureStateless.Hardware
+      BookSamples.CH03.Services.PureStateless.HardwareTest
+      BookSamples.CH03.Services.PureStateless.TestData
+      BookSamples.CH03.SeveralFactorialComputations
+      BookSamples.CH03.Value
+      BookSamples.CH03.WordsStatisticsCalculationMonadTransformer
+      BookSamples.CH03.WordsStatisticsCalculationMonadTransformerSeparated
+      BookSamples.CH03.WordsStatisticsCalculationNestedMonads
+      BookSamples.CH04.ArrowizedDSL.ArrEff
+      BookSamples.CH04.ArrowizedDSL.ArrowDSL
+      BookSamples.CH04.ArrowizedDSL.ComputationDSL
+      BookSamples.CH04.ArrowizedDSL.Control
+      BookSamples.CH04.ArrowizedDSL.ControllerDSL
+      BookSamples.CH04.ArrowizedDSL.DataAccessDSL
+      BookSamples.CH04.ArrowizedDSL.InfrastructureDSL
+      BookSamples.CH04.ArrowizedDSL.Interpreters
+      BookSamples.CH04.ArrowizedDSL.ScriptingDSL
+      BookSamples.CH04.ArrowizedDSL.TestArrows
+      BookSamples.CH04.ArrowizedDSL.TestProgram
+      BookSamples.CH04.ControlProgramDSL.ComputationDSL
+      BookSamples.CH04.ControlProgramDSL.Control
+      BookSamples.CH04.ControlProgramDSL.ControllerDSL
+      BookSamples.CH04.ControlProgramDSL.CustomInterpreters
+      BookSamples.CH04.ControlProgramDSL.DataAccessDSL
+      BookSamples.CH04.ControlProgramDSL.InfrastructureDSL
+      BookSamples.CH04.ControlProgramDSL.InterpreterInstances
+      BookSamples.CH04.ControlProgramDSL.ScriptingDSL
+      BookSamples.CH04.ControlProgramDSL.TestProgram
+      BookSamples.CH04.ControlProgramDSL.Types
+      BookSamples.CH04.FizzBuzzMorse
+      BookSamples.CH04.LensDemo
+      BookSamples.CH04.SimpleCombinatorialDSL
+      BookSamples.CH05.DiningPhilosophers
+      BookSamples.CH05.DiningPhilosophersSimple
+      BookSamples.CH05.ImpureMVarState
+      BookSamples.CH05.STMBlocking
+  other-modules:
+      Paths_Functional_Design_And_Architecture
+  hs-source-dirs:
+      src
+  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  ghc-options: -Wall
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , free
+    , lens
+    , mtl
+    , newtype-generics
+    , random
+    , scientific
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , uuid
+    , void
+  default-language: Haskell2010
+
+test-suite functional-tests
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      CH01_04_1Spec
+      Paths_Functional_Design_And_Architecture
+  hs-source-dirs:
+      test/
+  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Functional-Design-And-Architecture
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , free
+    , hspec
+    , lens
+    , mtl
+    , newtype-generics
+    , random
+    , scientific
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , uuid
+    , void
+  default-language: Haskell2010
