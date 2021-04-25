@@ -1,11 +1,11 @@
 import native.core.temperature
-import native.core.termometer
+import native.core.thermometer
 import native.core.utils
 
 object Observer {
   def readAndSendTemperature() {
 
-    def toCelsius(data: native.core.Temperature) : Float =
+    def toCelsius(data: native.core.temperature) : Float =
       data match {
         case native.core.Kelvin(v) => 273.15f - v
         case native.core.Celsius(v) => v

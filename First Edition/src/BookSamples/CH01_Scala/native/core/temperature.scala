@@ -1,8 +1,8 @@
 package native.core {
 
-  abstract class Temperature
+  abstract class temperature
 
-  case class Kelvin(value: Float) extends Temperature
-  case class Celsius(value: Float) extends Temperature
+  case class Kelvin(value: Float) extends temperature
+  case class Celsius(value: Float) extends temperature
 
 }
