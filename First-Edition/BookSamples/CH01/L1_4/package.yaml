@@ -1,11 +1,9 @@
-name:                Functional-Design-And-Architecture
-version:             0.0.0.1
-github:              "graninas/Functional-Design-and-Architecture"
+name:                l1p4
+version:             1.0.0.0
 license:             BSD3
 author:              "Alexander Granin"
 maintainer:          "graninas@gmail.com"
 copyright:           "Granin A.S. 2021"
-
 
 default-extensions:
 - DeriveFunctor
@@ -38,22 +36,13 @@ dependencies:
 - random
 - lens
 
-library:
-  source-dirs:
-  - src
-  ghc-options:
-  - -Wall
-
-
-tests:
-  functional-tests:
-    main: Spec.hs
-    source-dirs:
-    - test/
+executables:
+  l1_3:
+    main:                Main.hs
+    source-dirs:         ./
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    dependencies:
-    - hspec
-    - Functional-Design-And-Architecture
+    - -Wall
+    # - -O2

@@ -1,0 +1,41 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: d54b41f3e9a2e2401601e358ca8a17acffa322348fa6d1d0d80504ea4a1f79a0
+
+name:           tssch
+version:        1.0.0.0
+author:         Alexander Granin
+maintainer:     graninas@gmail.com
+copyright:      Granin A.S. 2021
+license:        BSD3
+build-type:     Simple
+
+executable l1_3
+  main-is: Main.hs
+  other-modules:
+      Paths_tssch
+  hs-source-dirs:
+      ./
+  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , free
+    , lens
+    , mtl
+    , newtype-generics
+    , random
+    , scientific
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , uuid
+    , void
+  default-language: Haskell2010

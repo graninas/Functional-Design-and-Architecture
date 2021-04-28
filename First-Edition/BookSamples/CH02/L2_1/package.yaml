@@ -1,0 +1,48 @@
+name:                l2p1
+version:             1.0.0.0
+license:             BSD3
+author:              "Alexander Granin"
+maintainer:          "graninas@gmail.com"
+copyright:           "Granin A.S. 2021"
+
+default-extensions:
+- DeriveFunctor
+- DeriveGeneric
+- OverloadedStrings
+- LambdaCase
+- MultiParamTypeClasses
+- ScopedTypeVariables
+- ExplicitNamespaces
+- NamedFieldPuns
+- TupleSections
+- ViewPatterns
+- MultiWayIf
+- RecordWildCards
+
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- mtl
+- time
+- scientific
+- containers
+- free
+- transformers
+- template-haskell
+- text
+- newtype-generics
+- uuid
+- void
+- random
+- lens
+
+executables:
+  l1_3:
+    main:                Main.hs
+    source-dirs:         ./
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    # - -O2

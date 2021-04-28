@@ -1,0 +1,7 @@
+
+resolver: lts-16.16
+
+packages:
+- BookSamples/CH01/L1_3
+- BookSamples/CH01/L1_4
+- BookSamples/CH01/TypesystemShowcase

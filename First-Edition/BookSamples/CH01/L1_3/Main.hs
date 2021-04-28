@@ -1,4 +1,4 @@
-
+module Main where
 
 import qualified Native.Core.Thermometer as T
 import qualified ServerContext.Connection as C
@@ -17,10 +17,14 @@ readTemperature = do
         T.Kelvin  v -> 273.15 - v
         T.Celsius v -> v
 
-    
+
 readAndSend :: IO ()
 readAndSend = do
     t1 <- readTemperature
     let t2 = t1 - 12.5 -- defect device!
     sendTemperature "T-201A" t2
-    
+
+
+
+main :: IO ()
+main = readAndSend

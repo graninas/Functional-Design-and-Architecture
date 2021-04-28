@@ -9,7 +9,7 @@ writeFloat :: Float -> IO ()
 writeFloat value = writeFile "value.txt" (show value)
 
 toFloatAndWrite :: Int -> IO ()
-toFloatAndWrite value = let 
+toFloatAndWrite value = let
     value = toFloat 42
     in writeFloat value
 
@@ -45,3 +45,5 @@ getUserInitials' u = do
     name <- getUserName user
     Just (head name)
 
+main :: IO ()
+main = pure ()
