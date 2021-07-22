@@ -4,15 +4,8 @@
 
 Code and materials for my book "Functional Design and Architecture" (1st and 2nd editions)
 
-### FDaA First Edition, self-published, delaunched at the moment
-
-- [Functional Design and Architecture (First Edition)](https://leanpub.com/functional-design-and-architecture)
-
-### FDaA Second Edition, Manning Publications
-
-We're working on the Second Edition with Manning Publications.
-
-* [Functional Design and Architecture (Second Edition)](https://www.manning.com/books/functional-design-and-architecture)
+- [Functional Design and Architecture (First Edition, delaunched)](https://leanpub.com/functional-design-and-architecture)
+- [Functional Design and Architecture (Second Edition, MEAP is available)](https://www.manning.com/books/functional-design-and-architecture)
 
 ### What this book is about?
 
