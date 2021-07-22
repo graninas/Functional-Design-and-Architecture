@@ -1,18 +1,18 @@
 # Functional Design and Architecture
 
+- [Book page (1st and 2nd editions)](https://graninas.com/functional-design-and-architecture-book)
+
 Code and materials for my book "Functional Design and Architecture" (1st and 2nd editions)
 
-### FDaA First Edition, self-published
+### FDaA First Edition, self-published, delaunched at the moment
 
-- [Book page (1st and 2nd editions)](https://graninas.com/functional-design-and-architecture-book)
-- [FDaA Table of Contents](https://docs.google.com/document/d/1zs8TuRRa5OCdR0ed9x398lIoQTeDtnZEBMW0U6qgBSU/edit?usp=sharing)
-- [Buy Functional Design and Architecture (Second Edition) by Manning Publications](https://www.manning.com/books/functional-design-and-architecture)
+- [Functional Design and Architecture (First Edition)](https://leanpub.com/functional-design-and-architecture)
 
 ### FDaA Second Edition, Manning Publications
 
 We're working on the Second Edition with Manning Publications.
 
-* [FDaA SE Table of Contents](https://docs.google.com/document/d/1oKti8O-eHYfNOXmGmR4JS2ZbFwKRQEOXVgnNKurU3Zk/edit?usp=sharing)
+* [Functional Design and Architecture (Second Edition)](https://www.manning.com/books/functional-design-and-architecture)
 
 ### What this book is about?
 
