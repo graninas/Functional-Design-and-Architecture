@@ -5,7 +5,7 @@
 Code and materials for my book "Functional Design and Architecture" (1st and 2nd editions)
 
 - [Functional Design and Architecture (First Edition, delaunched)](https://leanpub.com/functional-design-and-architecture)
-- [Functional Design and Architecture (Second Edition, MEAP is available)](https://www.manning.com/books/functional-design-and-architecture)
+- [Functional Design and Architecture (Second Edition with Manning Publications, MEAP is available)](https://www.manning.com/books/functional-design-and-architecture)
 
 ### What this book is about?
 
