@@ -1,11 +1,11 @@
-module ScenarioDSL2 where
+module ScenarioDSL1 where
 
 type Name = String
 
 data Value = FloatValue Float
            | IntValue Int
            | StringValue String
-           
+
 data Controller = Controller Name
 
 type Power = Float
@@ -22,7 +22,7 @@ data Procedure
     | Wait Int
 
 heatUp :: Script
-heatUp = 
+heatUp =
     [ ReadTemperature (Controller "boosters")
     , Report (FloatValue undefined)
     , Store (FloatValue undefined)
