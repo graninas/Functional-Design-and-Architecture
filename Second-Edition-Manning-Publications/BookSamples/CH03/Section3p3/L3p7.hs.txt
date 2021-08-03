@@ -1,0 +1,30 @@
+-- This listing can't be compiled.
+
+module Andromeda.Hardware.HDL
+  ( module X
+  , Component
+  , ComponentIndex
+  , sensor
+  , controller
+  ) where
+
+import Andromeda.Hardware.Common as X
+  (PhysicalGuid, Parameter, Manufacturer, ComponentName)
+
+import Andromeda.Hardware.HDL.Internal
+  (ComponentDef (..), ComponentClass (..))
+
+sensor
+  :: PhysicalGuid -> Manufacturer -> ComponentName
+  -> ComponentIndex -> Parameter
+  -> Component
+sensor guid manufacturer name idx param = Sensor
+  (ComponentDef Sensors guid manufacturer name)
+  idx param
+
+controller
+  :: PhysicalGuid -> Manufacturer -> ComponentName
+  -> ComponentIndex
+  -> Component
+controller guid manufacturer name idx = Controller
+  (ComponentDef Controllers guid manufacturer name) idx

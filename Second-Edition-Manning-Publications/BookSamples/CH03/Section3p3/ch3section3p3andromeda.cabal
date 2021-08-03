@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7f0b7141cca1c9bd1a01adf85e2e6d799d4ad4a0dddd3a44addac839e8406f54
+-- hash: e8a08821d98a5211ae4e56192dca8b878e4523bbbc8021d7ccbf821dcf816728
 
-name:           ch3section3p2andromeda
+name:           ch3section3p3andromeda
 version:        1.0.0.0
 author:         Alexander Granin
 maintainer:     graninas@gmail.com
@@ -14,7 +14,7 @@ copyright:      Granin A.S. 2021
 license:        BSD3
 build-type:     Simple
 
-executable ch3section3p2andromeda
+executable ch3section3p3andromeda
   main-is: Main.hs
   other-modules:
       Andromeda
@@ -36,7 +36,7 @@ executable ch3section3p2andromeda
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
-      Paths_ch3section3p2andromeda
+      Paths_ch3section3p3andromeda
   hs-source-dirs:
       ./
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
