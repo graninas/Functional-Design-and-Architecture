@@ -1,0 +1,25 @@
+
+
+Scenario: thermTemperature
+Description: read value from the thermometer
+Given: outside thermometer @therm
+Invocation: on call
+
+  Read @therm,
+    Result: @reading(@time, @tempCelsius, @therm)
+
+  @tempCelsius + 273.15,
+    Result: @tempKelvin
+
+  Return (@time, @tempKelvin, @therm)
+
+Scenario: validateTemperature
+Description: validate temperature
+Parameters: (@time, @temp, @therm)
+Invocation: on call
+
+  If @temp < 263.15K Then
+    Return (Failure, "Outside T < than bound for " + @therm)
+  Else If @temp > 323.15K Then
+    Return (Failure, "Outside T > than bound for " + @therm)
+  Else Return Success

@@ -1,0 +1,6 @@
+
+resolver: lts-16.16
+
+packages:
+- BookSamples/CH03/Section3p1
+- BookSamples/CH03/Section3p2

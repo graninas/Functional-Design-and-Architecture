@@ -1,0 +1,24 @@
+
+
+Stream: thermReadings
+Description: stream of measurements of the thermometer
+Invocation: once a second
+
+  thermTemperature(),
+    Result: @reading
+  Yield @reading
+
+Stream: thermMonitor
+Description: stream of results of the thermometer
+Invocation: for @reading in thermReadings
+
+  Store @reading
+
+  validateTemperature(@reading),
+    Result: @result
+
+  If @result == (Failure, @message) Then
+    Log @reading
+    Raise alarm @message
+
+  Yield @result

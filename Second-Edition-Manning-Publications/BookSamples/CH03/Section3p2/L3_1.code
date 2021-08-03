@@ -1,0 +1,31 @@
+
+
+Scenario: readThermometer
+Description: monitor outside thermometer temperature
+Given: outside thermometer @therm
+Invocation: once a second
+
+  Read @therm,
+    Result: @reading(@time, @temp, @therm)
+
+  If @temp < -10C Then
+    register @reading
+    Log @reading
+    Raise alarm "Temperature is too low"
+
+  Else If @temp > 50C Then
+    register @reading
+    Log @reading
+    Raise alarm "Temperature is too high"
+
+  Else register @reading
+
+  Return @reading
+
+Scenario: register
+Parameters: (@time, @tempCelsius, @device)
+Invocation: on call
+
+  @tempCelsius + 273.15,
+    Result: @tempKelvin
+  Store (@time, @tempKelvin, @device)

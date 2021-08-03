@@ -1,0 +1,43 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 96ef390778b5e46ef456f5049005a7b11fb055971be17fbe6df847dbc0ddd27d
+
+name:           ch3section3p1
+version:        1.0.0.0
+author:         Alexander Granin
+maintainer:     graninas@gmail.com
+copyright:      Granin A.S. 2021
+license:        BSD3
+build-type:     Simple
+
+executable ch3section3p1
+  main-is: Main.hs
+  other-modules:
+      Listing1
+      Listing2
+      Paths_ch3section3p1
+  hs-source-dirs:
+      ./
+  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , free
+    , lens
+    , mtl
+    , newtype-generics
+    , random
+    , scientific
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , uuid
+    , void
+  default-language: Haskell2010
