@@ -1,0 +1,63 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 18d4ffdb482dae95383e01a0a2db5c070973b447bd72b419d3623e4baf8dd5f8
+
+name:           ch4section4p1andromeda
+version:        1.0.0.0
+author:         Alexander Granin
+maintainer:     graninas@gmail.com
+copyright:      Granin A.S. 2021
+license:        BSD3
+build-type:     Simple
+
+executable ch4section4p1andromeda
+  main-is: Main.hs
+  other-modules:
+      Andromeda
+      Andromeda.Assets
+      Andromeda.Assets.Hardware.Components
+      Andromeda.Calculations
+      Andromeda.Common
+      Andromeda.Common.Value
+      Andromeda.Hardware
+      Andromeda.Hardware.Common
+      Andromeda.Hardware.Components.API
+      Andromeda.Hardware.Device
+      Andromeda.Hardware.Hdl
+      Andromeda.Hardware.Hndl
+      Andromeda.Hardware.Runtime
+      Andromeda.LogicControl
+      Andromeda.LogicControl.Language
+      Andromeda.Simulator
+      Andromeda.Simulator.Actions
+      Andromeda.Simulator.Language
+      Andromeda.Simulator.Runtime
+      Andromeda.Simulator.Simulation
+      Andromeda.Simulator.SimulationModel
+      Andromeda.Vendors.AAA
+      Paths_ch4section4p1andromeda
+  hs-source-dirs:
+      ./
+  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , free
+    , lens
+    , mtl
+    , newtype-generics
+    , random
+    , scientific
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , uuid
+    , void
+  default-language: Haskell2010
