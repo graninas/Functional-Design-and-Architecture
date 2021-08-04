@@ -1,4 +1,21 @@
+-- Listing for section 3.3.3.
 -- This listing can't be compiled.
+
+
+
+import Andromeda.Hardware.Device
+  ( Device, blankDevice, addSensor, addController)
+
+makeDevice :: Hdl -> Device
+makeDevice hdl = makeDevice' hdl blankDevice
+  where
+    makeDevice' [] d = d
+    makeDevice' (c:cs) d    = makeDevice' cs (add' c d)
+    add' (Sensor c idx p)   = addSensor idx p c
+    add' (Controller c idx) = addController idx c
+
+
+
 
 module Andromeda.Hardware.HDL
   ( module X

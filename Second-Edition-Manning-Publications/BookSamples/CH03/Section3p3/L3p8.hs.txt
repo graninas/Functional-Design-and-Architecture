@@ -1,0 +1,43 @@
+-- Listing for section 3.3.3.
+-- This listing can't be compiled.
+
+
+module Andromeda.Hardware.Components.API where
+
+data SensorAPI = SensorAPI
+  { reset :: IO ()
+  , readMeasurement :: IO Measurement
+  , setCallback :: Period -> IO Measurement -> IO ()
+  }
+
+data ControllerAPI = ControllerAPI
+  { reboot :: IO ()
+  , turnOff :: IO ()
+  , eval :: String -> IO ()
+  , doSomethingElse :: IO ()
+  }
+
+
+
+import Andromeda.Hardware.Components.API
+  (SensorAPI, ControllerAPI)
+
+import Andromeda.Vendors.AAA
+  ( t25Sensor, p02Sensor, c86Controller
+  , t25Handler, p02Handler, c86Handler)
+
+data DeviceComponent
+  = SensorImpl     ComponentDef SensorAPI
+  | ControllerImpl ComponentDef ControllerAPI
+
+addSensor :: ComponentIndex -> Parameter
+          -> ComponentDef -> Device -> Device
+addSensor idx _
+  def@(ComponentDef cClass cName cGuid cVendor)
+  (DeviceImpl components)
+    | cName == t25Sensor = DeviceImpl (add' t25Handler)
+    | cName == p02Sensor = DeviceImpl (add' p02Handler)
+    | otherwise = error "unknown component"
+  where
+    add' h = Map.insert idx (sensor h) components
+    sensor h = SensorImpl def h

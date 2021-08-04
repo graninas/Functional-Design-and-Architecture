@@ -1,10 +1,7 @@
-module Andromeda.Assets.Hardware.Components
-  (
-
-
-  ) where
+module Andromeda.Assets.Hardware.Components where
 
 import Andromeda.Hardware
+import Andromeda.Vendors.AAA
 
 guid1 = "guid1"
 guid2 = "guid2"
@@ -32,9 +29,10 @@ boostersDef =
 
 -- Inconsistency allowed:
 
-t25Sensor:: ComponentDef
-t25Sensor =
-  ComponentDef Sensors "some_guid" "AAA Inc." "AAA-T-25"
+-- Defined in Andromeda.Hardware.Components.Assets
+-- t25Sensor:: ComponentDef
+-- t25Sensor =
+--   ComponentDef Sensors "some_guid" "AAA Inc." "AAA-T-25"
 
 validComponent :: Component
 validComponent =
