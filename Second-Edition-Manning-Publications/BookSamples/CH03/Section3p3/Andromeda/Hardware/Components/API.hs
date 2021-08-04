@@ -1,5 +1,7 @@
 module Andromeda.Hardware.Components.API where
 
+import Andromeda.Hardware.Common
+
 
 data SensorAPI = SensorAPI
   { reset :: IO ()

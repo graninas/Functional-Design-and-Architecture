@@ -36,7 +36,7 @@ data Device
 
 
 blankDevice :: Device
-blankDevice = Device
+blankDevice = DeviceImpl Map.empty
 
 makeDevice :: Hdl -> Device
 makeDevice hdl = makeDevice' hdl blankDevice

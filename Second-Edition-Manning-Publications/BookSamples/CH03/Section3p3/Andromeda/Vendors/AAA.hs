@@ -33,12 +33,12 @@ t25Handler :: SensorAPI
 t25Handler = SensorAPI
   { reset = putStrLn $ t25SensorName <> " " <> " reset."
   , readMeasurement = pure $ Measurement Temperature 100.0   -- dummy
-  , setCallback _ _ = putStrLn $ t25SensorName <> " " <> " callback."
+  , setCallback = \_ _ -> putStrLn $ t25SensorName <> " " <> " callback."
   }
 
 p02Handler :: SensorAPI
 p02Handler = SensorAPI
   { reset = putStrLn $ p02SensorName <> " " <> " reset."
   , readMeasurement = pure $ Measurement Temperature 100.0   -- dummy
-  , setCallback _ _ = putStrLn $ p02SensorName <> " " <> " callback."
+  , setCallback = \_ _ -> putStrLn $ p02SensorName <> " " <> " callback."
   }

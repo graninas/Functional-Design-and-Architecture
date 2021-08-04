@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e8a08821d98a5211ae4e56192dca8b878e4523bbbc8021d7ccbf821dcf816728
+-- hash: 23e47cb59c7aee05f5a844e97207351767293563338f9d93bda11cc01146672d
 
 name:           ch3section3p3andromeda
 version:        1.0.0.0
@@ -24,6 +24,8 @@ executable ch3section3p3andromeda
       Andromeda.Common
       Andromeda.Common.Value
       Andromeda.Hardware
+      Andromeda.Hardware.Common
+      Andromeda.Hardware.Components.API
       Andromeda.Hardware.Device
       Andromeda.Hardware.Hdl
       Andromeda.Hardware.Hndl
@@ -36,6 +38,7 @@ executable ch3section3p3andromeda
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
+      Andromeda.Vendors.AAA
       Paths_ch3section3p3andromeda
   hs-source-dirs:
       ./
