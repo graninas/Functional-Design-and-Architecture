@@ -1,6 +1,8 @@
 module Andromeda.Hardware.Device (
     Device,
     DeviceComponent,
+    WithHandler (..),
+    withHandler,
     makeDevice,
     blankDevice,
     addSensor,
@@ -84,3 +86,19 @@ getComponent idx (DeviceImpl components) = Map.lookup idx components
 updateComponent :: ComponentIndex -> DeviceComponent
                 -> Device -> Maybe Device
 updateComponent = undefined
+
+
+
+
+class WithHandler handlerAPI where
+  withHandler :: DeviceComponent
+              -> (handlerAPI -> IO ())
+              -> IO ()
+
+instance WithHandler SensorAPI where
+  withHandler (SensorImpl _ handler) f = f handler
+  withHandler _ _ = error "Invalid component API handler"
+
+instance WithHandler ControllerAPI where
+  withHandler (ControllerImpl _ handler) f = f handler
+  withHandler _ _ = error "Invalid component API handler"

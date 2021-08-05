@@ -10,7 +10,11 @@ type PhysicalGuid = String
 type ComponentName = String
 
 data Parameter      = Temperature | Pressure
+  deriving (Show, Eq, Ord)
+
 data ComponentClass = Sensors | Controllers
+  deriving (Show, Eq, Ord)
+
 type Manufacturer   = String
 
 data ComponentDef = ComponentDef
@@ -19,7 +23,10 @@ data ComponentDef = ComponentDef
   , componentGuid         :: PhysicalGuid
   , componentManufacturer :: Manufacturer
   }
-
+  deriving (Show, Eq, Ord)
 
 data Measurement = Measurement Parameter Float
+  deriving (Show, Eq, Ord)
+
 data Period = Secondly
+  deriving (Show, Eq, Ord)
