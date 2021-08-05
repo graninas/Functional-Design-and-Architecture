@@ -36,12 +36,31 @@ dependencies:
 - random
 - lens
 
+library:
+  source-dirs:
+  - src
+  ghc-options:
+  - -Wall
+
 executables:
   ch4section4p1andromeda:
     main:                Main.hs
-    source-dirs:         ./
+    source-dirs:         ./src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
+
+tests:
+  functional:
+    main: Spec.hs
+    source-dirs:
+    - test/
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hspec
+    - ch4section4p1andromeda
