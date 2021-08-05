@@ -9,9 +9,9 @@ guid3 = "guid3"
 
 
 
-aaa_p_02 = ComponentDef Sensors     guid1 "AAA Inc." "AAA-P-02"
-aaa_t_25 = ComponentDef Sensors     guid2 "AAA Inc." "AAA-T-25"
-aaa_c_86 = ComponentDef Controllers guid3 "AAA Inc." "AAA-C-86"
+aaa_p_02 = ComponentDef Sensors     p02SensorName guid1 "AAA Inc."
+aaa_t_25 = ComponentDef Sensors     t25SensorName guid2 "AAA Inc."
+aaa_c_86 = ComponentDef Controllers c86ControllerName guid3 "AAA Inc."
 
 
 boostersDef :: Hdl

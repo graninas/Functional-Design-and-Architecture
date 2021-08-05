@@ -2,10 +2,20 @@
 module Andromeda.HardwareSpec where
 
 import           Test.Hspec
-import           Data.Proxy (Proxy(..))
+
+import Andromeda
+
+import Andromeda.Assets.Hardware.Components (boostersDef)
+import Andromeda.Vendors.AAA (c86ControllerName)
 
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
-    it "dummy" $ do
-      1 `shouldBe` 1
+    it "Hardware device components check" $ do
+
+      let boosters = makeDevice boostersDef
+      let mbThermometer = getComponent "controller" boosters
+
+      case mbThermometer of
+        Nothing -> fail "There is no such component"
+        Just component -> putStrLn "Component found."

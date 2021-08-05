@@ -1,6 +1,7 @@
 module Andromeda.Hardware.Device (
     Device,
     DeviceComponent,
+    makeDevice,
     blankDevice,
     addSensor,
     addController,
@@ -17,7 +18,7 @@ import Andromeda.Hardware.Hdl
 -- specific components and manufacturers.
 import Andromeda.Vendors.AAA (t25SensorName, p02SensorName
   , t25Handler, p02Handler
-  -- , c86Controller, c86Handler
+  , c86ControllerName, c86Handler
   )
 --
 
@@ -57,21 +58,28 @@ addSensor idx _
   (DeviceImpl components)
     | cName == t25SensorName = DeviceImpl (add' t25Handler)
     | cName == p02SensorName = DeviceImpl (add' p02Handler)
-    | otherwise = error "unknown component"
+    | otherwise = error "unknown component"                     -- bad practice
   where
     add' h = Map.insert idx (sensor h) components
     sensor h = SensorImpl def h
---
-
 
 
 addController :: ComponentIndex -> ComponentDef
               -> Device -> Device
-addController = undefined
+addController idx
+  def@(ComponentDef cClass cName cGuid cVendor)
+  (DeviceImpl components)
+    | cName == c86ControllerName = DeviceImpl (add' c86Handler)
+    | otherwise = error "unknown component"                     -- bad practice
+  where
+    add' h = Map.insert idx (controller h) components
+    controller h = ControllerImpl def h
+--
+
 
 getComponent :: ComponentIndex -> Device
              -> Maybe DeviceComponent
-getComponent = undefined
+getComponent idx (DeviceImpl components) = Map.lookup idx components
 
 updateComponent :: ComponentIndex -> DeviceComponent
                 -> Device -> Maybe Device
