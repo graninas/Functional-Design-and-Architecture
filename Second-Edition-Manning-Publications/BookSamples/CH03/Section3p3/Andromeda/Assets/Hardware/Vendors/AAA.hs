@@ -4,6 +4,8 @@ import Andromeda.Hardware.Common
 import Andromeda.Hardware.Components.API
 import Andromeda.Hardware.Hdl
 
+import qualified Data.Map as Map
+
 -- import Native AAA sensors library here or do FFI
 
 
@@ -57,3 +59,11 @@ c86Handler = ControllerAPI
   , eval = \cmd -> putStrLn $ c86ControllerName <> " eval cmd: " <> cmd
   , doSomethingElse = putStrLn $ c86ControllerName <> " do something else"
   }
+
+
+
+aaaVendorComponents = Map.fromList
+  [ ((aaaIncVendor, t25SensorName),     VendoredSensor     t25Sensor t25Handler)
+  , ((aaaIncVendor, p02SensorName),     VendoredSensor     p02Sensor p02Handler)
+  , ((aaaIncVendor, c86ControllerName), VendoredController c86Controller c86Handler)
+  ]

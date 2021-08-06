@@ -1,6 +1,6 @@
 module Andromeda.Hardware.Device (
     Device,
-    DeviceComponent,
+    DeviceComponent (..),
     WithHandler (..),
     withHandler,
     makeDevice,
@@ -16,18 +16,10 @@ import Andromeda.Hardware.Common
 import Andromeda.Hardware.Components.API (SensorAPI, ControllerAPI)
 import Andromeda.Hardware.Hdl
 
--- This is a sample of a bad design. The code knows about
--- specific components and manufacturers.
-import Andromeda.Vendors.AAA (t25SensorName, p02SensorName
-  , t25Handler, p02Handler
-  , c86ControllerName, c86Handler
-  )
---
-
 import Data.Map (Map)
 import qualified Data.Map as Map
 
-
+-- Design flaw: is it an implementation detail or a public definition?
 data DeviceComponent
   = SensorImpl     ComponentDef SensorAPI
   | ControllerImpl ComponentDef ControllerAPI
@@ -37,46 +29,45 @@ data Device
   = DeviceImpl (Map ComponentIndex DeviceComponent)
 
 
-
 blankDevice :: Device
 blankDevice = DeviceImpl Map.empty
 
-makeDevice :: Hdl -> Device
-makeDevice hdl = makeDevice' hdl blankDevice
+
+makeDevice
+  :: VendorComponents
+  -> Hdl
+  -> Device
+makeDevice vendorComponents hdl = makeDevice' hdl blankDevice
   where
+    -- Traversing the list of devices
     makeDevice' [] d = d
-    makeDevice' (c:cs) d    = makeDevice' cs (add' c d)
-    add' (Sensor c idx p)   = addSensor idx p c
-    add' (Controller c idx) = addController idx c
+    makeDevice' (c:cs) d = makeDevice' cs (add' c d)
+
+    -- Creating a specific component (implementation)
+    -- by its definition and adding into the Device type
+    add' componentDef = case validateComponent vendorComponents componentDef of
+      Left err -> error err                  -- Bad practice!
+      Right component -> addComponent idx component d
 
 
-
--- This is a sample of a bad design. The code knows about
--- specific components and manufacturers.
-addSensor :: ComponentIndex -> Parameter
-          -> ComponentDef -> Device -> Device
-addSensor idx _
-  def@(ComponentDef cClass cName cGuid cVendor)
-  (DeviceImpl components)
-    | cName == t25SensorName = DeviceImpl (add' t25Handler)
-    | cName == p02SensorName = DeviceImpl (add' p02Handler)
-    | otherwise = error "unknown component"                     -- bad practice
-  where
-    add' h = Map.insert idx (sensor h) components
-    sensor h = SensorImpl def h
+addComponent
+  :: ComponentIndex
+  -> DeviceComponent
+  -> Device
+  -> Device
+addComponent idx component (DeviceImpl components) =
+  DeviceImpl (Map.insert idx component components)
 
 
-addController :: ComponentIndex -> ComponentDef
-              -> Device -> Device
-addController idx
-  def@(ComponentDef cClass cName cGuid cVendor)
-  (DeviceImpl components)
-    | cName == c86ControllerName = DeviceImpl (add' c86Handler)
-    | otherwise = error "unknown component"                     -- bad practice
-  where
-    add' h = Map.insert idx (controller h) components
-    controller h = ControllerImpl def h
---
+validateComponent
+  :: VendorComponents
+  -> ComponentDef
+  -> Either String DeviceComponent
+validateComponent vendorComponents
+  def@(ComponentDef cClass cName cGuid cVendor) =
+    case Map.lookup (cVendor, cName) vendorComponents of
+      Nothing -> Left ("Component not found: " <> cVendor <> " " <> cName)
+      Just component -> Right component
 
 
 getComponent :: ComponentIndex -> Device

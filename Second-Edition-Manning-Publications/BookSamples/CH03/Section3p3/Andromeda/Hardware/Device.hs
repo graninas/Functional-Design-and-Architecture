@@ -42,8 +42,11 @@ blankDevice = DeviceImpl Map.empty
 makeDevice :: Hdl -> Device
 makeDevice hdl = makeDevice' hdl blankDevice
   where
+    -- Traversing the list of components (definitions)
     makeDevice' [] d = d
     makeDevice' (c:cs) d    = makeDevice' cs (add' c d)
+    -- Creating a specific component (implementation)
+    -- by its definition and adding into the Device type
     add' (Sensor c idx p)   = addSensor idx p c
     add' (Controller c idx) = addController idx c
 

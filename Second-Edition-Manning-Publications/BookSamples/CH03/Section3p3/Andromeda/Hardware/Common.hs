@@ -1,5 +1,6 @@
 module Andromeda.Hardware.Common where
 
+import Andromeda.Components.API (SensorAPI, ControllerAPI)
 
 
 -- Every physical instance of a component has its own GUID
@@ -11,15 +12,25 @@ type ComponentName = String
 
 data Parameter      = Temperature | Pressure
 data ComponentClass = Sensors | Controllers
-type Manufacturer   = String
+type VendorName     = String
 
 data ComponentDef = ComponentDef
-  { componentClass        :: ComponentClass
-  , componentName         :: ComponentName
-  , componentGuid         :: PhysicalGuid
-  , componentManufacturer :: Manufacturer
+  { componentClass  :: ComponentClass
+  , componentName   :: ComponentName
+  , componentGuid   :: PhysicalGuid
+  , componentVendor :: VendorName
   }
 
 
 data Measurement = Measurement Parameter Float
 data Period = Secondly
+
+
+
+
+data VendorComponent
+  = VendoredSensor     ComponentDef SensorAPI
+  | VendoredController ComponentDef ControllerAPI
+
+
+type VendorComponents = Map (VendorName, ComponentName) DeviceComponent
