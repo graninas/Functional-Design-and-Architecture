@@ -1,7 +1,7 @@
 module Andromeda.Assets.DeviceDefinitions where
 
 import Andromeda.Hardware
-import Andromeda.Assets.Vendors.AAA
+import Andromeda.Assets.Vendors.AAA.ComponentDefinitions
 
 
 -- Why don't we use VendorComponent here?

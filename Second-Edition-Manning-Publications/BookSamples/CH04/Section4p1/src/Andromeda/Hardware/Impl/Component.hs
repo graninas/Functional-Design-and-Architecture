@@ -1,6 +1,8 @@
-module Andromeda.Hardware.Components.API where
+module Andromeda.Hardware.Impl.Component where
 
 import Andromeda.Hardware.Common
+
+import Data.Map (Map)
 
 
 -- This is just a demo of API.
@@ -18,3 +20,11 @@ data ControllerAPI = ControllerAPI
   , eval :: String -> IO ()
   , doSomethingElse :: IO ()
   }
+
+
+data VendorComponent
+  = VendoredSensor     ComponentPassport SensorAPI
+  | VendoredController ComponentPassport ControllerAPI
+
+
+type VendorComponents = Map ComponentName VendorComponent

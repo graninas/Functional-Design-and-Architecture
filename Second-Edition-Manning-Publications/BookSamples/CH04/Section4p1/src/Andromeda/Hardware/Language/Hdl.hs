@@ -1,4 +1,4 @@
-module Andromeda.Hardware.Hdl where
+module Andromeda.Hardware.Language.Hdl where
 
 
 import Andromeda.Hardware.Common

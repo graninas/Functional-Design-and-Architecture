@@ -1,27 +1,25 @@
-module Andromeda.Hardware.Device (
+module Andromeda.Hardware.Impl.Device (
     Device,
-    DeviceComponent (..),
+    DevicePart (..),
     WithHandler (..),
     withHandler,
     makeDevice,
     blankDevice,
-    getComponent,
-    updateComponent
+    getDevicePart
  ) where
 
 
 import Andromeda.Hardware.Common
-import Andromeda.Hardware.Vendors.Components
-import Andromeda.Hardware.Components.API
-import Andromeda.Hardware.Hdl
+import Andromeda.Hardware.Language.Hdl
+import Andromeda.Hardware.Impl.Component
 
 import Data.Map (Map)
 import qualified Data.Map as Map
 
 
-data DeviceComponent = DeviceComponent VendorComponent {- some state here -}
+data DevicePart = DevicePart VendorComponent {- some state here -}
 
-data Device = Device (Map ComponentIndex DeviceComponent)
+data Device = Device (Map ComponentIndex DevicePart)
 
 
 blankDevice :: Device
@@ -40,53 +38,47 @@ makeDevice vendorComponents hdl = makeDevice' hdl blankDevice
     makeDevice' [] device = device
     makeDevice' (c:cs) device = makeDevice' cs (add' c device)
 
-    -- Creating a specific component (implementation)
+    -- Creating a specific device part (implementation)
     -- by its definition and adding into the Device type
     add' (ComponentDef idx passp) device = case validateComponent vendorComponents passp of
       Left err -> error err                  -- Bad practice!
-      Right component -> addComponent idx component device
+      Right part -> addComponent idx part device
 
 
 addComponent
   :: ComponentIndex
-  -> DeviceComponent
+  -> DevicePart
   -> Device
   -> Device
-addComponent idx component (Device components) =
-  Device (Map.insert idx component components)
+addComponent idx part (Device parts) =
+  Device (Map.insert idx part parts)
 
 
 validateComponent
   :: VendorComponents
   -> ComponentPassport
-  -> Either String DeviceComponent
+  -> Either String DevicePart
 validateComponent vendorComponents
   def@(ComponentPassport _ cName _ cVendor) =
     case Map.lookup cName vendorComponents of
       Nothing -> Left ("Component not found: " <> cVendor <> " " <> cName)
-      Just vendorComponent -> Right (DeviceComponent vendorComponent)
+      Just vendorComponent -> Right (DevicePart vendorComponent)
 
 
-getComponent :: ComponentIndex -> Device
-             -> Maybe DeviceComponent
-getComponent idx (Device components) = Map.lookup idx components
-
-updateComponent :: ComponentIndex -> DeviceComponent
-                -> Device -> Maybe Device
-updateComponent = undefined
-
-
+getDevicePart :: ComponentIndex -> Device
+              -> Maybe DevicePart
+getDevicePart idx (Device parts) = Map.lookup idx parts
 
 
 class WithHandler handlerAPI where
-  withHandler :: DeviceComponent
+  withHandler :: DevicePart
               -> (handlerAPI -> IO ())
               -> IO ()
 
 instance WithHandler SensorAPI where
-  withHandler (DeviceComponent (VendoredSensor _ handler)) f = f handler
-  withHandler _ _ = error "Invalid component API handler"
+  withHandler (DevicePart (VendoredSensor _ handler)) f = f handler
+  withHandler _ _ = error "Invalid part API handler"
 
 instance WithHandler ControllerAPI where
-  withHandler (DeviceComponent (VendoredController _ handler)) f = f handler
-  withHandler _ _ = error "Invalid component API handler"
+  withHandler (DevicePart (VendoredController _ handler)) f = f handler
+  withHandler _ _ = error "Invalid part API handler"

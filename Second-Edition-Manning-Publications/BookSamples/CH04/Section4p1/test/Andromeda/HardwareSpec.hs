@@ -5,8 +5,8 @@ import           Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets.DeviceDefinitions (boostersDef)
-import Andromeda.Assets.Vendors.AAA (aaaController86Name, aaaVendorComponents)
+import Andromeda.Assets (boostersDef, aaaController86Name)
+import Andromeda.Assets.Vendors.AAA.API (aaaVendorComponents)
 
 spec :: Spec
 spec =
@@ -15,7 +15,7 @@ spec =
     it "Hardware device components check" $ do
 
       let boosters = makeDevice aaaVendorComponents boostersDef
-      let mbThermometer = getComponent "nozzle1-t" boosters
+      let mbThermometer = getDevicePart "nozzle1-t" boosters
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
@@ -24,7 +24,7 @@ spec =
     it "Hardware device component method run" $ do
 
       let boosters = makeDevice aaaVendorComponents boostersDef
-      let mbThermometer = getComponent "nozzle1-t" boosters
+      let mbThermometer = getDevicePart "nozzle1-t" boosters
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
