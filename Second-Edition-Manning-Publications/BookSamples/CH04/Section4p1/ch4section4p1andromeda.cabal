@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9e859dc0a3c3a83d6c6d0abd988dbbbc72438ac44bf2ba5ac7dab0619dc5552e
+-- hash: e2173f609ebd6addd2bdc5c55f2b81c9222764e8b0b66abe69154b53f8e5204a
 
 name:           ch4section4p1andromeda
 version:        1.0.0.0
@@ -18,7 +18,8 @@ library
   exposed-modules:
       Andromeda
       Andromeda.Assets
-      Andromeda.Assets.Hardware.Components
+      Andromeda.Assets.DeviceDefinitions
+      Andromeda.Assets.Vendors.AAA
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -29,6 +30,7 @@ library
       Andromeda.Hardware.Hdl
       Andromeda.Hardware.Hndl
       Andromeda.Hardware.Runtime
+      Andromeda.Hardware.Vendors.Components
       Andromeda.LogicControl
       Andromeda.LogicControl.Language
       Andromeda.Simulator
@@ -37,7 +39,6 @@ library
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
-      Andromeda.Vendors.AAA
       Main
   other-modules:
       Paths_ch4section4p1andromeda
@@ -68,7 +69,8 @@ executable ch4section4p1andromeda
   other-modules:
       Andromeda
       Andromeda.Assets
-      Andromeda.Assets.Hardware.Components
+      Andromeda.Assets.DeviceDefinitions
+      Andromeda.Assets.Vendors.AAA
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -79,6 +81,7 @@ executable ch4section4p1andromeda
       Andromeda.Hardware.Hdl
       Andromeda.Hardware.Hndl
       Andromeda.Hardware.Runtime
+      Andromeda.Hardware.Vendors.Components
       Andromeda.LogicControl
       Andromeda.LogicControl.Language
       Andromeda.Simulator
@@ -87,7 +90,6 @@ executable ch4section4p1andromeda
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
-      Andromeda.Vendors.AAA
       Paths_ch4section4p1andromeda
   hs-source-dirs:
       ./src

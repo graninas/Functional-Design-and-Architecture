@@ -5,15 +5,16 @@ import           Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets.Hardware.Components (boostersDef)
-import Andromeda.Vendors.AAA (c86ControllerName)
+import Andromeda.Assets.DeviceDefinitions (boostersDef)
+import Andromeda.Assets.Vendors.AAA (aaaController86Name, aaaVendorComponents)
 
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
+
     it "Hardware device components check" $ do
 
-      let boosters = makeDevice boostersDef
+      let boosters = makeDevice aaaVendorComponents boostersDef
       let mbThermometer = getComponent "nozzle1-t" boosters
 
       case mbThermometer of
@@ -22,7 +23,7 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      let boosters = makeDevice boostersDef
+      let boosters = makeDevice aaaVendorComponents boostersDef
       let mbThermometer = getComponent "nozzle1-t" boosters
 
       case mbThermometer of

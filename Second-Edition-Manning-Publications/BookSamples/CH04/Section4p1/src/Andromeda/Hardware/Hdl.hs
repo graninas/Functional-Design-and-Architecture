@@ -6,8 +6,6 @@ import Andromeda.Hardware.Common
 
 type ComponentIndex = String
 
-data Component
-  = Sensor     ComponentDef ComponentIndex Parameter
-  | Controller ComponentDef ComponentIndex
+data ComponentDef = ComponentDef ComponentIndex ComponentPassport
 
-type Hdl = [Component]
+type Hdl = [ComponentDef]

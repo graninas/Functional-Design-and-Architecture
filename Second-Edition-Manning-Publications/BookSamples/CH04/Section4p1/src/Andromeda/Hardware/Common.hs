@@ -1,7 +1,5 @@
 module Andromeda.Hardware.Common where
 
-
-
 -- Every physical instance of a component has its own GUID
 type PhysicalGuid = String
 
@@ -9,19 +7,19 @@ type PhysicalGuid = String
 -- for example, temperature sensors AAA-T-25
 type ComponentName = String
 
-data Parameter      = Temperature | Pressure
+data Parameter = Temperature | Pressure
   deriving (Show, Eq, Ord)
 
 data ComponentClass = Sensors | Controllers
   deriving (Show, Eq, Ord)
 
-type Manufacturer   = String
+type Vendor = String
 
-data ComponentDef = ComponentDef
-  { componentClass        :: ComponentClass
-  , componentName         :: ComponentName
-  , componentGuid         :: PhysicalGuid
-  , componentManufacturer :: Manufacturer
+data ComponentPassport = ComponentPassport
+  { componentClass  :: ComponentClass
+  , componentName   :: ComponentName      -- Supposed to be unique on the market
+  , componentGuid   :: PhysicalGuid       -- Supposed to be unique on the market
+  , componentVendor :: Vendor
   }
   deriving (Show, Eq, Ord)
 

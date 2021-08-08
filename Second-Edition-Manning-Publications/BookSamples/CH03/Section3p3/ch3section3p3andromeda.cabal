@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 23e47cb59c7aee05f5a844e97207351767293563338f9d93bda11cc01146672d
+-- hash: 2818ba0e3007a846afd292f64ed4f1f7dca99677f684025eb9cdcbfdb6e7da57
 
 name:           ch3section3p3andromeda
 version:        1.0.0.0
@@ -19,7 +19,7 @@ executable ch3section3p3andromeda
   other-modules:
       Andromeda
       Andromeda.Assets
-      Andromeda.Assets.Hardware.Components
+      Andromeda.Assets.DeviceDefinitions
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value

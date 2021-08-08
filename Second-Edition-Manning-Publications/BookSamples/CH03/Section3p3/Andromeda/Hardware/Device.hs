@@ -3,8 +3,8 @@ module Andromeda.Hardware.Device (
     DeviceComponent,
     makeDevice,
     blankDevice,
-    addSensor,
-    addController,
+    addSensor,        -- These functions violate encapsulation
+    addController,    -- Device internal structure should not be mutable.
     getComponent,
     updateComponent
  ) where
@@ -27,8 +27,8 @@ import qualified Data.Map as Map
 
 
 data DeviceComponent
-  = SensorImpl     ComponentDef SensorAPI
-  | ControllerImpl ComponentDef ControllerAPI
+  = SensorImpl     ComponentPassport SensorAPI
+  | ControllerImpl ComponentPassport ControllerAPI
 
 
 data Device
@@ -43,8 +43,8 @@ makeDevice :: Hdl -> Device
 makeDevice hdl = makeDevice' hdl blankDevice
   where
     -- Traversing the list of components (definitions)
-    makeDevice' [] d = d
-    makeDevice' (c:cs) d    = makeDevice' cs (add' c d)
+    makeDevice' [] device = device
+    makeDevice' (c:cs) device = makeDevice' cs (add' c device)
     -- Creating a specific component (implementation)
     -- by its definition and adding into the Device type
     add' (Sensor c idx p)   = addSensor idx p c
@@ -55,9 +55,9 @@ makeDevice hdl = makeDevice' hdl blankDevice
 -- This is a sample of a bad design. The code knows about
 -- specific components and manufacturers.
 addSensor :: ComponentIndex -> Parameter
-          -> ComponentDef -> Device -> Device
+          -> ComponentPassport -> Device -> Device
 addSensor idx _
-  def@(ComponentDef cClass cName cGuid cVendor)
+  def@(ComponentPassport cClass cName cGuid cVendor)
   (DeviceImpl components)
     | cName == t25SensorName = DeviceImpl (add' t25Handler)
     | cName == p02SensorName = DeviceImpl (add' p02Handler)
@@ -69,7 +69,7 @@ addSensor idx _
 
 
 
-addController :: ComponentIndex -> ComponentDef
+addController :: ComponentIndex -> ComponentPassport
               -> Device -> Device
 addController = undefined
 

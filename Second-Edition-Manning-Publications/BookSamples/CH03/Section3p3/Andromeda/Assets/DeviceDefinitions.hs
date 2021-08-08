@@ -1,4 +1,4 @@
-module Andromeda.Assets.Hardware.Components where
+module Andromeda.Assets.DeviceDefinitions where
 
 import Andromeda.Hardware
 import Andromeda.Vendors.AAA
@@ -9,9 +9,9 @@ guid3 = "guid3"
 
 
 
-aaa_p_02 = ComponentDef Sensors     p02SensorName guid1 "AAA Inc."
-aaa_t_25 = ComponentDef Sensors     t25SensorName guid2 "AAA Inc."
-aaa_c_86 = ComponentDef Controllers c86ControllerName guid3 "AAA Inc."
+aaa_p_02 = ComponentPassport Sensors     p02SensorName guid1 "AAA Inc."
+aaa_t_25 = ComponentPassport Sensors     t25SensorName guid2 "AAA Inc."
+aaa_c_86 = ComponentPassport Controllers c86ControllerName guid3 "AAA Inc."
 
 
 boostersDef :: Hdl
