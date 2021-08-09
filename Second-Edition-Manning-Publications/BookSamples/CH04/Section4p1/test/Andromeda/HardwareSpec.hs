@@ -6,7 +6,7 @@ import           Test.Hspec
 import Andromeda
 
 import Andromeda.Assets (boostersDef, aaaController86Name)
-import Andromeda.Assets.Vendors.AAA.API (aaaVendorComponents)
+import Andromeda.Assets.Vendors.AAA.ComponentsAPI (aaaVendorComponents)
 
 spec :: Spec
 spec =

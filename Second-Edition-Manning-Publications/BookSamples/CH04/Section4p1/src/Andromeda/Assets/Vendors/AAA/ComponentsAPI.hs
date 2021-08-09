@@ -1,7 +1,8 @@
-module Andromeda.Assets.Vendors.AAA.API where
+module Andromeda.Assets.Vendors.AAA.ComponentsAPI where
 
 import Andromeda.Hardware.Common
-import Andromeda.Assets.Vendors.AAA.ComponentDefinitions
+import Andromeda.Assets.Vendors.AAA.Common
+import Andromeda.Assets.Vendors.AAA.Components
 import Andromeda.Hardware.Impl.Component
 
 import qualified Data.Map as Map

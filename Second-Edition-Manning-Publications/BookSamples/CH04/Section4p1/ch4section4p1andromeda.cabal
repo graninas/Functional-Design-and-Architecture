@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 63107135668289a28206f2d0a89bb5ea65c8c596bcc6b6b90a5f1849ddf9e658
+-- hash: 516815b478c83d03a465c0c594b097b2d94e120a8145fbbb6b85f8bded2a87c2
 
 name:           ch4section4p1andromeda
 version:        1.0.0.0
@@ -19,8 +19,9 @@ library
       Andromeda
       Andromeda.Assets
       Andromeda.Assets.DeviceDefinitions
-      Andromeda.Assets.Vendors.AAA.API
-      Andromeda.Assets.Vendors.AAA.ComponentDefinitions
+      Andromeda.Assets.Vendors.AAA.Common
+      Andromeda.Assets.Vendors.AAA.Components
+      Andromeda.Assets.Vendors.AAA.ComponentsAPI
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -70,8 +71,9 @@ executable ch4section4p1andromeda
       Andromeda
       Andromeda.Assets
       Andromeda.Assets.DeviceDefinitions
-      Andromeda.Assets.Vendors.AAA.API
-      Andromeda.Assets.Vendors.AAA.ComponentDefinitions
+      Andromeda.Assets.Vendors.AAA.Common
+      Andromeda.Assets.Vendors.AAA.Components
+      Andromeda.Assets.Vendors.AAA.ComponentsAPI
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value

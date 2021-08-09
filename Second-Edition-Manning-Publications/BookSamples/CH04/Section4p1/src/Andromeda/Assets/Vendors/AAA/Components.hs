@@ -1,14 +1,11 @@
-module Andromeda.Assets.Vendors.AAA.ComponentDefinitions where
+module Andromeda.Assets.Vendors.AAA.Components where
 
 import Andromeda.Hardware.Common
+import Andromeda.Assets.Vendors.AAA.Common
 
 import qualified Data.Map as Map
 
 -- import Native AAA sensors library here or do FFI
-
-aaaInc :: Vendor
-aaaInc = "AAA Inc."
-
 
 aaaTemperature25Name :: ComponentName
 aaaTemperature25Name = "AAA-T-25"
@@ -25,6 +22,6 @@ guid2 = "some_guid2"
 guid3 = "some_guid3"
 
 
-aaaTemperature25Passport = ComponentPassport Sensors     aaaTemperature25Name guid2 aaaInc
-aaaPressure02Passport    = ComponentPassport Sensors     aaaPressure02Name    guid1 aaaInc
-aaaController86Passport  = ComponentPassport Controllers aaaController86Name  guid3 aaaInc
+aaaTemperature25Passport = ComponentPassport (Sensors Temperature) aaaTemperature25Name guid2 aaaInc
+aaaPressure02Passport    = ComponentPassport (Sensors Pressure) aaaPressure02Name guid1 aaaInc
+aaaController86Passport  = ComponentPassport Controllers aaaController86Name guid3 aaaInc

@@ -10,7 +10,7 @@ type ComponentName = String
 data Parameter = Temperature | Pressure
   deriving (Show, Eq, Ord)
 
-data ComponentClass = Sensors | Controllers
+data ComponentClass = Sensors Parameter | Controllers
   deriving (Show, Eq, Ord)
 
 type Vendor = String
