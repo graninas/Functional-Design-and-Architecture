@@ -22,6 +22,11 @@ guid2 = "some_guid2"
 guid3 = "some_guid3"
 
 
+aaaTemperature25Passport :: ComponentPassport
 aaaTemperature25Passport = ComponentPassport (Sensors Temperature) aaaTemperature25Name guid2 aaaInc
-aaaPressure02Passport    = ComponentPassport (Sensors Pressure) aaaPressure02Name guid1 aaaInc
-aaaController86Passport  = ComponentPassport Controllers aaaController86Name guid3 aaaInc
+
+aaaPressure02Passport :: ComponentPassport
+aaaPressure02Passport = ComponentPassport (Sensors Pressure) aaaPressure02Name guid1 aaaInc
+
+aaaController86Passport :: ComponentPassport
+aaaController86Passport = ComponentPassport Controllers aaaController86Name guid3 aaaInc
