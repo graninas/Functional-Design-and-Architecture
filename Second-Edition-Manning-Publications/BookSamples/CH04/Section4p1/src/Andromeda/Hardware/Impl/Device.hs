@@ -11,7 +11,7 @@ module Andromeda.Hardware.Impl.Device (
 
 import Andromeda.Hardware.Common
 import Andromeda.Hardware.Language.Hdl
-import Andromeda.Hardware.Impl.Component
+import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..), SensorAPI, ControllerAPI)
 
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -34,15 +34,16 @@ makeDevice
   -> Device
 makeDevice vendorComponents hdl = makeDevice' hdl blankDevice
   where
-    -- Traversing the list of devices
+    -- Traversing the list of components (definitions)
     makeDevice' [] device = device
     makeDevice' (c:cs) device = makeDevice' cs (add' c device)
 
     -- Creating a specific device part (implementation)
     -- by its definition and adding into the Device type
-    add' (ComponentDef idx passp) device = case validateComponent vendorComponents passp of
-      Left err -> error err                  -- Bad practice!
-      Right part -> addComponent idx part device
+    add' (ComponentDef idx passp) device =
+      case validateComponent vendorComponents passp of
+        Left err -> error err                  -- Bad practice!
+        Right part -> addComponent idx part device
 
 
 addComponent
@@ -59,7 +60,7 @@ validateComponent
   -> ComponentPassport
   -> Either String DevicePart
 validateComponent vendorComponents
-  def@(ComponentPassport _ cName _ cVendor) =
+  (ComponentPassport _ cName _ cVendor) =
     case Map.lookup cName vendorComponents of
       Nothing -> Left ("Component not found: " <> cVendor <> " " <> cName)
       Just vendorComponent -> Right (DevicePart vendorComponent)

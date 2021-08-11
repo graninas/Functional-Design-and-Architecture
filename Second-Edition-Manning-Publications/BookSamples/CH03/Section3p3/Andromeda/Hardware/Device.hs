@@ -45,7 +45,7 @@ makeDevice hdl = makeDevice' hdl blankDevice
     -- Traversing the list of components (definitions)
     makeDevice' [] device = device
     makeDevice' (c:cs) device = makeDevice' cs (add' c device)
-    -- Creating a specific component (implementation)
+    -- Creating a specific device part (implementation)
     -- by its definition and adding into the Device type
     add' (Sensor c idx p)   = addSensor idx p c
     add' (Controller c idx) = addController idx c
