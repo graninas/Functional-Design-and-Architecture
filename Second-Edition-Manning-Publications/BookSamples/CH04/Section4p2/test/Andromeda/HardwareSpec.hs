@@ -1,12 +1,12 @@
 
 module Andromeda.HardwareSpec where
 
-import           Test.Hspec
+import Test.Hspec
 
 import Andromeda
 
 import Andromeda.Assets (boostersDef, aaaController86Name)
-import Andromeda.Assets.Vendors.AAA.ComponentsAPI (aaaVendorComponents)
+import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 
 spec :: Spec
 spec =
@@ -14,8 +14,8 @@ spec =
 
     it "Hardware device components check" $ do
 
-      boosters      <- makeDevice aaaVendorComponents boostersDef
-      mbThermometer <- getDevicePart "nozzle1-t" boosters
+      boosters      <- makeDevice aaaHardwareService boostersDef
+      mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
@@ -23,8 +23,8 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      boosters      <- makeDevice aaaVendorComponents boostersDef
-      mbThermometer <- getDevicePart "nozzle1-t" boosters
+      boosters      <- makeDevice aaaHardwareService boostersDef
+      mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
 
       case mbThermometer of
         Nothing -> fail "There is no such component"

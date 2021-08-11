@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 358bb819fd82196c739f5c6c6e2a0059a9cacaa0b75c16b1025193b86f2feef6
+-- hash: 5f8337bb1e545f27675f029a7982c9b4ca000101cc7b9ff6922746a45ad58133
 
 name:           ch4section4p2andromeda
 version:        1.0.0.0
@@ -22,6 +22,7 @@ library
       Andromeda.Assets.Vendors.AAA.Common
       Andromeda.Assets.Vendors.AAA.Components
       Andromeda.Assets.Vendors.AAA.ComponentsAPI
+      Andromeda.Assets.Vendors.AAA.HardwareService
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -29,7 +30,9 @@ library
       Andromeda.Hardware.Common
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
+      Andromeda.Hardware.Impl.Device.Types
       Andromeda.Hardware.Impl.Runtime
+      Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
@@ -74,6 +77,7 @@ executable ch4section4p2andromeda
       Andromeda.Assets.Vendors.AAA.Common
       Andromeda.Assets.Vendors.AAA.Components
       Andromeda.Assets.Vendors.AAA.ComponentsAPI
+      Andromeda.Assets.Vendors.AAA.HardwareService
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -81,7 +85,9 @@ executable ch4section4p2andromeda
       Andromeda.Hardware.Common
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
+      Andromeda.Hardware.Impl.Device.Types
       Andromeda.Hardware.Impl.Runtime
+      Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl

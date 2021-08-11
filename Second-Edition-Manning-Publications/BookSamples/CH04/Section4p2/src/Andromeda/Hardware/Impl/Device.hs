@@ -1,8 +1,4 @@
 module Andromeda.Hardware.Impl.Device (
-    Device,
-    DevicePart (..),
-    WithHandler (..),
-    withHandler,
     makeDevice,
     blankDevice,
     getDevicePart
@@ -10,21 +6,17 @@ module Andromeda.Hardware.Impl.Device (
 
 
 import Andromeda.Hardware.Common
-import Andromeda.Hardware.Language.Hdl
+import Andromeda.Hardware.Language.Hdl (Hdl, ComponentIndex, ComponentDef(..))
 import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..), SensorAPI, ControllerAPI)
+import Andromeda.Hardware.Impl.Device.Types (Device(..), DevicePart (..))
+
 
 import Data.Map (Map)
 import qualified Data.Map as Map
 
 
-data DevicePart = DevicePart VendorComponent {- some state here -}
-
-data Device = Device (Map ComponentIndex DevicePart)
-
-
 blankDevice :: Device
 blankDevice = Device Map.empty
-
 
 
 -- There are different ways to provide the context
@@ -66,8 +58,8 @@ validateComponent vendorComponents componentDef = let
 
 
 getDevicePart :: ComponentIndex -> Device
-              -> IO (Maybe DevicePart)
-getDevicePart idx (Device parts) = pure (Map.lookup idx parts)
+              -> Maybe DevicePart
+getDevicePart idx (Device parts) = Map.lookup idx parts
 
 
 class WithHandler handlerAPI where
