@@ -1,6 +1,6 @@
 module Andromeda.Assets.Vendors.AAA.HardwareService where
 
-import Andromeda.Hardware
+import Andromeda.Hardware (HardwareService(..))
 import qualified Andromeda.Hardware.Impl.Device as D
 import Andromeda.Assets.Vendors.AAA.ComponentsAPI (aaaVendorComponents)
 
