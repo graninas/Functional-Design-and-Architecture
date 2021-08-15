@@ -14,9 +14,9 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 
 
+type DeviceName = String
 data DevicePart = DevicePart VendorComponent {- some state here -}
-
-data Device = Device (Map ComponentIndex DevicePart)
+data Device = Device DeviceName (Map ComponentIndex DevicePart)
 
 
 class WithHandler handlerAPI where

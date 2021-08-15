@@ -6,7 +6,7 @@ import Andromeda.Assets.Vendors.AAA.ComponentsAPI (aaaVendorComponents)
 
 aaaHardwareService :: HardwareService
 aaaHardwareService = HardwareService
-  { makeDevice     = D.makeDevice aaaVendorComponents
+  { makeDevice     = \hdl -> D.makeDevice aaaVendorComponents hdl
   , getBlankDevice = pure D.blankDevice
   , getDevicePart  = \idx device -> pure (D.getDevicePart idx device)
   }

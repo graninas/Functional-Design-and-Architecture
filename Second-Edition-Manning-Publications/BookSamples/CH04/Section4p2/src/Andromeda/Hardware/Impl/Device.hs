@@ -16,7 +16,7 @@ import qualified Data.Map as Map
 
 
 blankDevice :: Device
-blankDevice = Device Map.empty
+blankDevice = Device "" Map.empty   -- TODO: name
 
 
 -- There are different ways to provide the context
@@ -41,8 +41,8 @@ makeDevice' vendorComponents (componentDef:cs) device = do
 
 
 addComponent :: ComponentIndex -> DevicePart -> Device -> Device
-addComponent idx part (Device parts) =
-  Device (Map.insert idx part parts)
+addComponent idx part (Device name parts) =
+  Device name (Map.insert idx part parts)
 
 
 validateComponent
@@ -59,18 +59,4 @@ validateComponent vendorComponents componentDef = let
 
 getDevicePart :: ComponentIndex -> Device
               -> Maybe DevicePart
-getDevicePart idx (Device parts) = Map.lookup idx parts
-
-
-class WithHandler handlerAPI where
-  withHandler :: DevicePart
-              -> (handlerAPI -> IO ())
-              -> IO ()
-
-instance WithHandler SensorAPI where
-  withHandler (DevicePart (VendoredSensor _ handler)) f = f handler
-  withHandler _ _ = error "Invalid part API handler"
-
-instance WithHandler ControllerAPI where
-  withHandler (DevicePart (VendoredController _ handler)) f = f handler
-  withHandler _ _ = error "Invalid part API handler"
+getDevicePart idx (Device _ parts) = Map.lookup idx parts

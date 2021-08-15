@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5f8337bb1e545f27675f029a7982c9b4ca000101cc7b9ff6922746a45ad58133
+-- hash: 3b1f76d25fa98cf3a4eb04ffd8490c7d293b6f5ed2b28ff4d4ebeea819aefe54
 
 name:           ch4section4p2andromeda
 version:        1.0.0.0
@@ -23,6 +23,11 @@ library
       Andromeda.Assets.Vendors.AAA.Components
       Andromeda.Assets.Vendors.AAA.ComponentsAPI
       Andromeda.Assets.Vendors.AAA.HardwareService
+      Andromeda.Assets.Vendors.BBB.Common
+      Andromeda.Assets.Vendors.BBB.Components
+      Andromeda.Assets.Vendors.BBB.ComponentsAPI
+      Andromeda.Assets.Vendors.BBB.HardwareService
+      Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -78,6 +83,11 @@ executable ch4section4p2andromeda
       Andromeda.Assets.Vendors.AAA.Components
       Andromeda.Assets.Vendors.AAA.ComponentsAPI
       Andromeda.Assets.Vendors.AAA.HardwareService
+      Andromeda.Assets.Vendors.BBB.Common
+      Andromeda.Assets.Vendors.BBB.Components
+      Andromeda.Assets.Vendors.BBB.ComponentsAPI
+      Andromeda.Assets.Vendors.BBB.HardwareService
+      Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
       Andromeda.Common.Value
@@ -126,6 +136,8 @@ test-suite functional
   main-is: Spec.hs
   other-modules:
       Andromeda.HardwareSpec
+      Andromeda.Test.HardwareService
+      Andromeda.TestData.Components
       Paths_ch4section4p2andromeda
   hs-source-dirs:
       test/
