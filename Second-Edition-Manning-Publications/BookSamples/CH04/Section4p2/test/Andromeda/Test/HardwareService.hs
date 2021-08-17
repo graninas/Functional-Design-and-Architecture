@@ -1,20 +1,32 @@
 module Andromeda.Test.HardwareService where
 
 import Andromeda.Hardware
-import qualified Andromeda.Hardware.Impl.Device.Types as D
 
-import Andromeda.TestData.Components (thermometer1Passp, thermometer1Handler)
+import Andromeda.TestData.Components (thermometer1Passp, thermometer1Handler,
+  pressure1Passp, pressure1Handler)
 
-import qualified Data.Map as Map
+mockedThermometer1 :: DevicePart
+mockedThermometer1 = DevicePart (VendoredSensor thermometer1Passp thermometer1Handler)
 
-mockedDevicePart :: D.DevicePart
-mockedDevicePart = D.DevicePart (VendoredSensor thermometer1Passp thermometer1Handler)
+mockedPressure1 :: DevicePart
+mockedPressure1 = DevicePart (VendoredSensor pressure1Passp pressure1Handler)
 
 mockedHardwareService :: HardwareService
 mockedHardwareService = HardwareService
-  { makeDevice     = \_ -> pure (D.Device "mocked" Map.empty)
+  { makeDevice     = mockedMakeDevice
   , getBlankDevice = error "getBlankDevice not supported"
-  , getDevicePart  = \idx device -> case (idx, device) of
-    ("t1", D.Device "mocked" _) -> pure (Just mockedDevicePart)
-    _ -> error "Unknown device"
+  , getDevicePart  = mockedGetDevicePart
   }
+
+mockedMakeDevice :: Hdl -> IO Device
+mockedMakeDevice _ = pure (Device "mocked" mempty)
+
+mockedGetDevicePart
+  :: ComponentIndex
+  -> Device
+  -> IO (Maybe DevicePart)
+mockedGetDevicePart idx device =
+  case (idx, device) of
+    ("t1", Device "mocked" _) -> pure (Just mockedThermometer1)
+    ("p1", Device "mocked" _) -> pure (Just mockedPressure1)
+    _ -> pure Nothing

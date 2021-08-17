@@ -7,7 +7,7 @@ import Andromeda
 import Andromeda.Assets (boostersDef, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 import Andromeda.Test.HardwareService (mockedHardwareService)
-import Andromeda.TestData.Components (thermometer1Passp)
+import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
 
 spec :: Spec
 spec =
@@ -34,7 +34,7 @@ spec =
             measurement <- readMeasurement handler
             measurement `shouldBe` (Measurement Temperature 100.0)
 
-    it "Mocked device part" $ do
+    it "Getting measurement from mocked device" $ do
 
       let testDef =
             [ ComponentDef "t1" thermometer1Passp
@@ -49,3 +49,19 @@ spec =
           withHandler part $ \handler -> do
             measurement <- readMeasurement handler
             measurement `shouldBe` (Measurement Temperature 50.0)
+
+    it "Getting absent device part" $ do
+
+      let testDef =
+            [ ComponentDef "t1" thermometer1Passp
+            , ComponentDef "p1" pressure1Passp
+            ]
+
+      device <- makeDevice mockedHardwareService testDef
+      mpPart1 <- getDevicePart mockedHardwareService "t1" device
+      mpPart2 <- getDevicePart mockedHardwareService "p1" device
+      mpPart3 <- getDevicePart mockedHardwareService "t2" device
+
+      case (mpPart1, mpPart2, mpPart3) of
+        (Just _, Just _, Nothing) -> pure ()
+        _ -> fail "Device is assembled incorrectly."

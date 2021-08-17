@@ -7,12 +7,23 @@ import qualified Data.Map as Map
 
 thermometer1Passp :: ComponentPassport
 thermometer1Passp =
-  ComponentPassport (Sensors Temperature) "1" "1" "1"
+  ComponentPassport (Sensors Temperature) "t1" "t1" "t1"
+
+pressure1Passp :: ComponentPassport
+pressure1Passp =
+  ComponentPassport (Sensors Temperature) "p1" "p1" "p1"
 
 
 thermometer1Handler :: SensorAPI
 thermometer1Handler = SensorAPI
-  { reset = putStrLn "1 reset."
+  { reset           = putStrLn "t1 reset."
   , readMeasurement = pure (Measurement Temperature 50.0)
-  , setCallback = \_ _ -> putStrLn "1 callback."
+  , setCallback     = \_ _ -> putStrLn "t1 callback."
+  }
+
+pressure1Handler :: SensorAPI
+pressure1Handler = SensorAPI
+  { reset           = putStrLn "p1 reset."
+  , readMeasurement = pure (Measurement Pressure 2.0)
+  , setCallback     = \_ _ -> putStrLn "p1 callback."
   }
