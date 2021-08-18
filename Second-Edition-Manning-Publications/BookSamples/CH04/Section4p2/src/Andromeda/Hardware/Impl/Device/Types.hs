@@ -1,4 +1,5 @@
 module Andromeda.Hardware.Impl.Device.Types (
+    DeviceName,
     Device (..),
     DevicePart (..),
     WithHandler (..),

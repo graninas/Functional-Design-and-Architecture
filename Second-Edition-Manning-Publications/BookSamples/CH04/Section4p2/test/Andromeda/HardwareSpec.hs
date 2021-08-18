@@ -9,6 +9,12 @@ import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 import Andromeda.Test.HardwareService (mockedHardwareService)
 import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
 
+verifyTemperature :: Float -> SensorAPI -> IO ()
+verifyTemperature temp handler = do
+  measurement <- readMeasurement handler
+  measurement `shouldBe` (Measurement Temperature temp)
+
+
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
@@ -29,10 +35,7 @@ spec =
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
-        Just thermometer -> do
-          withHandler thermometer $ \handler -> do
-            measurement <- readMeasurement handler
-            measurement `shouldBe` (Measurement Temperature 100.0)
+        Just thermometer -> withHandler thermometer (verifyTemperature 100.0)
 
     it "Getting measurement from mocked device" $ do
 
@@ -45,10 +48,7 @@ spec =
 
       case mpPart of
         Nothing -> fail "There is no such part"
-        Just part -> do
-          withHandler part $ \handler -> do
-            measurement <- readMeasurement handler
-            measurement `shouldBe` (Measurement Temperature 50.0)
+        Just part -> withHandler part (verifyTemperature 50.0)
 
     it "Getting absent device part" $ do
 

@@ -13,13 +13,13 @@ mockedPressure1 = DevicePart (VendoredSensor pressure1Passp pressure1Handler)
 
 mockedHardwareService :: HardwareService
 mockedHardwareService = HardwareService
-  { makeDevice     = mockedMakeDevice
+  { makeDevice     = mockedMakeDevice "mocked"
   , getBlankDevice = error "getBlankDevice not supported"
   , getDevicePart  = mockedGetDevicePart
   }
 
-mockedMakeDevice :: Hdl -> IO Device
-mockedMakeDevice _ = pure (Device "mocked" mempty)
+mockedMakeDevice :: DeviceName -> Hdl -> IO Device
+mockedMakeDevice name _ = pure (Device name mempty)
 
 mockedGetDevicePart
   :: ComponentIndex
