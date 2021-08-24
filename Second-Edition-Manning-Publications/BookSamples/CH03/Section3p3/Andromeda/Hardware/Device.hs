@@ -1,12 +1,12 @@
 module Andromeda.Hardware.Device (
     Device,
-    DeviceComponent,
+    DevicePart,
     makeDevice,
     blankDevice,
     addSensor,        -- These functions violate encapsulation
     addController,    -- Device internal structure should not be mutable.
-    getComponent,
-    updateComponent
+    getDevicePart,
+    updateDevicePart
  ) where
 
 
@@ -26,13 +26,14 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 
 
-data DeviceComponent
+data DevicePart
   = SensorImpl     ComponentPassport SensorAPI
   | ControllerImpl ComponentPassport ControllerAPI
 
 
-data Device
-  = DeviceImpl (Map ComponentIndex DeviceComponent)
+type DeviceParts = Map ComponentIndex DevicePart
+
+data Device = DeviceImpl DeviceParts
 
 
 
@@ -47,8 +48,8 @@ makeDevice hdl = makeDevice' hdl blankDevice
     makeDevice' (c:cs) device = makeDevice' cs (add' c device)
     -- Creating a specific device part (implementation)
     -- by its definition and adding into the Device type
-    add' (Sensor c idx p)   = addSensor idx p c
-    add' (Controller c idx) = addController idx c
+add' (Sensor c idx p)   = addSensor idx p c
+add' (Controller c idx) = addController idx c
 
 
 
@@ -56,27 +57,29 @@ makeDevice hdl = makeDevice' hdl blankDevice
 -- specific components and manufacturers.
 addSensor :: ComponentIndex -> Parameter
           -> ComponentPassport -> Device -> Device
-addSensor idx _
-  def@(ComponentPassport cClass cName cGuid cVendor)
-  (DeviceImpl components)
-    | cName == t25SensorName = DeviceImpl (add' t25Handler)
-    | cName == p02SensorName = DeviceImpl (add' p02Handler)
-    | otherwise = error "unknown component"                      -- bad practice
-  where
-    add' h = Map.insert idx (sensor h) components
-    sensor h = SensorImpl def h
---
+addSensor
+  idx _
+  def@(ComponentPassport _ cName _ _)
+  (DeviceImpl components) = let
+      handler = getHandler cName
+      sensor  = SensorImpl def handler
+      components' = Map.insert idx sensor components
+      in DeviceImpl components'
 
+getHandler :: ComponentName -> SensorAPI
+getHandler cName | cName == t25SensorName = t25Handler
+getHandler cName | cName == p02SensorName = p02Handler
+getHandler _     | otherwise = error "unknown component"      -- bad practice
 
 
 addController :: ComponentIndex -> ComponentPassport
               -> Device -> Device
 addController = undefined
 
-getComponent :: ComponentIndex -> Device
-             -> Maybe DeviceComponent
-getComponent = undefined
+getDevicePart :: ComponentIndex -> Device
+             -> Maybe DevicePart
+getDevicePart = undefined
 
-updateComponent :: ComponentIndex -> DeviceComponent
+updateDevicePart :: ComponentIndex -> DevicePart
                 -> Device -> Maybe Device
-updateComponent = undefined
+updateDevicePart = undefined

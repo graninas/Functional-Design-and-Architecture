@@ -34,12 +34,10 @@ boostersDef =
 -- t25Sensor =
 --   ComponentDef Sensors "some_guid" "AAA Inc." "AAA-T-25"
 
-validComponent :: Component
-validComponent =
-  Sensor t25Sensor "nozzle1-t" Temperature
+validComponent :: ComponentDef
+validComponent = Sensor aaa_t_25 "nozzle1-t" Temperature
 
-invalidComponent :: Component
-invalidComponent =
-  Controller t25Sensor "central controller"
+invalidComponent :: ComponentDef
+invalidComponent = Controller aaa_t_25 "central controller"
 
 --           ^ a sensor passed by a mistake
