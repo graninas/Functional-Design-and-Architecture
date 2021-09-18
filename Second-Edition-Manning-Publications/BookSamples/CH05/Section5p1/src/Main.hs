@@ -1,8 +1,8 @@
 module Main where
 
-import FizzBuzzMorse
+import qualified Andromeda
 
 
 
 main :: IO ()
-main = putStrLn morseFizzBuzzes
+main = pure ()

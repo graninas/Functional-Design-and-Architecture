@@ -1,4 +1,4 @@
-name:                ch5section5p1
+name:                ch5section5p1andromeda
 version:             1.0.0.0
 license:             BSD3
 author:              "Alexander Granin"
@@ -43,7 +43,7 @@ library:
   - -Wall
 
 executables:
-  ch5section5p1:
+  ch5section5p1andromeda:
     main:                Main.hs
     source-dirs:         ./src
     ghc-options:
@@ -51,3 +51,16 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
+
+tests:
+  functional:
+    main: Spec.hs
+    source-dirs:
+    - test/
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hspec
+    - ch5section5p1andromeda
