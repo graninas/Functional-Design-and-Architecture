@@ -4,17 +4,19 @@ import Andromeda.Hardware
 import Andromeda.Assets.Vendors.AAA.Components
 
 
--- Why don't we use VendorComponent here?
--- Because Hdl should be serializable and independent
--- of any implementation details.
--- It can use definitions only.
+import Andromeda.Hardware
+import Andromeda.Assets.Vendors.AAA.Components
 
 
-boostersDef :: Hdl
-boostersDef =
-  [ ComponentDef "nozzle1-t"  aaaTemperature25Passport
-  , ComponentDef "nozzle1-p"  aaaPressure02Passport
-  , ComponentDef "nozzle2-t"  aaaTemperature25Passport
-  , ComponentDef "nozzle2-p"  aaaPressure02Passport
-  , ComponentDef "controller" aaaController86Passport
-  ]
+createBoosters :: Hdl Controller
+createBoosters = do
+  t1   <- setupComponent aaaTemperature25Passport
+  p1   <- setupComponent aaaPressure02Passport
+  t2   <- setupComponent aaaTemperature25Passport
+  p2   <- setupComponent aaaPressure02Passport
+  ctrl <- setupController "controller" aaaController86Passport
+  registerComponent ctrl "nozzle1-t" t1
+  registerComponent ctrl "nozzle1-p" p1
+  registerComponent ctrl "nozzle2-t" t2
+  registerComponent ctrl "nozzle2-p" p2
+  pure ctrl

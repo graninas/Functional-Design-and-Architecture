@@ -13,49 +13,5 @@ spec :: Spec
 spec =
   describe "Logic control tests" $ do
 
-    it "Hardware device components check" $ do
-
-      boosters      <- makeDevice aaaHardwareService boostersDef
-      mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
-
-      case mbThermometer of
-        Nothing -> fail "There is no such component"
-        Just thermometer -> putStrLn "Component found."
-
-    it "Hardware device component method run" $ do
-
-      boosters      <- makeDevice aaaHardwareService boostersDef
-      mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
-
-      case mbThermometer of
-        Nothing -> fail "There is no such component"
-        Just thermometer -> withHandler thermometer (verifyTemperature 100.0)
-
-    it "Getting measurement from mocked device" $ do
-
-      let testDef =
-            [ ComponentDef "t1" thermometer1Passp
-            ]
-
-      device <- makeDevice mockedHardwareService testDef
-      mpPart <- getDevicePart mockedHardwareService "t1" device
-
-      case mpPart of
-        Nothing -> fail "There is no such part"
-        Just part -> withHandler part (verifyTemperature 50.0)
-
-    it "Getting absent device part" $ do
-
-      let testDef =
-            [ ComponentDef "t1" thermometer1Passp
-            , ComponentDef "p1" pressure1Passp
-            ]
-
-      device <- makeDevice mockedHardwareService testDef
-      mpPart1 <- getDevicePart mockedHardwareService "t1" device
-      mpPart2 <- getDevicePart mockedHardwareService "p1" device
-      mpPart3 <- getDevicePart mockedHardwareService "t2" device
-
-      case (mpPart1, mpPart2, mpPart3) of
-        (Just _, Just _, Nothing) -> pure ()
-        _ -> fail "Device is assembled incorrectly."
+    it "Controller properties" $ do
+      1 `shouldBe` 1

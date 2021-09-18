@@ -2,10 +2,31 @@ module Andromeda.Hardware.Language.Hdl where
 
 
 import Andromeda.Hardware.Common
+import Andromeda.Hardware.Domain
+
+import Control.Monad.Free (Free (..), liftF)
 
 
-type ComponentIndex = String
+data HdlMethod next
+  = SetupComponent ComponentPassport (Component -> next)
+  | SetupController ControllerName ComponentPassport (Controller -> next)
+  | RegisterComponent Controller ComponentIndex Component (() -> next)
 
-data ComponentDef = ComponentDef ComponentIndex ComponentPassport
+instance Functor HdlMethod where
+  fmap f (SetupComponent passp next) = SetupComponent passp (f . next)
+  fmap f (SetupController name passp next) = SetupController name passp (f . next)
+  fmap f (RegisterComponent ctrl cIdx component next) = RegisterComponent ctrl cIdx component (f . next)
 
-type Hdl = [ComponentDef]
+
+type Hdl a = Free HdlMethod a
+
+
+
+setupComponent :: ComponentPassport -> Hdl Component
+setupComponent passp = liftF $ SetupComponent passp id
+
+setupController :: ControllerName -> ComponentPassport -> Hdl Controller
+setupController name passp = liftF $ SetupController name passp id
+
+registerComponent :: Controller -> ComponentIndex -> Component -> Hdl ()
+registerComponent ctrl cIdx component = liftF $ RegisterComponent ctrl cIdx component id

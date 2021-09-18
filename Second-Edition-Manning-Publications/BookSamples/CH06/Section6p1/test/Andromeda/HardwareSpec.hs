@@ -19,9 +19,16 @@ spec :: Spec
 spec =
   describe "Hardware tests" $ do
 
+    it "Controller status check" $ do
+
+      boostersCtrl <- runHdl aaaHardwareService createBoosters
+      status <- getStatus aaaHardwareService boostersCtrl
+
+      status `shouldBe` StatusOk
+
     it "Hardware device components check" $ do
 
-      boosters      <- makeDevice aaaHardwareService boostersDef
+      boostersCtrl <- runHdl aaaHardwareService boostersDef
       mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
 
       case mbThermometer of
@@ -30,7 +37,7 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      boosters      <- makeDevice aaaHardwareService boostersDef
+      boostersCtrl <- runHdl aaaHardwareService boostersDef
       mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
 
       case mbThermometer of
@@ -43,7 +50,7 @@ spec =
             [ ComponentDef "t1" thermometer1Passp
             ]
 
-      device <- makeDevice mockedHardwareService testDef
+      boostersCtrl <- runHdl mockedHardwareService testDef
       mpPart <- getDevicePart mockedHardwareService "t1" device
 
       case mpPart of
@@ -57,7 +64,7 @@ spec =
             , ComponentDef "p1" pressure1Passp
             ]
 
-      device <- makeDevice mockedHardwareService testDef
+      boostersCtrl <- runHdl mockedHardwareService testDef
       mpPart1 <- getDevicePart mockedHardwareService "t1" device
       mpPart2 <- getDevicePart mockedHardwareService "p1" device
       mpPart3 <- getDevicePart mockedHardwareService "t2" device
