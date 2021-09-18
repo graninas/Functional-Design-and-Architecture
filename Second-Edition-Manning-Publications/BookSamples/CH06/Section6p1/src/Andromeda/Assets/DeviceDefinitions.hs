@@ -3,13 +3,8 @@ module Andromeda.Assets.DeviceDefinitions where
 import Andromeda.Hardware
 import Andromeda.Assets.Vendors.AAA.Components
 
-
-import Andromeda.Hardware
-import Andromeda.Assets.Vendors.AAA.Components
-
-
-createBoosters :: Hdl Controller
-createBoosters = do
+boostersDef :: Hdl Controller
+boostersDef = do
   t1   <- setupComponent aaaTemperature25Passport
   p1   <- setupComponent aaaPressure02Passport
   t2   <- setupComponent aaaTemperature25Passport

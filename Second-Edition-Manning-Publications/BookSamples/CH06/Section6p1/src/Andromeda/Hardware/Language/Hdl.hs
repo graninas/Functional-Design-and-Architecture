@@ -15,7 +15,7 @@ data HdlMethod next
 instance Functor HdlMethod where
   fmap f (SetupComponent passp next) = SetupComponent passp (f . next)
   fmap f (SetupController name passp next) = SetupController name passp (f . next)
-  fmap f (RegisterComponent ctrl cIdx component next) = RegisterComponent ctrl cIdx component (f . next)
+  fmap f (RegisterComponent controller cIdx component next) = RegisterComponent controller cIdx component (f . next)
 
 
 type Hdl a = Free HdlMethod a
@@ -29,4 +29,4 @@ setupController :: ControllerName -> ComponentPassport -> Hdl Controller
 setupController name passp = liftF $ SetupController name passp id
 
 registerComponent :: Controller -> ComponentIndex -> Component -> Hdl ()
-registerComponent ctrl cIdx component = liftF $ RegisterComponent ctrl cIdx component id
+registerComponent controller cIdx component = liftF $ RegisterComponent controller cIdx component id

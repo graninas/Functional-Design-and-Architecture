@@ -1,4 +1,4 @@
-module Andromeda.HardwareSpec where
+module Andromeda.LogicControlSpec where
 
 import Test.Hspec
 
@@ -19,15 +19,8 @@ spec :: Spec
 spec =
   describe "Hardware tests" $ do
 
-    it "Controller status check" $ do
-
-      boostersCtrl <- runHdl aaaHardwareService createBoosters
-      status <- getStatus aaaHardwareService boostersCtrl
-
-      status `shouldBe` StatusOk
-
     it "Hardware device components check" $ do
-
+    
       boostersCtrl <- runHdl aaaHardwareService boostersDef
       mbThermometer <- getDevicePart aaaHardwareService "nozzle1-t" boosters
 

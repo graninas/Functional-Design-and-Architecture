@@ -1,3 +1,7 @@
 module Andromeda.LogicControl.Domain where
 
-import Andromeda.Hardware.Domain
+
+
+data Status
+  = StatusOk
+  deriving (Show, Eq, Ord)
