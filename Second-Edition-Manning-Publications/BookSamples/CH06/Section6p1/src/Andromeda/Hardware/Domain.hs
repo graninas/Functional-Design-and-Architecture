@@ -1,6 +1,8 @@
 module Andromeda.Hardware.Domain where
 
 
+type DeviceName = String
 type ComponentIndex = String
-data Component = Component
-data Controller = Controller ControllerName [Component]
+type ControllerName = String
+data Controller = Controller ControllerName
+  deriving (Show, Eq, Ord)

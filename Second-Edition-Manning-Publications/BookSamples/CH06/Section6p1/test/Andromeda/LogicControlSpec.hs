@@ -4,8 +4,15 @@ import Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets (boostersDef, aaaController86Name)
+import Andromeda.Assets (createBoosters, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
+
+import qualified Andromeda.Hardware.Impl.Runtime as Impl
+import qualified Andromeda.Hardware.Impl.Interpreter as Impl
+import qualified Andromeda.LogicControl.Impl.Interpreter as Impl
+
+import qualified Andromeda.Hardware.Language.Hdl as L
+import qualified Andromeda.LogicControl.Language as L
 
 
 spec :: Spec
@@ -14,8 +21,13 @@ spec =
 
     it "Controller status check" $ do
 
-      status <- runLogicControl aaaHardwareService $ do
-        boostersCtrl <- initDevice boostersDef
-        getStatus boostersCtrl
+      runtime <- Impl.createHardwareRuntime
 
-      status `shouldBe` StatusOk
+      (lStatus, rStatus) <- Impl.runLogicControl runtime aaaHardwareService $ do
+        (leftBoosterCtrl, rightBoosterCtrl) <- L.evalHdl createBoosters
+        lStatus <- L.getStatus leftBoosterCtrl
+        rStatus <- L.getStatus rightBoosterCtrl
+        pure (lStatus, rStatus)
+
+      lStatus `shouldBe` StatusOk
+      rStatus `shouldBe` StatusOk

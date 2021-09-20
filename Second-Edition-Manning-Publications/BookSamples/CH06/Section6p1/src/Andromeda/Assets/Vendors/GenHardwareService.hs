@@ -1,7 +1,7 @@
 module Andromeda.Assets.Vendors.GenHardwareService where
 
 import Andromeda.Hardware
-import qualified Andromeda.Hardware.Impl.Device as D
+import qualified Andromeda.Hardware.Impl.Device as Impl
 import Andromeda.Assets.Vendors.AAA.ComponentsAPI (aaaVendorComponents)
 import Andromeda.Assets.Vendors.BBB.ComponentsAPI (bbbVendorComponents)
 
@@ -14,7 +14,9 @@ allComponents = Map.union
 
 genHardwareService :: HardwareService
 genHardwareService = HardwareService
-  { makeDevice     = \hdl -> D.makeDevice allComponents hdl
-  , getBlankDevice = pure D.blankDevice
-  , getDevicePart  = \idx device -> pure (D.getDevicePart idx device)
+  { makeController = Impl.makeController allComponents
+  , makeDevicePart = Impl.makeDevicePart allComponents
+  , makeBlankDevice = Impl.makeBlankDevice
+  , addDevicePart = Impl.addDevicePart
+  , getDevicePart = Impl.getDevicePart
   }
