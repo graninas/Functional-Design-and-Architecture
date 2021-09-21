@@ -9,10 +9,11 @@ import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 -- import Andromeda.Test.HardwareService (mockedHardwareService)
 import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
 
-import qualified Andromeda.Hardware.Impl.Device.Types as Impl
-import qualified Andromeda.Hardware.Impl.Service as S
-import qualified Andromeda.Hardware.Impl.Runtime as Impl
-import qualified Andromeda.Hardware.Impl.Interpreter as Impl
+import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
+import qualified Andromeda.Hardware.Impl.Service as SImpl
+import qualified Andromeda.Hardware.Impl.Runtime as RImpl
+import qualified Andromeda.Hardware.Impl.HdlInterpreter as HdlImpl
+import qualified Andromeda.Hardware.Impl.HilInterpreter as HilImpl
 import qualified Andromeda.Hardware.Language.Hdl as L
 
 import Data.IORef
@@ -25,22 +26,22 @@ verifyTemperature temp handler = do
   measurement `shouldBe` (Measurement Temperature temp)
 
 
-getDevice :: Impl.HardwareRuntime -> Controller -> IO Impl.Device
-getDevice Impl.HardwareRuntime {devicesRef} ctrl = do
+getDevice :: RImpl.HardwareRuntime -> Controller -> IO TImpl.Device
+getDevice RImpl.HardwareRuntime {devicesRef} ctrl = do
   devices <- readIORef devicesRef
   case Map.lookup ctrl devices of
     Nothing -> fail "Controller not found"
     Just device -> pure device
 
 getDevicePart'
-  :: Impl.HardwareRuntime
-  -> S.HardwareService
+  :: RImpl.HardwareRuntime
+  -> SImpl.HardwareService
   -> ComponentIndex
   -> Controller
-  -> IO (Maybe DevicePart)
+  -> IO (Maybe TImpl.DevicePart)
 getDevicePart' runtime service idx ctrl = do
   device <- getDevice runtime ctrl
-  S.getDevicePart service idx device
+  SImpl.getDevicePart service idx device
 
 
 spec :: Spec
@@ -49,9 +50,9 @@ spec =
 
     it "Hardware device components check" $ do
 
-      runtime <- Impl.createHardwareRuntime
+      runtime <- RImpl.createHardwareRuntime
 
-      (leftBoosterCtrl, rightBoosterCtrl) <- Impl.runHdl runtime aaaHardwareService createBoosters
+      (leftBoosterCtrl, rightBoosterCtrl) <- HdlImpl.runHdl runtime aaaHardwareService createBoosters
 
       mbThermometer1 <- getDevicePart' runtime aaaHardwareService "nozzle1-t" leftBoosterCtrl
       mbThermometer2 <- getDevicePart' runtime aaaHardwareService "nozzle1-t" rightBoosterCtrl
@@ -63,14 +64,14 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      runtime <- Impl.createHardwareRuntime
+      runtime <- RImpl.createHardwareRuntime
 
-      (leftBoosterCtrl, _) <- Impl.runHdl runtime aaaHardwareService createBoosters
+      (leftBoosterCtrl, _) <- HdlImpl.runHdl runtime aaaHardwareService createBoosters
       mbThermometer <- getDevicePart' runtime aaaHardwareService "nozzle1-t" leftBoosterCtrl
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
-        Just thermometer -> Impl.withHandler thermometer (verifyTemperature 100.0)
+        Just thermometer -> TImpl.withHandler thermometer (verifyTemperature 100.0)
 
     -- it "Getting measurement from mocked device" $ do
     --   runtime <- Impl.createHardwareRuntime

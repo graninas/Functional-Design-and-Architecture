@@ -23,8 +23,8 @@ data Device = Device DeviceName ControllerImpl (IORef (Map ComponentIndex Device
 
 class WithHandler handlerAPI where
   withHandler :: DevicePart
-              -> (handlerAPI -> IO ())
-              -> IO ()
+              -> (handlerAPI -> IO a)
+              -> IO a
 
 instance WithHandler SensorAPI where
   withHandler (DevicePart (VendoredSensor _ handler)) f = f handler

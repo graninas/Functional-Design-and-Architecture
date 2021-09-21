@@ -24,21 +24,6 @@ makeBlankDevice name ctrlImpl = do
   partsRef <- newIORef Map.empty
   pure $ Device name ctrlImpl partsRef
 
-  -- makeDevice' vendorComponents hdl blankDevice
-
--- -- Traversing the list of components (definitions)
--- makeDevice' :: VendorComponents -> Hdl -> Device -> IO Device
--- makeDevice' vendorComponents [] device = pure device
--- makeDevice' vendorComponents (componentDef:cs) device = do
---   let ePart = validateComponent vendorComponents componentDef
---   case ePart of
---     Left err   -> error err                  -- Bad practice!
---     Right part -> do
---       let (ComponentDef idx _) = componentDef
---       let device' = addComponent idx part device
---       makeDevice' vendorComponents cs device'
-
-
 makeDevicePart
   :: VendorComponents
   -> ComponentPassport
@@ -48,7 +33,6 @@ makeDevicePart vendorComponents (ComponentPassport (Sensors _) cName _ cVendor) 
     Just vendorComponent -> Right (DevicePart vendorComponent)
     Nothing              -> Left ("Component not found: " <> cVendor <> " " <> cName)
 makeDevicePart _ _ = pure $ Left "Invalid/unknown component class for a device part"
-
 
 makeController
   :: VendorComponents
@@ -66,7 +50,6 @@ addDevicePart :: ComponentIndex -> DevicePart -> Device -> IO ()
 addDevicePart idx part (Device name _ partsRef) = do
   parts <- readIORef partsRef
   writeIORef partsRef (Map.insert idx part parts)
-
 
 getDevicePart :: ComponentIndex -> Device
               -> IO (Maybe DevicePart)

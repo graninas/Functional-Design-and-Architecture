@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cd0c17ab2dadaf69886a3d6c6bb7df68fc70710450eb4f47b881ce5cbc19fbcd
+-- hash: 245df5cc90dcaf76b591644096d48d028522ae6c87649703b81310d3fb2a8783
 
 name:           ch6section6p1andromeda
 version:        1.0.0.0
@@ -37,10 +37,12 @@ library
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
-      Andromeda.Hardware.Impl.Interpreter
+      Andromeda.Hardware.Impl.HdlInterpreter
+      Andromeda.Hardware.Impl.HilInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
+      Andromeda.Hardware.Language.Hil
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain
@@ -101,10 +103,12 @@ executable ch6section6p1andromeda
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
-      Andromeda.Hardware.Impl.Interpreter
+      Andromeda.Hardware.Impl.HdlInterpreter
+      Andromeda.Hardware.Impl.HilInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
+      Andromeda.Hardware.Language.Hil
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain
