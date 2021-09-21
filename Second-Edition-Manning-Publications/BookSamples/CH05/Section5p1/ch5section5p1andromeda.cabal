@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1f93666d889244972d78dba26347d5da19180b4ed5bd7f8ec872d4ffb137a510
+-- hash: 3c844c79f17d78665f2475d1f03bf2326d967f65850b9f96e6ff07a08fb7fb24
 
 name:           ch5section5p1andromeda
 version:        1.0.0.0
@@ -33,14 +33,17 @@ library
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common
+      Andromeda.Hardware.Domain
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
+      Andromeda.Hardware.Impl.HdlInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
+      Andromeda.LogicControl.Domain
       Andromeda.LogicControl.Language
       Andromeda.Simulator
       Andromeda.Simulator.Actions
@@ -93,14 +96,17 @@ executable ch5section5p1andromeda
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common
+      Andromeda.Hardware.Domain
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
+      Andromeda.Hardware.Impl.HdlInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
+      Andromeda.LogicControl.Domain
       Andromeda.LogicControl.Language
       Andromeda.Simulator
       Andromeda.Simulator.Actions

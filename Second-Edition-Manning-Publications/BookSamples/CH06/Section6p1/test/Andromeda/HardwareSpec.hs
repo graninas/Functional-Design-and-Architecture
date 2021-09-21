@@ -20,6 +20,7 @@ import Data.IORef
 import qualified Data.Map as Map
 
 
+
 verifyTemperature :: Float -> SensorAPI -> IO ()
 verifyTemperature temp handler = do
   measurement <- readMeasurement handler
@@ -55,7 +56,7 @@ spec =
       (leftBoosterCtrl, rightBoosterCtrl) <- HdlImpl.runHdl runtime aaaHardwareService createBoosters
 
       mbThermometer1 <- getDevicePart' runtime aaaHardwareService "nozzle1-t" leftBoosterCtrl
-      mbThermometer2 <- getDevicePart' runtime aaaHardwareService "nozzle1-t" rightBoosterCtrl
+      mbThermometer2 <- getDevicePart' runtime aaaHardwareService "nozzle2-t" rightBoosterCtrl
 
       case (mbThermometer1, mbThermometer2) of
         (Nothing, _) -> fail "There is no such component"

@@ -14,42 +14,40 @@ import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 -- import qualified Andromeda.Hardware.Impl.Device as Impl
 
 
-import Data.IORef
 import qualified Data.Map as Map
 
 
 
 
-type Devices = Map.Map ControllerName (ControllerImpl, Device)
 
 
-
-
-
-interpretHdlMethod :: Devices -> SImpl.HardwareService -> L.HdlMethod -> IO Devices
+interpretHdlMethod :: RImpl.Devices -> SImpl.HardwareService -> L.HdlMethod -> IO RImpl.Devices
 interpretHdlMethod devices service (L.SetupController deviceName ctrlName passp) = do
-  ctrlImpl <- createController service ctrlName passp
-  blankDevice <- SImpl.makeBlankDevice service deviceName ctrlImpl
-  let devices' = Map.insert ctrlName (ctrlImpl, blankDevice)
-  pure devices'
+  eCtrlImpl <- SImpl.makeController service ctrlName passp
+  case eCtrlImpl of
+    Left err -> error err     -- bad practice
+    Right ctrlImpl -> do
+      blankDevice <- SImpl.makeBlankDevice service deviceName ctrlImpl
+      let devices' = Map.insert ctrlName (ctrlImpl, blankDevice) devices
+      pure devices'
 
-interpretHdlMethod devices service (L.RegisterComponent controller idx passp) = do
-  let mbDevice = Map.lookup (controller, idx) devices
+interpretHdlMethod devices service (L.RegisterComponent ctrlName idx passp) = do
+  let mbDevice = Map.lookup ctrlName devices
   case mbDevice of
     Nothing -> error "Device not found"    -- bad practice
-    Just (_, device) -> do
+    Just (ctrlImpl, device) -> do
       eDeivcePart <- SImpl.makeDevicePart service passp
       case eDeivcePart of
         Left err -> error err    -- TODO: bad practice
         Right part -> do
           device' <- SImpl.addDevicePart service idx part device
-          let devices' = Map.insert (controller, idx) device'
+          let devices' = Map.insert ctrlName (ctrlImpl, device') devices
           pure devices'
 
 
 
-runHdl :: Devices -> SImpl.HardwareService -> L.Hdl -> IO Devices
-runHdl devices _ [] = devices
+runHdl :: RImpl.Devices -> SImpl.HardwareService -> L.Hdl -> IO RImpl.Devices
+runHdl devices _ [] = pure devices
 runHdl devices service (hdlMethod:ms) = do
   devices' <- interpretHdlMethod devices service hdlMethod
-  runHdl devices service devices'
+  runHdl devices' service ms

@@ -12,3 +12,6 @@ data Controller = Controller ControllerName
 data Status
   = StatusOk
   deriving (Show, Eq, Ord)
+
+type Message = String
+type Key = String

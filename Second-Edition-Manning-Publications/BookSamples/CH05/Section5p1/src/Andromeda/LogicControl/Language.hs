@@ -8,7 +8,7 @@ import Andromeda.Common.Value
 
 import qualified Andromeda.Hardware.Language.Hdl as L
 
-data LogicControlMethod next
+data LogicControlMethod
   = EvalHdl L.Hdl
   -- | Report Message
   -- | Store Key Value

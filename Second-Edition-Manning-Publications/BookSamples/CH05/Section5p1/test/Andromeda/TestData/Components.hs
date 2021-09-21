@@ -13,6 +13,10 @@ pressure1Passp :: ComponentPassport
 pressure1Passp =
   ComponentPassport (Sensors Temperature) "p1" "p1" "p1"
 
+controller1Passp :: ComponentPassport
+controller1Passp =
+  ComponentPassport Controllers "controller" "controller" "controller"
+
 
 thermometer1Handler :: SensorAPI
 thermometer1Handler = SensorAPI

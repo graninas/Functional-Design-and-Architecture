@@ -12,13 +12,11 @@ import Andromeda.Hardware.Domain
 import Andromeda.Hardware.Language.Hdl
 import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..), SensorAPI, ControllerAPI)
 
-import Data.Map (Map)
 import qualified Data.Map as Map
-import Data.IORef (IORef)
 
 data DevicePart = DevicePart VendorComponent {- some state here -}
 data ControllerImpl = ControllerImpl ControllerName VendorComponent
-data Device = Device DeviceName ControllerImpl (Map ComponentIndex DevicePart)
+data Device = Device DeviceName ControllerImpl (Map.Map ComponentIndex DevicePart)
 
 
 class WithHandler handlerAPI where

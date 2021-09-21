@@ -14,7 +14,6 @@ import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..)
 import Andromeda.Hardware.Impl.Device.Types (ControllerImpl(..), Device(..), DevicePart (..))
 
 import qualified Data.Map as Map
-import Data.IORef
 
 
 makeBlankDevice :: DeviceName -> ControllerImpl -> IO Device
