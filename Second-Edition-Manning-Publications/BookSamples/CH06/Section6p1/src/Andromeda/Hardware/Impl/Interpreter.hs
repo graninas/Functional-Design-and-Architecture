@@ -70,6 +70,9 @@ interpretHdlMethod runtime service (L.SetupController deviceName ctrlName passp 
   registerDevice runtime blankDevice ctrl
   pure $ next ctrl
 
+interpretHdlMethod runtime service (L.GetStatus ctrl next) =
+  -- TODO: dummy
+  pure $ next T.StatusOk
 
 
 runHdl :: Impl.HardwareRuntime -> S.HardwareService -> L.Hdl a -> IO a

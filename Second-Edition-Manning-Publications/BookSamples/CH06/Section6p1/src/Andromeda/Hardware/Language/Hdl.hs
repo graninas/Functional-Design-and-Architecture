@@ -7,19 +7,15 @@ import Andromeda.Hardware.Domain
 import Control.Monad.Free (Free (..), liftF)
 
 
--- type ComponentIndex = String
--- data ComponentDef = ComponentDef ComponentIndex ComponentPassport
--- type Hdl = [ComponentDef]
-
-
 data HdlMethod next
   = SetupController DeviceName ControllerName ComponentPassport (Controller -> next)
   | RegisterComponent Controller ComponentIndex ComponentPassport (() -> next)
+  | GetStatus Controller (Status -> next)
 
 instance Functor HdlMethod where
   fmap f (SetupController deviceName ctrlName passp next) = SetupController deviceName ctrlName passp (f . next)
   fmap f (RegisterComponent controller idx passp next) = RegisterComponent controller idx passp (f . next)
-
+  fmap f (GetStatus controller next) = GetStatus controller (f . next)
 
 type Hdl a = Free HdlMethod a
 
@@ -29,3 +25,6 @@ setupController deviceName ctrlName passp = liftF $ SetupController deviceName c
 
 registerComponent :: Controller -> ComponentIndex -> ComponentPassport -> Hdl ()
 registerComponent controller idx passp = liftF $ RegisterComponent controller idx passp id
+
+getStatus :: Controller -> Hdl Status
+getStatus controller = liftF $ GetStatus controller id

@@ -20,9 +20,7 @@ interpretLogicControlMethod hardwareRuntime hardwareService
   (L.EvalHdl hdl next) = do
     res <- Impl.runHdl hardwareRuntime hardwareService hdl
     pure $ next res
-interpretLogicControlMethod hardwareRuntime hardwareService
-  (L.GetStatus controller next) = do
-    pure $ next T.StatusOk
+
 
 
 

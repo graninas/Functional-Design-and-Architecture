@@ -25,8 +25,8 @@ spec =
 
       (lStatus, rStatus) <- Impl.runLogicControl runtime aaaHardwareService $ do
         (leftBoosterCtrl, rightBoosterCtrl) <- L.evalHdl createBoosters
-        lStatus <- L.getStatus leftBoosterCtrl
-        rStatus <- L.getStatus rightBoosterCtrl
+        lStatus <- L.evalHdl $ L.getStatus leftBoosterCtrl
+        rStatus <- L.evalHdl $ L.getStatus rightBoosterCtrl
         pure (lStatus, rStatus)
 
       lStatus `shouldBe` StatusOk
