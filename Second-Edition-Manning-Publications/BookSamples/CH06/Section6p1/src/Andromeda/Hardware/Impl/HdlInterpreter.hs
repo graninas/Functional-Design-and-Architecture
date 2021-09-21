@@ -59,10 +59,6 @@ registerDevice RImpl.HardwareRuntime{devicesRef} device ctrl = do
 
 
 interpretHdlMethod :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.HdlMethod a -> IO a
-interpretHdlMethod runtime service (L.RegisterComponent controller idx passp next) = do
-  registerDevicePart runtime service controller idx passp
-  pure $ next ()
-
 interpretHdlMethod runtime service (L.SetupController deviceName ctrlName passp next) = do
   ctrlImpl <- createController service ctrlName passp
   blankDevice <- SImpl.makeBlankDevice service deviceName ctrlImpl
@@ -70,6 +66,9 @@ interpretHdlMethod runtime service (L.SetupController deviceName ctrlName passp 
   registerDevice runtime blankDevice ctrl
   pure $ next ctrl
 
+interpretHdlMethod runtime service (L.RegisterComponent controller idx passp next) = do
+  registerDevicePart runtime service controller idx passp
+  pure $ next ()
 
 runHdl :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.Hdl a -> IO a
 runHdl runtime service hdl = foldFree (interpretHdlMethod runtime service) hdl

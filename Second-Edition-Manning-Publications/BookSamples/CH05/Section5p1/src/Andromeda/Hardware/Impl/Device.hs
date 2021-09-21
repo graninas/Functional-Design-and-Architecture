@@ -1,62 +1,53 @@
-module Andromeda.Hardware.Impl.Device (
-    makeDevice,
-    blankDevice,
-    getDevicePart
- ) where
+module Andromeda.Hardware.Impl.Device
+  ( makeBlankDevice
+  , makeDevicePart
+  , makeController
+  , addDevicePart
+  , getDevicePart
+  ) where
 
 
 import Andromeda.Hardware.Common
-import Andromeda.Hardware.Language.Hdl (Hdl, ComponentIndex, ComponentDef(..))
+import Andromeda.Hardware.Domain (ControllerName, ComponentIndex, DeviceName)
+import Andromeda.Hardware.Language.Hdl (Hdl)
 import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..), SensorAPI, ControllerAPI)
-import Andromeda.Hardware.Impl.Device.Types (Device(..), DevicePart (..))
+import Andromeda.Hardware.Impl.Device.Types (ControllerImpl(..), Device(..), DevicePart (..))
 
-
-import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.IORef
 
 
-blankDevice :: Device
-blankDevice = Device "" Map.empty   -- TODO: name
+makeBlankDevice :: DeviceName -> ControllerImpl -> IO Device
+makeBlankDevice name ctrlImpl = pure $ Device name ctrlImpl Map.empty
 
-
--- There are different ways to provide the context
-makeDevice
+makeDevicePart
   :: VendorComponents
-  -> Hdl
-  -> IO Device
-makeDevice vendorComponents hdl =
-  makeDevice' vendorComponents hdl blankDevice
+  -> ComponentPassport
+  -> IO (Either String DevicePart)
+makeDevicePart vendorComponents (ComponentPassport (Sensors _) cName _ cVendor) =
+  pure $ case Map.lookup cName vendorComponents of
+    Just vendorComponent -> Right (DevicePart vendorComponent)
+    Nothing              -> Left ("Component not found: " <> cVendor <> " " <> cName)
+makeDevicePart _ _ = pure $ Left "Invalid/unknown component class for a device part"
 
--- Traversing the list of components (definitions)
-makeDevice' :: VendorComponents -> Hdl -> Device -> IO Device
-makeDevice' vendorComponents [] device = pure device
-makeDevice' vendorComponents (componentDef:cs) device = do
-  let ePart = validateComponent vendorComponents componentDef
-  case ePart of
-    Left err   -> error err                  -- Bad practice!
-    Right part -> do
-      let (ComponentDef idx _) = componentDef
-      let device' = addComponent idx part device
-      makeDevice' vendorComponents cs device'
-
-
-addComponent :: ComponentIndex -> DevicePart -> Device -> Device
-addComponent idx part (Device name parts) =
-  Device name (Map.insert idx part parts)
-
-
-validateComponent
+makeController
   :: VendorComponents
-  -> ComponentDef
-  -> Either String DevicePart
-validateComponent vendorComponents componentDef = let
-  (ComponentDef _ passp) = componentDef
-  (ComponentPassport _ cName _ cVendor) = passp
-  in case Map.lookup cName vendorComponents of
-      Just vendorComponent -> Right (DevicePart vendorComponent)
-      Nothing              -> Left ("Component not found: " <> cVendor <> " " <> cName)
+  -> ControllerName
+  -> ComponentPassport
+  -> IO (Either String ControllerImpl)
+makeController vendorComponents ctrlName (ComponentPassport Controllers cName _ cVendor) =
+  pure $ case Map.lookup cName vendorComponents of
+    Just vendorComponent -> Right (ControllerImpl ctrlName vendorComponent)
+    Nothing              -> Left ("Component not found: " <> cVendor <> " " <> cName)
+makeController _ _ _ = pure $ Left "Invalid/unknown component class for a controller"
 
+
+addDevicePart :: ComponentIndex -> DevicePart -> Device -> IO Device
+addDevicePart idx part (Device name ctrlImpl parts) = do
+  let parts' = Map.insert idx part parts
+  pure $ Device name ctrlImpl parts'
 
 getDevicePart :: ComponentIndex -> Device
-              -> Maybe DevicePart
-getDevicePart idx (Device _ parts) = Map.lookup idx parts
+              -> IO (Maybe DevicePart)
+getDevicePart idx (Device _ _ parts) =
+  pure $ Map.lookup idx parts

@@ -1,5 +1,5 @@
 module Andromeda.Hardware.Impl.Device.Types (
-    DeviceName,
+    ControllerImpl(..),
     Device (..),
     DevicePart (..),
     WithHandler (..),
@@ -8,22 +8,23 @@ module Andromeda.Hardware.Impl.Device.Types (
 
 
 import Andromeda.Hardware.Common
+import Andromeda.Hardware.Domain
 import Andromeda.Hardware.Language.Hdl
 import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..), SensorAPI, ControllerAPI)
 
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.IORef (IORef)
 
-
-type DeviceName = String
 data DevicePart = DevicePart VendorComponent {- some state here -}
-data Device = Device DeviceName (Map ComponentIndex DevicePart)
+data ControllerImpl = ControllerImpl ControllerName VendorComponent
+data Device = Device DeviceName ControllerImpl (Map ComponentIndex DevicePart)
 
 
 class WithHandler handlerAPI where
   withHandler :: DevicePart
-              -> (handlerAPI -> IO ())
-              -> IO ()
+              -> (handlerAPI -> IO a)
+              -> IO a
 
 instance WithHandler SensorAPI where
   withHandler (DevicePart (VendoredSensor _ handler)) f = f handler

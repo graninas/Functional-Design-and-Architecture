@@ -4,17 +4,22 @@ import Andromeda.Hardware
 import Andromeda.Assets.Vendors.AAA.Components
 
 
--- Why don't we use VendorComponent here?
--- Because Hdl should be serializable and independent
--- of any implementation details.
--- It can use definitions only.
+hdlScript :: Hdl
+hdlScript =
+  [ SetupController "left booster" "left b ctrl" aaaController86Passport
 
+  , RegisterComponent "left b ctrl" "nozzle1-t" aaaTemperature25Passport
+  , RegisterComponent "left b ctrl" "nozzle1-p" aaaPressure02Passport
 
-boostersDef :: Hdl
-boostersDef =
-  [ ComponentDef "nozzle1-t"  aaaTemperature25Passport
-  , ComponentDef "nozzle1-p"  aaaPressure02Passport
-  , ComponentDef "nozzle2-t"  aaaTemperature25Passport
-  , ComponentDef "nozzle2-p"  aaaPressure02Passport
-  , ComponentDef "controller" aaaController86Passport
+  , SetupController "right booster" "right b ctrl" aaaController86Passport
+  , RegisterComponent "right b ctrl" "nozzle2-t" aaaTemperature25Passport
+  , RegisterComponent "right b ctrl" "nozzle2-p" aaaPressure02Passport
+
+  , ReadSensor "nozzle1-t"
+      ( \eMeasurement ->
+        [ case eMeasurement of
+            Left err -> Report err
+            Right (Measurement _ val) -> Store "nozzle1-t temp" (floatValue val)
+        ]
+      )
   ]
