@@ -43,5 +43,5 @@ controlProgramA = mArr (const controlProgram)
     
 test = do
     let sensorInst = (Controller "boosters", "00:01")
-    runFreeArr interpretControlProgram thermMonitorA sensorInst
-    runFreeArr interpretControlProgram controlProgramA ()
+    runFreeArr interpretDeviceControl thermMonitorA sensorInst
+    runFreeArr interpretDeviceControl controlProgramA ()

@@ -37,8 +37,8 @@ interpretControllerScript (Free (Run c cmd next)) = do
 interpretScript (ControllerScriptDef scr)     = interpretControllerScript scr
 interpretScript (InfrastructureScriptDef scr) = interpretInfrastructureScript scr
     
-interpretControlProgram :: ControlProgram a -> IO a
-interpretControlProgram (Pure a) = return a
-interpretControlProgram (Free (EvalScript scr next)) = do
+interpretDeviceControl :: DeviceControl a -> IO a
+interpretDeviceControl (Pure a) = return a
+interpretDeviceControl (Free (EvalScript scr next)) = do
     res <- interpretScript scr
-    interpretControlProgram (next res)
+    interpretDeviceControl (next res)

@@ -12,15 +12,15 @@ data Control a = forall b. EvalScript (S.Script b) (b -> a)
 instance Functor Control where
     fmap f (EvalScript scr g) = EvalScript scr (f . g)
 
-type ControlProgram a = F.Free Control a
+type DeviceControl a = F.Free Control a
 
-evalScript :: S.Script a -> ControlProgram a
+evalScript :: S.Script a -> DeviceControl a
 evalScript scr = F.liftF (EvalScript scr id)
 
 class Monad m => Interpreter m where
     onEvalScript :: S.Script b -> m b
 
-interpret :: (Monad m, Interpreter m) => ControlProgram a -> m a
+interpret :: (Monad m, Interpreter m) => DeviceControl a -> m a
 interpret (F.Pure a) = return a
 interpret (F.Free (EvalScript s nextF)) = do
     v <- onEvalScript s

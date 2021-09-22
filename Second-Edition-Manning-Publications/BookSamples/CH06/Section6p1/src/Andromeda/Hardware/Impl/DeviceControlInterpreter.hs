@@ -1,6 +1,6 @@
-module Andromeda.Hardware.Impl.HilInterpreter where
+module Andromeda.Hardware.Impl.DeviceControlInterpreter where
 
-import qualified Andromeda.Hardware.Language.Hil as L
+import qualified Andromeda.Hardware.Language.DeviceControl as L
 
 import qualified Andromeda.Hardware.Common as T
 import qualified Andromeda.Hardware.Domain as T
@@ -26,13 +26,13 @@ getDevice RImpl.HardwareRuntime {devicesRef} ctrl = do
   pure $ Map.lookup ctrl devices
 
 
-interpretHilMethod :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.HilMethod a -> IO a
+interpretDeviceControlMethod :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.DeviceControlMethod a -> IO a
 
-interpretHilMethod runtime service (L.GetStatus ctrl next) =
+interpretDeviceControlMethod runtime service (L.GetStatus ctrl next) =
   -- TODO: dummy
   pure $ next $ Right T.StatusOk
 
-interpretHilMethod runtime service (L.ReadSensor controller idx next) = do
+interpretDeviceControlMethod runtime service (L.ReadSensor controller idx next) = do
   mbDevice <- getDevice runtime controller
   case mbDevice of
     Nothing -> pure $ next $ Left "Device not found"
@@ -45,5 +45,5 @@ interpretHilMethod runtime service (L.ReadSensor controller idx next) = do
             CImpl.readMeasurement handler
           pure $ next $ Right measurement
 
-runHil :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.Hil a -> IO a
-runHil runtime service hil = foldFree (interpretHilMethod runtime service) hil
+runDeviceControl :: RImpl.HardwareRuntime -> SImpl.HardwareService -> L.DeviceControl a -> IO a
+runDeviceControl runtime service hil = foldFree (interpretDeviceControlMethod runtime service) hil

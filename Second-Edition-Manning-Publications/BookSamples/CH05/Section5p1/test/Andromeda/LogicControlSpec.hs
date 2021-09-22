@@ -28,8 +28,8 @@ spec =
       1 `shouldBe` 1
       -- devices' <- Impl.runLogicControl devices aaaHardwareService $ do
       --   (leftBoosterCtrl, rightBoosterCtrl) <- L.evalHdl createBoosters
-      --   lStatus <- L.evalHil $ L.getStatus leftBoosterCtrl
-      --   rStatus <- L.evalHil $ L.getStatus rightBoosterCtrl
+      --   lStatus <- L.evalDeviceControl $ L.getStatus leftBoosterCtrl
+      --   rStatus <- L.evalDeviceControl $ L.getStatus rightBoosterCtrl
       --   pure (lStatus, rStatus)
       --
       -- lStatus `shouldBe` (Right StatusOk)

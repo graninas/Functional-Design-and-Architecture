@@ -9,11 +9,11 @@ import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 
 import qualified Andromeda.Hardware.Impl.Runtime as Impl
 import qualified Andromeda.Hardware.Impl.HdlInterpreter as Impl
-import qualified Andromeda.Hardware.Impl.HilInterpreter as Impl
+import qualified Andromeda.Hardware.Impl.DeviceControlInterpreter as Impl
 import qualified Andromeda.LogicControl.Impl.Interpreter as Impl
 
 import qualified Andromeda.Hardware.Language.Hdl as L
-import qualified Andromeda.Hardware.Language.Hil as L
+import qualified Andromeda.Hardware.Language.DeviceControl as L
 import qualified Andromeda.LogicControl.Language as L
 
 
@@ -27,8 +27,8 @@ spec =
 
       (lStatus, rStatus) <- Impl.runLogicControl runtime aaaHardwareService $ do
         (leftBoosterCtrl, rightBoosterCtrl) <- L.evalHdl createBoosters
-        lStatus <- L.evalHil $ L.getStatus leftBoosterCtrl
-        rStatus <- L.evalHil $ L.getStatus rightBoosterCtrl
+        lStatus <- L.evalDeviceControl $ L.getStatus leftBoosterCtrl
+        rStatus <- L.evalDeviceControl $ L.getStatus rightBoosterCtrl
         pure (lStatus, rStatus)
 
       lStatus `shouldBe` (Right StatusOk)

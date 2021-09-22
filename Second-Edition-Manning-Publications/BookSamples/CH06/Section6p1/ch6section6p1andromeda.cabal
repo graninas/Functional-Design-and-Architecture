@@ -38,11 +38,11 @@ library
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
       Andromeda.Hardware.Impl.HdlInterpreter
-      Andromeda.Hardware.Impl.HilInterpreter
+      Andromeda.Hardware.Impl.DeviceControlInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
-      Andromeda.Hardware.Language.Hil
+      Andromeda.Hardware.Language.DeviceControl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain
@@ -104,11 +104,11 @@ executable ch6section6p1andromeda
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
       Andromeda.Hardware.Impl.HdlInterpreter
-      Andromeda.Hardware.Impl.HilInterpreter
+      Andromeda.Hardware.Impl.DeviceControlInterpreter
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
       Andromeda.Hardware.Language.Hdl
-      Andromeda.Hardware.Language.Hil
+      Andromeda.Hardware.Language.DeviceControl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain

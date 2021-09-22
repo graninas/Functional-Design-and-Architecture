@@ -13,9 +13,9 @@ data Control a = forall b. EvalScript (Script b) (b -> a)
 instance Functor Control where
     fmap f (EvalScript scr g) = EvalScript scr (f . g)
 
-type ControlProgram a = F.Free Control a
+type DeviceControl a = F.Free Control a
 
-evalScript :: Script a -> ControlProgram a
+evalScript :: Script a -> DeviceControl a
 evalScript scr = F.liftF (EvalScript scr id)
 
 

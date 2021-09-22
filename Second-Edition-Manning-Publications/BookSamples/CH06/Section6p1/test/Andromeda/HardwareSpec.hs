@@ -13,7 +13,7 @@ import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
 import qualified Andromeda.Hardware.Impl.Service as SImpl
 import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 import qualified Andromeda.Hardware.Impl.HdlInterpreter as HdlImpl
-import qualified Andromeda.Hardware.Impl.HilInterpreter as HilImpl
+import qualified Andromeda.Hardware.Impl.DeviceControlInterpreter as DeviceControlImpl
 import qualified Andromeda.Hardware.Language.Hdl as L
 
 import Data.IORef

@@ -15,7 +15,7 @@ alarmReceiver :: Receiver
 alarmReceiver = \v -> print ("WARNING!", v)
 
 
-controlProgram :: ControlProgram ()
+controlProgram :: DeviceControl ()
 controlProgram = do
     logMessage "[INF]" "Control program started."
     result1 <- evalScript (controllerScript startBoosters)
@@ -24,7 +24,7 @@ controlProgram = do
     checkResult result2
     logMessage "[INF]" "Control program finished."
     
-logMessage :: String -> String -> ControlProgram ()
+logMessage :: String -> String -> DeviceControl ()
 logMessage severity str = do
     time <- evalScript (infrastructureScript getCurrentTime)
     let msg = show (time, severity, str)
@@ -36,7 +36,7 @@ startBoosters = run (Controller "boosters") (Command "start")
 startRotaryEngines :: ControllerScript CommandResult
 startRotaryEngines = run (Controller "rotary engines") (Command "start")
         
-checkResult :: CommandResult -> ControlProgram ()
+checkResult :: CommandResult -> DeviceControl ()
 checkResult (Left failed) = do
     let errorMsg = "Start engines failed"
     logMessage "[ERR]" errorMsg
@@ -47,4 +47,4 @@ checkResult (Right succeeded) =
     
 
     
-test = interpretControlProgram controlProgram
+test = interpretDeviceControl controlProgram
