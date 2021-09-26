@@ -6,8 +6,9 @@ import Andromeda.Hardware.Domain
 import Andromeda.Common.Value
 
 
-type Hdl = [HdlMethod]
 
-data HdlMethod
-  = SetupController DeviceName ControllerName ComponentPassport
-  | RegisterComponent ControllerName ComponentIndex ComponentPassport
+type Hdl next = [HdlMethod next]
+
+data HdlMethod next
+  = SetupController DeviceName ControllerName ComponentPassport (Controller -> next)
+  | RegisterComponent Controller ComponentIndex ComponentPassport

@@ -22,17 +22,19 @@ import qualified Data.Map as Map
 
 
 interpretHdlMethod :: RImpl.Devices -> SImpl.HardwareService -> L.HdlMethod -> IO RImpl.Devices
-interpretHdlMethod devices service (L.SetupController deviceName ctrlName passp) = do
+interpretHdlMethod devices service (L.SetupController deviceName ctrlName passp next) = do
   eCtrlImpl <- SImpl.makeController service ctrlName passp
   case eCtrlImpl of
     Left err -> error err     -- bad practice
     Right ctrlImpl -> do
       blankDevice <- SImpl.makeBlankDevice service deviceName ctrlImpl
-      let devices' = Map.insert ctrlName (ctrlImpl, blankDevice) devices
-      pure devices'
+      let ctrl = T.Controller ctrlName
+      let devices' = Map.insert ctrl (ctrlImpl, blankDevice) devices
+      devices'' <- runHdl devices' service $ next ctrl
+      pure devices''
 
-interpretHdlMethod devices service (L.RegisterComponent ctrlName idx passp) = do
-  let mbDevice = Map.lookup ctrlName devices
+interpretHdlMethod devices service (L.RegisterComponent ctrl idx passp) = do
+  let mbDevice = Map.lookup ctrl devices
   case mbDevice of
     Nothing -> error "Device not found"    -- bad practice
     Just (ctrlImpl, device) -> do
@@ -41,7 +43,7 @@ interpretHdlMethod devices service (L.RegisterComponent ctrlName idx passp) = do
         Left err -> error err    -- TODO: bad practice
         Right part -> do
           device' <- SImpl.addDevicePart service idx part device
-          let devices' = Map.insert ctrlName (ctrlImpl, device') devices
+          let devices' = Map.insert ctrl (ctrlImpl, device') devices
           pure devices'
 
 interpretHdlMethod _ _ _ = error "Not implemented"

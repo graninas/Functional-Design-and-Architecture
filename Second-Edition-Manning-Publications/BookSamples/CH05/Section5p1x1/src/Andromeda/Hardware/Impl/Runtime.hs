@@ -10,4 +10,4 @@ import qualified Data.Map as Map
 
 
 
-type Devices = Map.Map T.ControllerName (TImpl.ControllerImpl, TImpl.Device)
+type Devices = Map.Map T.Controller (TImpl.ControllerImpl, TImpl.Device)
