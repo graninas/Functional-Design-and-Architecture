@@ -13,4 +13,4 @@ data HdlMethod
   | RegisterComponent Controller ComponentIndex ComponentPassport
   | ReadSensor Controller ComponentIndex (Either String Measurement -> Hdl)
   | GetStatus Controller (Either String Status -> Hdl)
-  | Print String
+  | Report Message
