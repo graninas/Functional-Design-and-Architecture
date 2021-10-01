@@ -1,10 +1,8 @@
 module Andromeda.Hardware.Language.Hdl where
 
 
-import Andromeda.Hardware.Common
-import Andromeda.Hardware.Domain
-import Andromeda.Common.Value
-
+import Andromeda.Hardware.Common (ComponentPassport)
+import Andromeda.Hardware.Domain (DeviceName, ControllerName, ComponentIndex, Controller)
 
 
 type Hdl next = [HdlMethod next]

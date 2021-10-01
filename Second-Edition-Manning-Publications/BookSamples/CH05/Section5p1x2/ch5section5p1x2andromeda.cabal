@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8f23ef50d1212ed2bd088dce8ae4a2957f180283243fd740cf0fb8ecd866211b
+-- hash: 142083a4f4eada19d60699900278530d051d68cabcec321e5759aca413b9f1f4
 
 name:           ch5section5p1x2andromeda
 version:        1.0.0.0
@@ -30,6 +30,7 @@ library
       Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
+      Andromeda.Common.Types
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common
@@ -94,6 +95,7 @@ executable ch5section5p1x2andromeda
       Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
+      Andromeda.Common.Types
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common

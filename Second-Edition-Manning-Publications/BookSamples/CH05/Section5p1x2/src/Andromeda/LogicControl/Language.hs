@@ -1,10 +1,7 @@
 
 module Andromeda.LogicControl.Language where
 
-import Andromeda.Hardware.Common
-import Andromeda.Hardware.Domain
-import Andromeda.LogicControl.Domain
-import Andromeda.Common.Value
+import Andromeda.Common (Key, Value, Message)
 
 import qualified Andromeda.Hardware.Language.Hdl as L
 import qualified Andromeda.Hardware.Language.DeviceControl as L
