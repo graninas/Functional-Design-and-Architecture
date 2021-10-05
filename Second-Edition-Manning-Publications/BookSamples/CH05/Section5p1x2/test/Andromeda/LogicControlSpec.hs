@@ -8,8 +8,8 @@ import Andromeda.Assets (boostersDef, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 
 import qualified Andromeda.Hardware.Impl.Runtime as Impl
-import qualified Andromeda.Hardware.Impl.HdlInterpreter as Impl
--- import qualified Andromeda.LogicControl.Impl.Interpreter as Impl
+import qualified Andromeda.Hardware.Impl.Interpreters.Hdl as HdlImpl
+import qualified Andromeda.LogicControl.Impl.Interpreters.LogicControl as LCImpl
 
 import qualified Andromeda.Hardware.Language.Hdl as L
 import qualified Andromeda.LogicControl.Language as L

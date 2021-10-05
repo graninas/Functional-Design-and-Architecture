@@ -1,7 +1,7 @@
-module Andromeda.Hardware.Impl.HdlInterpreter where
+module Andromeda.LogicControl.Impl.Interpreters.LogicControl where
 
 import qualified Andromeda.Hardware.Language.Hdl as L
-
+import qualified Andromeda.Hardware.Language.DeviceControl as L
 import qualified Andromeda.Hardware.Common as T
 import qualified Andromeda.Hardware.Domain as T
 
@@ -9,9 +9,11 @@ import qualified Andromeda.Hardware.Impl.Service as SImpl
 import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
 import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 
--- This interpreter should not know about this module.
--- Everything is accessible through HardwareService.
--- import qualified Andromeda.Hardware.Impl.Device as Impl
+import qualified Andromeda.Hardware.Impl.Interpreters.Hdl as HdlImpl
+import qualified Andromeda.Hardware.Impl.Interpreters.DeviceControl as DeviceControlImpl
+
+import qualified Andromeda.LogicControl.Domain as T
+import qualified Andromeda.LogicControl.Language as L
 
 
 import qualified Data.Map as Map
@@ -25,10 +27,10 @@ import qualified Data.Map as Map
 
 
 
-runHdl
+runLogicControl
   :: RImpl.Devices
   -> SImpl.HardwareService
   -> (nextIterp -> IO ())
   -> L.Hdl nextIterp
   -> IO RImpl.Devices
-runHdl _ _ _ _ = error "not implemented"
+runLogicControl _ _ _ _ = error "not implemented"
