@@ -14,8 +14,8 @@ import Andromeda.Hardware.Impl.Component (VendorComponents, VendorComponent (..)
 
 import qualified Data.Map as Map
 
-data DevicePart = DevicePart VendorComponent {- some state here -}
 data ControllerImpl = ControllerImpl ControllerName VendorComponent
+data DevicePart = DevicePart VendorComponent {- some state here -}
 data Device = Device DeviceName ControllerImpl (Map.Map ComponentIndex DevicePart)
 
 

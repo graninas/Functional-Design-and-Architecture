@@ -4,7 +4,7 @@ import Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets (boostersDef, aaaController86Name)
+import Andromeda.Assets (boostersDef, script, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 -- import Andromeda.Test.HardwareService (mockedHardwareService)
 import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
@@ -14,6 +14,7 @@ import qualified Andromeda.Hardware.Impl.Service as SImpl
 import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 import qualified Andromeda.Hardware.Impl.Interpreters.Hdl as HdlImpl
 import qualified Andromeda.Hardware.Language.Hdl as L
+import qualified Andromeda.Hardware.Domain as D
 
 import qualified Andromeda.LogicControl.Impl.Interpreters.LogicControl as LCImpl
 
@@ -26,23 +27,20 @@ verifyTemperature temp handler = do
   measurement `shouldBe` (Measurement Temperature temp)
 
 
-getDevice :: RImpl.Runtime -> ControllerName -> IO TImpl.Device
-getDevice runtime ctrlName = do
-  let devices = RImpl._devices runtime
-  case Map.lookup (Controller ctrlName) devices of
-    Nothing -> fail "Controller not found"
-    Just (_, device) -> pure device
+getDevice :: RImpl.Devices -> ControllerName -> IO TImpl.Device
+getDevice devices ctrlName = case Map.lookup (D.Controller ctrlName) devices of
+  Nothing -> fail "Controller not found"
+  Just (_, device) -> pure device
 
 getDevicePart'
-  :: RImpl.Runtime
+  :: RImpl.Devices
+  -> SImpl.HardwareService
   -> ComponentIndex
   -> ControllerName
   -> IO (Maybe TImpl.DevicePart)
-getDevicePart' runtime  idx ctrlName = do
-  let service = RImpl._hardwareService runtime
-  device <- getDevice runtime ctrlName
+getDevicePart' devices service idx ctrlName = do
+  device <- getDevice devices ctrlName
   SImpl.getDevicePart service idx device
-
 
 
 spec :: Spec
@@ -51,9 +49,8 @@ spec =
 
     it "Hardware device components check" $ do
 
-      let runtime = RImpl.Runtime Map.empty aaaHardwareService
-      runtime' <- LCImpl.runLogicControl runtime script
-      mbTherm  <- getDevicePart' runtime' "therm" "ctrl"
+      devices' <- LCImpl.runLogicControl Map.empty aaaHardwareService script
+      mbTherm  <- getDevicePart' devices' aaaHardwareService "therm" "ctrl"
 
       case mbTherm of
         Nothing          -> fail "There is no such component"
@@ -61,9 +58,8 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      let runtime = RImpl.Runtime Map.empty aaaHardwareService
-      runtime' <- LCImpl.runLogicControl runtime script
-      mbTherm  <- getDevicePart' runtime' "therm" "ctrl"
+      devices' <- LCImpl.runLogicControl Map.empty aaaHardwareService script
+      mbTherm  <- getDevicePart' devices' aaaHardwareService "therm" "ctrl"
 
       case mbTherm of
         Nothing          -> fail "There is no such component"

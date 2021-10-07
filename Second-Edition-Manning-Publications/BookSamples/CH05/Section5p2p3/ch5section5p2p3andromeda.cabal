@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5b30f6b8f70d545eae59794804205a860be54d370697f2bb990963d8c3350c82
+-- hash: 9ebb0875194f3f93e8d30f76a4ae22b57bd291a44b37c86d5952aef4111cce3e
 
-name:           ch5section5p3andromeda
+name:           ch5section5p2p3andromeda
 version:        1.0.0.0
 author:         Alexander Granin
 maintainer:     graninas@gmail.com
@@ -58,7 +58,7 @@ library
       Andromeda.Simulator.SimulationModel
       Main
   other-modules:
-      Paths_ch5section5p3andromeda
+      Paths_ch5section5p2p3andromeda
   hs-source-dirs:
       src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -81,7 +81,7 @@ library
     , void
   default-language: Haskell2010
 
-executable ch5section5p3andromeda
+executable ch5section5p2p3andromeda
   main-is: Main.hs
   other-modules:
       Andromeda
@@ -124,7 +124,7 @@ executable ch5section5p3andromeda
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
-      Paths_ch5section5p3andromeda
+      Paths_ch5section5p2p3andromeda
   hs-source-dirs:
       ./src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -154,7 +154,7 @@ test-suite functional
       Andromeda.LogicControlSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components
-      Paths_ch5section5p3andromeda
+      Paths_ch5section5p2p3andromeda
   hs-source-dirs:
       test/
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -162,7 +162,7 @@ test-suite functional
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , ch5section5p3andromeda
+    , ch5section5p2p3andromeda
     , containers
     , free
     , hspec
