@@ -36,8 +36,7 @@ interpretHdlMethod runtime nextInterp (L.SetupController deviceName ctrlName pas
       let ctrl = T.Controller ctrlName
       let devices' = Map.insert ctrl (ctrlImpl, blankDevice) devices
       let runtime' = RImpl.Runtime devices' service
-      runtime'' <- nextInterp runtime' $ next ctrl
-      pure runtime'
+      nextInterp runtime' $ next ctrl
 
 interpretHdlMethod runtime nextInterp (L.RegisterComponent ctrl idx passp) = do
   let devices = RImpl._devices runtime

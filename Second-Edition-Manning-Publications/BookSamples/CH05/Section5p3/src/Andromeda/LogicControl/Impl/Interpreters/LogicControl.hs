@@ -26,20 +26,17 @@ interpretLogicControlMethod
   -> L.LogicControlMethod
   -> IO RImpl.Runtime
 
-interpretLogicControlMethod runtime (L.EvalHdl hdl) = do
-  runtime' <- HdlImpl.runHdl runtime runLogicControl hdl
-  pure runtime'
+interpretLogicControlMethod runtime (L.EvalHdl hdl) =
+  HdlImpl.runHdl runtime runLogicControl hdl
 
-interpretLogicControlMethod runtime (L.EvalDeviceControl dc) = do
-  runtime' <- DeviceControlImpl.runDeviceControl runtime runLogicControl dc
-  pure runtime'
+interpretLogicControlMethod runtime (L.EvalDeviceControl dc) =
+  DeviceControlImpl.runDeviceControl runtime runLogicControl dc
 
 interpretLogicControlMethod runtime (L.Report msg) = do
   putStrLn msg
   pure runtime
 
-
-interpretLogicControlMethod runtime (L.Store k v) = do
+interpretLogicControlMethod runtime (L.Store k v) =
   error "not implemented"
 
 

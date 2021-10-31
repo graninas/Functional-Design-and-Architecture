@@ -18,7 +18,6 @@ import qualified Data.Map as Map
 
 
 
-
 interpretDeviceControlMethod
   :: RImpl.Runtime
   -> (RImpl.Runtime -> next -> IO RImpl.Runtime)
@@ -26,16 +25,13 @@ interpretDeviceControlMethod
   -> IO RImpl.Runtime
 
 interpretDeviceControlMethod runtime nextInterp (L.GetStatus ctrl next) = do
-  let devices = RImpl._devices runtime
-  let service = RImpl._hardwareService runtime
+  let nextScript = next $ Right T.StatusOk      -- Dummy
+  nextInterp runtime nextScript
 
-  error "Not implemented"
 
 interpretDeviceControlMethod runtime nextInterp (L.ReadSensor ctrl idx next) = do
-  let devices = RImpl._devices runtime
-  let service = RImpl._hardwareService runtime
-
-  error "Not implemented"
+  let nextScript = next $ Right $ T.Measurement T.Temperature 100.0      -- Dummy
+  nextInterp runtime nextScript
 
 
 
