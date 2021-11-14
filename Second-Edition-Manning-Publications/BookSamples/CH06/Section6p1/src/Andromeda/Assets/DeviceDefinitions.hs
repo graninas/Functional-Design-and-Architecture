@@ -7,11 +7,11 @@ type Boosters = (Controller, Controller)
 
 createBoosters :: Hdl Boosters
 createBoosters = do
-  ctrl1 <- setupController "left booster" "left b ctrl" aaaController86Passport
-  registerComponent ctrl1 "nozzle1-t" aaaTemperature25Passport
-  registerComponent ctrl1 "nozzle1-p" aaaPressure02Passport
+  lCtrl <- setupController "left booster" "left b ctrl" aaaController86Passport
+  registerComponent lCtrl "nozzle1-t" aaaTemperature25Passport
+  registerComponent lCtrl "nozzle1-p" aaaPressure02Passport
 
-  ctrl2 <- setupController "right booster" "right b ctrl" aaaController86Passport
-  registerComponent ctrl2 "nozzle2-t" aaaTemperature25Passport
-  registerComponent ctrl2 "nozzle2-p" aaaPressure02Passport
-  pure (ctrl1, ctrl2)
+  rCtrl <- setupController "right booster" "right b ctrl" aaaController86Passport
+  registerComponent rCtrl "nozzle2-t" aaaTemperature25Passport
+  registerComponent rCtrl "nozzle2-p" aaaPressure02Passport
+  pure (lCtrl, rCtrl)
