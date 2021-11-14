@@ -23,12 +23,12 @@ data Component
   | Lettuce
 
 data SandwichBody = SandwichBody BreadType [Component]
-data Sandwich = Sandwich BreadType [Component] (Maybe BreadType)
+data Sandwich = Sandwich BreadType (Maybe BreadType) [Component]
 
 data SandwichConstructor next
   = StartNewSandwich BreadType Component (SandwichBody -> next)
   | AddComponent Component SandwichBody (SandwichBody -> next)
-  | FinishSandwich SandwichBody (Maybe BreadType) (Sandwich -> next)
+  | FinishSandwich (Maybe BreadType) SandwichBody (Sandwich -> next)
 
 type SandwichReceipt a = Free SandwichConstructor a
 
@@ -37,8 +37,8 @@ instance Functor SandwichConstructor where
     = StartNewSandwich breadType component (f . next)
   fmap f (AddComponent component sandwichBody next)
     = AddComponent component sandwichBody (f . next)
-  fmap f (FinishSandwich sandwichBody mbBreadType next)
-    = FinishSandwich sandwichBody mbBreadType (f . next)
+  fmap f (FinishSandwich mbBreadType sandwichBody next)
+    = FinishSandwich mbBreadType sandwichBody (f . next)
 
 
 startNewSandwich :: BreadType -> Component -> SandwichReceipt SandwichBody
@@ -47,14 +47,22 @@ startNewSandwich breadType component = liftF $ StartNewSandwich breadType compon
 addComponent :: Component -> SandwichBody -> SandwichReceipt SandwichBody
 addComponent component sandwichBody = liftF $ AddComponent component sandwichBody id
 
-finishSandwich :: SandwichBody -> Maybe BreadType -> SandwichReceipt Sandwich
-finishSandwich sandwichBody mbBreadType = liftF $ FinishSandwich sandwichBody mbBreadType id
+finishSandwich :: Maybe BreadType -> SandwichBody -> SandwichReceipt Sandwich
+finishSandwich mbBreadType sandwichBody  = liftF $ FinishSandwich mbBreadType sandwichBody id
 
 mySandwich :: SandwichReceipt Sandwich
 mySandwich = do
   body1 <- startNewSandwich Toast Tomato
   body2 <- addComponent Cheese body1
-  finishSandwich body2 Nothing
+  body3 <- addComponent Salt body2
+  finishSandwich Nothing body3
+
+mySandwich2 :: SandwichReceipt Sandwich
+mySandwich2
+    = startNewSandwich Toast Tomato
+  >>= addComponent Cheese
+  >>= addComponent Salt
+  >>= finishSandwich Nothing
 
 spec :: Spec
 spec =
