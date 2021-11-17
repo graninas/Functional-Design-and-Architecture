@@ -64,6 +64,32 @@ mySandwich2
   >>= addComponent Salt
   >>= finishSandwich Nothing
 
+mySandwich3 :: SandwichReceipt Sandwich
+mySandwich3
+    = startNewSandwich Toast Tomato
+    >>= (\body1 -> addComponent Cheese body1
+        >>= (\body2 -> addComponent Salt body2
+            >>= (\body3 -> finishSandwich (Just Toast) body3
+                )
+            )
+        )
+
+
+
+mySandwich4 :: SandwichReceipt Sandwich
+mySandwich4 = do
+  incomplete <- Free (
+      StartNewSandwich Toast Tomato (\body -> Pure body)
+    )
+  finishSandwich (Just Toast) incomplete
+
+
+-- mySandwich4 :: SandwichReceipt Sandwich
+-- mySandwich4 = do
+--   incomplete <- StartNewSandwich Toast Tomato ??some_continuation??
+--   finishSandwich (Just Toast) incomplete
+
+
 spec :: Spec
 spec =
   describe "Sandwich machine eDSL tests" $ do
