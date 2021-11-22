@@ -9,11 +9,6 @@ import qualified Andromeda.Hardware.Impl.Service as SImpl
 import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
 import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 
--- This interpreter should not know about this module.
--- Everything is accessible through HardwareService.
--- import qualified Andromeda.Hardware.Impl.Device as Impl
-
-
 import qualified Data.Map as Map
 
 
@@ -67,5 +62,5 @@ runHdl
   -> IO RImpl.Runtime
 runHdl runtime _ [] = pure runtime
 runHdl runtime nextInterp (m:ms) = do
-  devices' <- interpretHdlMethod runtime nextInterp m
-  runHdl runtime nextInterp ms
+  runtime' <- interpretHdlMethod runtime nextInterp m
+  runHdl runtime' nextInterp ms

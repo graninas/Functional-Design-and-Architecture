@@ -43,14 +43,32 @@ getDevicePart' devices service idx ctrlName = do
   SImpl.getDevicePart service idx device
 
 
+testScript :: LogicControl
+testScript =
+  [ EvalHdl
+    [ SetupController "device" "ctrl" aaaController86Passport (\ctrl ->
+      [ EvalHdl
+        [ RegisterComponent ctrl "therm" aaaTemperature25Passport ]
+      , EvalDeviceControl (readAndReport ctrl)
+      ]
+    )]
+  ]
+  where
+    readAndReport :: Controller -> DeviceControl LogicControl
+    readAndReport ctrl =
+      [ ReadSensor ctrl "therm" (\eMeasurement ->
+        [ Report (show eMeasurement) ])
+      ]
+
+
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
 
     it "Hardware device components check" $ do
 
-      devices' <- LCImpl.runLogicControl Map.empty aaaHardwareService script
-      mbTherm  <- getDevicePart' devices' aaaHardwareService "therm" "ctrl"
+      devices <- LCImpl.runLogicControl Map.empty aaaHardwareService testScript
+      mbTherm  <- getDevicePart' devices aaaHardwareService "therm" "ctrl"
 
       case mbTherm of
         Nothing          -> fail "There is no such component"
@@ -58,7 +76,7 @@ spec =
 
     it "Hardware device component method run" $ do
 
-      devices' <- LCImpl.runLogicControl Map.empty aaaHardwareService script
+      devices' <- LCImpl.runLogicControl Map.empty aaaHardwareService testScript
       mbTherm  <- getDevicePart' devices' aaaHardwareService "therm" "ctrl"
 
       case mbTherm of

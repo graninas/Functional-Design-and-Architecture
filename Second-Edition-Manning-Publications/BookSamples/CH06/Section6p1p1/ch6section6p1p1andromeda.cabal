@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 245df5cc90dcaf76b591644096d48d028522ae6c87649703b81310d3fb2a8783
+-- hash: 70dd31100cb676b5a9e89daa255f6eca581c3b5af18273730dfad70ccf39edbe
 
-name:           ch6section6p1andromeda
+name:           ch6section6p1p1andromeda
 version:        1.0.0.0
 author:         Alexander Granin
 maintainer:     graninas@gmail.com
@@ -37,12 +37,12 @@ library
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
-      Andromeda.Hardware.Impl.HdlInterpreter
-      Andromeda.Hardware.Impl.DeviceControlInterpreter
+      Andromeda.Hardware.Impl.Interpreters.DeviceControl
+      Andromeda.Hardware.Impl.Interpreters.Hdl
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
-      Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.DeviceControl
+      Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain
@@ -56,7 +56,7 @@ library
       Andromeda.Simulator.SimulationModel
       Main
   other-modules:
-      Paths_ch6section6p1andromeda
+      Paths_ch6section6p1p1andromeda
   hs-source-dirs:
       src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -79,7 +79,7 @@ library
     , void
   default-language: Haskell2010
 
-executable ch6section6p1andromeda
+executable ch6section6p1p1andromeda
   main-is: Main.hs
   other-modules:
       Andromeda
@@ -103,12 +103,12 @@ executable ch6section6p1andromeda
       Andromeda.Hardware.Impl.Component
       Andromeda.Hardware.Impl.Device
       Andromeda.Hardware.Impl.Device.Types
-      Andromeda.Hardware.Impl.HdlInterpreter
-      Andromeda.Hardware.Impl.DeviceControlInterpreter
+      Andromeda.Hardware.Impl.Interpreters.DeviceControl
+      Andromeda.Hardware.Impl.Interpreters.Hdl
       Andromeda.Hardware.Impl.Runtime
       Andromeda.Hardware.Impl.Service
-      Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.DeviceControl
+      Andromeda.Hardware.Language.Hdl
       Andromeda.Hardware.Language.Hndl
       Andromeda.LogicControl
       Andromeda.LogicControl.Domain
@@ -120,7 +120,7 @@ executable ch6section6p1andromeda
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
       Andromeda.Simulator.SimulationModel
-      Paths_ch6section6p1andromeda
+      Paths_ch6section6p1p1andromeda
   hs-source-dirs:
       ./src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -151,7 +151,7 @@ test-suite functional
       Andromeda.LogicControlSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components
-      Paths_ch6section6p1andromeda
+      Paths_ch6section6p1p1andromeda
   hs-source-dirs:
       test/
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -159,7 +159,7 @@ test-suite functional
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , ch6section6p1andromeda
+    , ch6section6p1p1andromeda
     , containers
     , free
     , hspec

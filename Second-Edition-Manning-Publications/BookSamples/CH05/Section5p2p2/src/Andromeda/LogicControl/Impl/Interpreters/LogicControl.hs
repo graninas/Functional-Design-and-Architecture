@@ -40,4 +40,4 @@ runLogicControl
 runLogicControl devices _ [] = pure devices
 runLogicControl devices hardwareService (m:ms) = do
   devices' <- interpretLogicControlMethod devices hardwareService m
-  runLogicControl devices hardwareService ms
+  runLogicControl devices' hardwareService ms

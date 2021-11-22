@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2c3d276329ef5ed5141a41ae3162c90e4f3b483287c432e276a16992cabdb479
+-- hash: ec5f5e867d315f98ef3a65e6d91e533312a674fd9814f49251b75c15ed94a8d0
 
 name:           ch5section5p2p2andromeda
 version:        1.0.0.0
@@ -144,7 +144,6 @@ test-suite functional
   main-is: Spec.hs
   other-modules:
       Andromeda.HardwareSpec
-      Andromeda.LogicControlSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components
       Paths_ch5section5p2p2andromeda

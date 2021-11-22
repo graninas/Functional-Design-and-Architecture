@@ -42,6 +42,24 @@ getDevicePart' devices service idx ctrlName = do
 
 
 
+testBoostersDef :: Hdl
+testBoostersDef =
+  [ SetupController "left booster" "left b ctrl" aaaController86Passport
+    ( \lCtrl ->
+      [ RegisterComponent lCtrl "nozzle1-t" aaaTemperature25Passport
+      , RegisterComponent lCtrl "nozzle1-p" aaaPressure02Passport
+      , SetupController "right booster" "right b ctrl" aaaController86Passport
+        ( \rCtrl ->
+          [ RegisterComponent rCtrl "nozzle2-t" aaaTemperature25Passport
+          , RegisterComponent rCtrl "nozzle2-p" aaaPressure02Passport
+          ]
+        )
+      ]
+    )
+  ]
+
+
+
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
@@ -50,58 +68,29 @@ spec =
 
       let devices = Map.empty
 
-      devices' <- HdlImpl.runHdl devices aaaHardwareService boostersDef
+      devices' <- HdlImpl.runHdl devices aaaHardwareService testBoostersDef
 
       mbThermometer1 <- getDevicePart' devices' aaaHardwareService "nozzle1-t" "left b ctrl"
       mbThermometer2 <- getDevicePart' devices' aaaHardwareService "nozzle2-t" "right b ctrl"
 
+      mbNonExistentTherm1 <- getDevicePart' devices' aaaHardwareService "xxx-t" "left b ctrl"
+      mbNonExistentTherm2 <- getDevicePart' devices' aaaHardwareService "xxx-t" "right b ctrl"
+
+      case (mbNonExistentTherm1, mbNonExistentTherm2) of
+        (Nothing, Nothing) -> pure ()
+        _ -> fail "Found an unexpected thermometer"
+
       case (mbThermometer1, mbThermometer2) of
-        (Nothing, _) -> fail "There is no such component"
-        (_, Just _) -> fail "Found an unexpected thermometer"
-        (Just thermometer, Nothing) -> putStrLn "Component found."
+        (Just therm1, Just therm2) -> putStrLn "Component found."
+        _ -> fail "There is no such component"
 
     it "Hardware device component method run" $ do
 
       let devices = Map.empty
 
-      devices' <- HdlImpl.runHdl devices aaaHardwareService boostersDef
+      devices' <- HdlImpl.runHdl devices aaaHardwareService testBoostersDef
       mbThermometer <- getDevicePart' devices' aaaHardwareService "nozzle1-t" "left b ctrl"
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
         Just thermometer -> TImpl.withHandler thermometer (verifyTemperature 100.0)
-
-    -- it "Getting measurement from mocked device" $ do
-    --   runtime <- Impl.createHardwareRuntime
-    --
-    --   let createTestDevice = do
-    --         ctrl <- L.setupController "test device" "controler" controller1Passp
-    --         L.registerComponent "t1" thermometer1Passp
-    --         pure ctrl
-    --
-    --   ctrl <- Impl.runHdl runtime mockedHardwareService createTestDevice
-    --   mpPart <- Impl.getDevicePart mockedHardwareService "t1" ctrl
-    --
-    --   case mpPart of
-    --     Nothing -> fail "There is no such part"
-    --     Just part -> Impl.withHandler part (verifyTemperature 50.0)
-    --
-    --
-    -- it "Getting absent device part" $ do
-    --
-    --   runtime <- Impl.createHardwareRuntime
-    --
-    --   let createTestDevice = do
-    --         ctrl <- L.setupController "test device" "controler" controller1Passp
-    --         L.registerComponent "t1" thermometer1Passp
-    --         L.registerComponent "p1" pressure1Passp
-    --         pure ctrl
-    --
-    --   ctrl <- Impl.runHdl runtime mockedHardwareService createTestDevice
-    --   mpPart1 <- getDevicePart mockedHardwareService "t1" ctrl
-    --   mpPart2 <- getDevicePart mockedHardwareService "p1" ctrl
-    --   mpPart3 <- getDevicePart mockedHardwareService "t2" ctrl
-    --
-    --   case (mpPart1, mpPart2, mpPart3) of
-    --     (Just _, Just _, Nothing) -> pure ()
-    --     _ -> fail "Device is assembled incorrectly."

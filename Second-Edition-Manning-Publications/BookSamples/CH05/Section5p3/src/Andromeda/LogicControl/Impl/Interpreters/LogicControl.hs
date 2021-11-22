@@ -47,5 +47,5 @@ runLogicControl
   -> IO RImpl.Runtime
 runLogicControl runtime [] = pure runtime
 runLogicControl runtime (m:ms) = do
-  devices' <- interpretLogicControlMethod runtime m
-  runLogicControl runtime ms
+  runtime' <- interpretLogicControlMethod runtime m
+  runLogicControl runtime' ms

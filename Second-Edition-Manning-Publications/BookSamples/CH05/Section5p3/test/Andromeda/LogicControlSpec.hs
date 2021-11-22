@@ -6,7 +6,6 @@ import Andromeda
 
 import Andromeda.Assets (boostersDef, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
--- import Andromeda.Test.HardwareService (mockedHardwareService)
 import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
 
 import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
@@ -45,6 +44,48 @@ getDevicePart' runtime  idx ctrlName = do
 
 
 
+
+
+
+
+-- Listing 5.5
+testScript :: LogicControl
+testScript =
+  [ EvalHdl
+    [ SetupController "device" "ctrl" aaaController86Passport (\ctrl ->
+      [ EvalHdl
+        [ RegisterComponent ctrl "therm" aaaTemperature25Passport ]
+      , EvalDeviceControl (readAndReport ctrl)
+      ]
+    )]
+  ]
+  where
+    readAndReport :: Controller -> DeviceControl LogicControl
+    readAndReport ctrl =
+      [ ReadSensor ctrl "therm" (\eMeasurement ->
+        [ Report (show eMeasurement) ])
+      ]
+
+
+
+testBoostersDef :: Hdl (Hdl (Hdl ()))
+testBoostersDef =
+  [ SetupController "left booster" "left b ctrl" aaaController86Passport
+    ( \lCtrl ->
+      [ RegisterComponent lCtrl "nozzle1-t" aaaTemperature25Passport
+      , RegisterComponent lCtrl "nozzle1-p" aaaPressure02Passport
+      , SetupController "right booster" "right b ctrl" aaaController86Passport
+        ( \rCtrl ->
+          [ RegisterComponent rCtrl "nozzle2-t" aaaTemperature25Passport
+          , RegisterComponent rCtrl "nozzle2-p" aaaPressure02Passport
+          ]
+        )
+      ]
+    )
+  ]
+
+
+
 spec :: Spec
 spec =
   describe "Hardware tests" $ do
@@ -52,7 +93,8 @@ spec =
     it "Hardware device components check" $ do
 
       let runtime = RImpl.Runtime Map.empty aaaHardwareService
-      runtime' <- LCImpl.runLogicControl runtime script
+      runtime' <- LCImpl.runLogicControl runtime testScript
+
       mbTherm  <- getDevicePart' runtime' "therm" "ctrl"
 
       case mbTherm of
@@ -62,7 +104,7 @@ spec =
     it "Hardware device component method run" $ do
 
       let runtime = RImpl.Runtime Map.empty aaaHardwareService
-      runtime' <- LCImpl.runLogicControl runtime script
+      runtime' <- LCImpl.runLogicControl runtime testScript
       mbTherm  <- getDevicePart' runtime' "therm" "ctrl"
 
       case mbTherm of
