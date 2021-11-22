@@ -2,7 +2,7 @@ module SandwichLangSpec where
 
 import Test.Hspec
 
-import Control.Monad.Free (Free, liftF)
+import Control.Monad.Free (Free (..), liftF)
 
 
 data BreadType
@@ -42,13 +42,13 @@ instance Functor SandwichConstructor where
 
 
 startNewSandwich :: BreadType -> Component -> SandwichReceipt SandwichBody
-startNewSandwich breadType component = liftF $ StartNewSandwich breadType component id
+startNewSandwich breadType component = Free (StartNewSandwich breadType component Pure)
 
 addComponent :: Component -> SandwichBody -> SandwichReceipt SandwichBody
-addComponent component sandwichBody = liftF $ AddComponent component sandwichBody id
+addComponent component sandwichBody = Free (AddComponent component sandwichBody Pure)
 
 finishSandwich :: Maybe BreadType -> SandwichBody -> SandwichReceipt Sandwich
-finishSandwich mbBreadType sandwichBody  = liftF $ FinishSandwich mbBreadType sandwichBody id
+finishSandwich mbBreadType sandwichBody = Free (FinishSandwich mbBreadType sandwichBody Pure)
 
 mySandwich :: SandwichReceipt Sandwich
 mySandwich = do
@@ -84,10 +84,43 @@ mySandwich4 = do
   finishSandwich (Just Toast) incomplete
 
 
+-- Won't compile because it's not wrapped into Free:
 -- mySandwich4 :: SandwichReceipt Sandwich
 -- mySandwich4 = do
 --   incomplete <- StartNewSandwich Toast Tomato ??some_continuation??
 --   finishSandwich (Just Toast) incomplete
+
+
+
+
+
+val1 :: SandwichReceipt SandwichBody
+val1 = Free (StartNewSandwich Toast Tomato Pure)
+
+val2 :: SandwichBody -> SandwichReceipt SandwichBody
+val2 = \body -> Free (AddComponent Salt body Pure)
+
+val1' :: SandwichReceipt SandwichBody
+val1' = liftF (StartNewSandwich Toast Tomato id)
+
+val2' :: SandwichBody -> SandwichReceipt SandwichBody
+val2' = \body -> liftF (AddComponent Salt body id)
+
+
+
+val = StartNewSandwich Toast Tomato
+       (\b1 -> AddComponent Salt b1
+          (\b2 -> AddComponent Cheese b2 (\b3 -> ()))
+       )
+
+
+mval1 :: SandwichBody -> SandwichConstructor ()
+mval2 :: SandwichBody -> SandwichConstructor (SandwichConstructor ())
+mval3 :: SandwichConstructor (SandwichConstructor (SandwichConstructor ()))
+mval1 = \b -> AddComponent Cheese b (\b2 -> ())
+mval2 = \b -> AddComponent Salt b mval1
+mval3 = StartNewSandwich Toast Tomato mval2
+
 
 
 spec :: Spec
