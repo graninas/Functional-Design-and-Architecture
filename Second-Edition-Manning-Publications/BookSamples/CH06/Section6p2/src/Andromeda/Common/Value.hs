@@ -1,22 +1,16 @@
-module Andromeda.Common.Value   -- hierarchical module name
-  ( -- export list:
-    Value,            -- type without value constructors
-    boolValue,        -- smart constructors
+module Andromeda.Common.Value
+  ( Value,
+    boolValue,
     stringValue,
     intValue,
     floatValue
   ) where
-
--- data type Value and smart constructors go here
-
 
 
 data Value = BoolValue Bool
            | IntValue Int
            | FloatValue Float
            | StringValue String
-
-
 
 
 boolValue :: Bool -> Value

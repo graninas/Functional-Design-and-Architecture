@@ -9,13 +9,21 @@ newtype ComponentIndex = ComponentIndex String
 
 newtype ControllerName = ControllerName String
   deriving (Show, Eq, Ord)
-  
+
 newtype Controller = Controller ControllerName
   deriving (Show, Eq, Ord)
 
 
 
-data Status
-  = StatusOk
-  | StatusFail String
+
+data ControllerStatus
+  = ControllerOk
+  | ControllerFail String
+  deriving (Show, Eq, Ord)
+
+
+
+data HardwareFailure
+  = DeviceNotFound String
+  | DevicePartNotFound String
   deriving (Show, Eq, Ord)

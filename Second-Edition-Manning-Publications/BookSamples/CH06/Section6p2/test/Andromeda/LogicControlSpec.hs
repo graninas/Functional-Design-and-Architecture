@@ -19,6 +19,19 @@ import qualified Andromeda.Hardware.Language.Hdl as L
 import qualified Andromeda.Hardware.Language.DeviceControl as L
 import qualified Andromeda.LogicControl.Language as L
 
+import qualified Andromeda.TestData.Scripts as Test
+
+
+getBoostersStatus :: LogicControl (Either LogicFailure (ControllerStatus, ControllerStatus))
+getBoostersStatus = do
+  (lCtrl, rCtrl) <- L.evalHdl Test.createBoosters
+  eLStatus <- Test.getControllerStatus lCtrl
+  eRStatus <- Test.getControllerStatus rCtrl
+  pure $ case (eLStatus, eRStatus) of
+    (Right s1, Right s2) -> Right (s1, s2)
+    (Left e, _) -> Left $ LogicFailure $ show e
+    (_, Left e) -> Left $ LogicFailure $ show e
+
 
 spec :: Spec
 spec =
@@ -28,11 +41,10 @@ spec =
 
       runtime <- RImpl.createHardwareRuntime aaaHardwareService
 
-      (lStatus, rStatus) <- LCImpl.runLogicControl runtime $ do
-        (leftBoosterCtrl, rightBoosterCtrl) <- L.evalHdl createBoosters
-        lStatus <- L.evalDeviceControl $ L.getStatus leftBoosterCtrl
-        rStatus <- L.evalDeviceControl $ L.getStatus rightBoosterCtrl
-        pure (lStatus, rStatus)
+      eResult <- LCImpl.runLogicControl runtime getBoostersStatus
 
-      lStatus `shouldBe` (Right StatusOk)
-      rStatus `shouldBe` (Right StatusOk)
+      case eResult of
+        Left e -> fail $ show e
+        Right (lStatus, rStatus) -> do
+          lStatus `shouldBe` ControllerOk
+          rStatus `shouldBe` ControllerOk

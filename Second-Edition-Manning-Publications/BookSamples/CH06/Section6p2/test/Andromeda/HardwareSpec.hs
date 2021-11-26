@@ -4,9 +4,10 @@ import Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets (Boosters(..), aaaController86Name)
+import Andromeda.Assets (aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 import Andromeda.TestData.Components (thermometer1Passp, pressure1Passp)
+import qualified Andromeda.TestData.Scripts as Test
 
 import qualified Andromeda.Hardware.Impl.Device.Types as TImpl
 import qualified Andromeda.Hardware.Impl.Service as SImpl
@@ -46,17 +47,6 @@ getDevicePart' runtime idx ctrl = do
   SImpl.getDevicePart service idx device
 
 
-testCreateBoosters :: Hdl Boosters
-testCreateBoosters = do
-  lCtrl <- setupController lBooster lBoosterController aaaController86Passport
-  registerComponent lCtrl nozzle1p aaaTemperature25Passport
-  registerComponent lCtrl nozzle1t aaaPressure02Passport
-
-  rCtrl <- setupController rBooster rBoosterController aaaController86Passport
-  registerComponent rCtrl nozzle2p aaaTemperature25Passport
-  registerComponent rCtrl nozzle2t aaaPressure02Passport
-  pure (lCtrl, rCtrl)
-
 
 spec :: Spec
 spec =
@@ -66,7 +56,7 @@ spec =
 
       runtime <- RImpl.createHardwareRuntime aaaHardwareService
 
-      (leftBoosterCtrl, rightBoosterCtrl) <- HdlImpl.runHdl runtime testCreateBoosters
+      (leftBoosterCtrl, rightBoosterCtrl) <- HdlImpl.runHdl runtime Test.createBoosters
 
       mbThermometer1 <- getDevicePart' runtime nozzle1t leftBoosterCtrl
       mbThermometer2 <- getDevicePart' runtime nozzle2t rightBoosterCtrl
@@ -86,7 +76,7 @@ spec =
 
       runtime <- RImpl.createHardwareRuntime aaaHardwareService
 
-      (leftBoosterCtrl, _) <- HdlImpl.runHdl runtime testCreateBoosters
+      (leftBoosterCtrl, _) <- HdlImpl.runHdl runtime Test.createBoosters
       mbThermometer <- getDevicePart' runtime nozzle1t leftBoosterCtrl
 
       case mbThermometer of

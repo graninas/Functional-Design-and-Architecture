@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c55352f6d4618a60b2d6538f0af27e38ca408c10dba1970e96c568406950aec
+-- hash: 7805af79e516b32862ecb6a7e33721e9bb4c0818369004cb5521cd843688467c
 
 name:           ch6section6p2andromeda
 version:        1.0.0.0
@@ -151,6 +151,7 @@ test-suite functional
       Andromeda.LogicControlSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components
+      Andromeda.TestData.Scripts
       Paths_ch6section6p2andromeda
   hs-source-dirs:
       test/
