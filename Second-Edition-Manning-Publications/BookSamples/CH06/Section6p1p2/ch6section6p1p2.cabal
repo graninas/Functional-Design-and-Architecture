@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9d4dc4ab614761a3e02e54712b0689217689a425ebe25e572f93f20b96151af4
+-- hash: a5cf78be09ef07287cad64cd3ceeb5e8366729c568f9024ed29471006eb5673e
 
 name:           ch6section6p1p2
 version:        1.0.0.0
@@ -71,6 +71,7 @@ test-suite functional
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Sandwich2LangSpec
       SandwichLangSpec
       Paths_ch6section6p1p2
   hs-source-dirs:
