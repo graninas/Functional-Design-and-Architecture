@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs #-}
+
 module Andromeda.Hardware.Impl.Interpreters.DeviceControl where
 
 import qualified Andromeda.Hardware.Language.DeviceControl as L
@@ -23,26 +25,23 @@ getDevice devicesRef ctrl = do
 
 interpretDeviceControlMethod :: RImpl.HardwareRuntime -> L.DeviceControlMethod a -> IO a
 
-interpretDeviceControlMethod runtime (L.GetStatus ctrl next) =
+interpretDeviceControlMethod runtime (L.GetStatus ctrl) =
   -- TODO: dummy
-  pure $ next $ Right T.ControllerOk
+  pure $ Right T.ControllerOk
 
-interpretDeviceControlMethod runtime (L.ReadSensor controller idx next) = do
+interpretDeviceControlMethod runtime (L.ReadSensor controller idx) = do
   let RImpl.HardwareRuntime {_devicesRef, _hardwareServiceRef} = runtime
 
   service <- readIORef _hardwareServiceRef
 
   mbDevice <- getDevice _devicesRef controller
   case mbDevice of
-    Nothing -> pure $ next $ Left $ T.DeviceNotFound $ show controller
+    Nothing -> pure $ Left $ T.DeviceNotFound $ show controller
     Just (_, device) -> do
       mbDevicePart <- SImpl.getDevicePart service idx device
       case mbDevicePart of
-        Nothing -> pure $ next $ Left $ T.DevicePartNotFound $ show idx
+        Nothing -> pure $ Left $ T.DevicePartNotFound $ show idx
         Just devicePart -> do
           measurement <- TImpl.withHandler devicePart $ \handler ->
             CImpl.readMeasurement handler
-          pure $ next $ Right measurement
-
-runDeviceControl :: RImpl.HardwareRuntime -> L.DeviceControl a -> IO a
-runDeviceControl runtime hil = foldFree (interpretDeviceControlMethod runtime) hil
+          pure $ Right measurement

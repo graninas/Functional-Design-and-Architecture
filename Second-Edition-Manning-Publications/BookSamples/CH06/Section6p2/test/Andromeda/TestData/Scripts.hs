@@ -24,4 +24,4 @@ createBoosters = do
 
 
 getControllerStatus :: Controller -> LogicControl (Either HardwareFailure ControllerStatus)
-getControllerStatus ctrl = L.evalDeviceControl $ L.getStatus ctrl
+getControllerStatus ctrl = L.getStatus ctrl

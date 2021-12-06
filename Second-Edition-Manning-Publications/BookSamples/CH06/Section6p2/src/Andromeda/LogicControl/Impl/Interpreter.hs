@@ -5,7 +5,7 @@ import qualified Andromeda.LogicControl.Language as L
 
 import qualified Andromeda.Hardware.Impl.Runtime as RImpl
 import qualified Andromeda.Hardware.Impl.Interpreters.Hdl as HdlImpl
-import qualified Andromeda.Hardware.Impl.Interpreters.DeviceControl as DeviceControlImpl
+import qualified Andromeda.Hardware.Impl.Interpreters.DeviceControl as DCImpl
 import qualified Andromeda.Hardware.Impl.Service as SImpl
 
 
@@ -22,8 +22,8 @@ interpretLogicControlMethod hardwareRuntime
     pure $ next res
 
 interpretLogicControlMethod hardwareRuntime
-  (L.EvalDeviceControl hil next) = do
-    res <- DeviceControlImpl.runDeviceControl hardwareRuntime hil
+  (L.EvalDeviceControlMethod dc next) = do
+    res <- DCImpl.interpretDeviceControlMethod hardwareRuntime dc
     pure $ next res
 
 interpretLogicControlMethod hardwareRuntime
