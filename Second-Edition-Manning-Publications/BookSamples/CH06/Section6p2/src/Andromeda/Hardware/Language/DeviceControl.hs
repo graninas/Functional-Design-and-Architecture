@@ -8,7 +8,7 @@ import Andromeda.Hardware.Domain
 
 
 data DeviceControlMethod a where
-  GetStatus :: Controller -> DeviceControlMethod (Either HardwareFailure ControllerStatus)
+  GetStatus  :: Controller -> DeviceControlMethod (Either HardwareFailure ControllerStatus)
   ReadSensor :: Controller -> ComponentIndex -> DeviceControlMethod (Either HardwareFailure Measurement)
 
 getStatus' :: Controller -> DeviceControlMethod (Either HardwareFailure ControllerStatus)
