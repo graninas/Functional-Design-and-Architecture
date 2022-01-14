@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6217b8c1465d4b4bddf2caef8d0df30fa33c238ff651440cece722b2215585b8
+-- hash: 17664729d1046c8e5bf1a893cbf5583c16609d39dc7ce21967cfb65b272eb537
 
 name:           ch7section7p1andromeda
 version:        1.0.0.0
@@ -50,6 +50,8 @@ library
       Andromeda.LogicControl.Language
       Andromeda.Simulator
       Andromeda.Simulator.Actions
+      Andromeda.Simulator.Hardware.Device
+      Andromeda.Simulator.Hardware.Interpreters.Hdl
       Andromeda.Simulator.Language
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
@@ -116,6 +118,8 @@ executable ch7section7p1andromeda
       Andromeda.LogicControl.Language
       Andromeda.Simulator
       Andromeda.Simulator.Actions
+      Andromeda.Simulator.Hardware.Device
+      Andromeda.Simulator.Hardware.Interpreters.Hdl
       Andromeda.Simulator.Language
       Andromeda.Simulator.Runtime
       Andromeda.Simulator.Simulation
@@ -149,6 +153,7 @@ test-suite functional
   other-modules:
       Andromeda.HardwareSpec
       Andromeda.LogicControlSpec
+      Andromeda.SimulatorSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components
       Andromeda.TestData.Scripts
