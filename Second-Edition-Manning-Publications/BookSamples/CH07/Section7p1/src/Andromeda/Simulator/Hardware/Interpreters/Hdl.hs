@@ -5,48 +5,21 @@ import qualified Andromeda.Hardware.Language.Hdl as L
 import qualified Andromeda.Hardware.Common as T
 import qualified Andromeda.Hardware.Domain as T
 
-import qualified Andromeda.Simulator.Hardware.Device as Impl
+import Andromeda.Simulator.Hardware.Device
+import Andromeda.Simulator.Runtime
 
 import Data.IORef
-import Control.Concurrent.MVar
 import qualified Data.Map as Map
+import Control.Concurrent.MVar
 import Control.Monad.Free (foldFree)
 
 
-type ControllerSimChannel = (MVar ControllerSimRequest, MVar ControllerSimResponse)
-type DevicePartSimChannel = (MVar DevicePartSimRequest, MVar DevicePartSimResponse)
 
+controllerWorker :: IO ThreadId
+controllerWorker = forever (pure ())
 
-data DevicePartSim = DevicePartSim
-  { devicePartSimThreadId :: ThreadId
-  , devicePartSimDef :: ComponentPassport
-  }
-
-
-type DevicePartSims = Map ComponentIndex DevicePartSim
-
-data ControllerSim = ControllerSim
-  { ctrlSimThreadId :: ThreadId
-  , ctrlSimDef :: (ControllerName, ComponentPassport)
-  , ctrlSimDevicePartsVar :: MVar DevicePartSims
-  , ctrlSimChannel :: ControllerSimChannel
-  }
-
-
-
-
-createControllerSimChannel :: IO ControllerSimChannel
-createControllerSimChannel = do
-  requestMVar <- newEmptyMVar
-  responseMVar <- newEmptyMVar
-  pure (requestMVar, responseMVar)
-
-
-createDevicePartSimChannel :: IO DevicePartSimChannel
-createDevicePartSimChannel = do
-  requestMVar <- newEmptyMVar
-  responseMVar <- newEmptyMVar
-  pure (requestMVar, responseMVar)
+sensorWorker :: Parameter -> IO ThreadId
+sensorWorker _ = forever (pure ())
 
 
 
@@ -56,13 +29,13 @@ makeControllerSim
   -> IO (Either String ControllerSim)
 makeControllerSim ctrlName ctrlPassp@(ComponentPassport Controllers _ _ _) = do
   devicePartsVar <- newMVar Map.empty
-  channel <- createControllerSimChannel devicePartsVar
-  threadId <- forkIO (controllerWorker channel)
+  requestVar <- newEmptyMVar
+  threadId <- forkIO (controllerWorker requestVar)
   let sim = ControllerSim
         { ctrlSimThreadId = threadId
         , ctrlSimDef = (ctrlName, ctrlPassp)
         , ctrlSimDevicePartsVar = devicePartsVar
-        , ctrlSimChannel = channel
+        , ctrlSimRequestVar = requestVar
         }
   pure $ Right sim
 makeControllerSim _ _ = pure $ Left "Invalid/unknown component class for a controller"
@@ -73,26 +46,26 @@ makeDevicePartSim
   :: ComponentPassport
   -> IO (Either String DevicePartSim)
 makeDevicePartSim passp@(ComponentPassport (Sensors param) _ _ _) = do
-  channel <- createDevicePartSimChannel
-  threadId <- forkIO (sensorWorker channel param)
+  requestVar <- newEmptyMVar
+  threadId <- forkIO (sensorWorker requestVar param)
   let sim = DevicePartSim
         { devicePartSimThreadId = threadId
         , devicePartSimDef = passp
-        , devicePartSimChannel = channel
+        , devicePartSimRequestVar = requestVar
         }
   pure $ Right sim
 makeDevicePartSim _ _ = pure $ Left "Invalid/unknown component class for a device part"
 
 
 
-interpretHdlMethod :: RImpl.SimulatorRuntime -> L.HdlMethod a -> IO a
+interpretHdlMethod :: SimulatorRuntime -> L.HdlMethod a -> IO a
 
 interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = do
   eCtrlSim <- SImpl.makeControllerSim service ctrlName passp
   case eCtrlSim of
     Left err -> error err     -- bad practice
     Right ctrlSim -> do
-      let RImpl.SimulatorRuntime {_controllerSimsRef} = runtime
+      let SimulatorRuntime {_controllerSimsRef} = runtime
       controllerSims <- readIORef _controllerSimsRef
       let ctrl = T.Controller ctrlName
       let controllerSims' = Map.insert ctrl ctrlSim
@@ -101,7 +74,7 @@ interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = 
 
 
 interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
-  let RImpl.SimulatorRuntime {_controllerSimsRef} = runtime
+  let SimulatorRuntime {_controllerSimsRef} = runtime
   controllerSims <- readIORef _controllerSimsRef
 
   let mbCtrlSim = Map.lookup ctrl controllerSims
@@ -119,5 +92,5 @@ interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
 
 
 
-runHdl :: RImpl.SimulatorRuntime -> L.Hdl a -> IO a
+runHdl :: SimulatorRuntime -> L.Hdl a -> IO a
 runHdl runtime hdl = foldFree (interpretHdlMethod runtime) hdl
