@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Andromeda.Hardware.Impl.Interpreters.DeviceControl where
+module Andromeda.Simulator.Hardware.Interpreters.DeviceControl where
 
 import qualified Andromeda.Hardware.Language.DeviceControl as L
 

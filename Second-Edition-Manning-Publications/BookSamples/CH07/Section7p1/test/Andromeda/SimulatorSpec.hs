@@ -4,6 +4,9 @@ import Test.Hspec
 
 import Andromeda
 
+import qualified Andromeda.LogicControl.Domain as T
+import qualified Andromeda.LogicControl.Language as L
+
 import qualified Andromeda.Simulator.Runtime as SimImpl
 
 import Data.IORef
@@ -23,16 +26,6 @@ createBoosters = do
   L.registerComponent rCtrl nozzle2t aaaPressure02Passport
   pure (lCtrl, rCtrl)
 
-
-data SimulatorControl = SimulatorControl
-  { simulatorThreadId   :: ThreadId
-  , simulatorRequestVar :: MVar SimulatorRequest
-  }
-
-
-startSimulator :: SimImpl.SimulatorRuntime -> L.LogicControl () -> IO SimulatorControl
-startSimulator runtime lc = do
-  
 
 
 reportBoostersStatus :: (Controller, Controller) -> L.LogicControl ()

@@ -11,23 +11,25 @@ import Andromeda.Simulator.Runtime
 import Data.IORef
 import qualified Data.Map as Map
 import Control.Concurrent.MVar
+import Control.Concurrent (forkIO, ThreadId)
 import Control.Monad.Free (foldFree)
+import Control.Monad (forever)
 
 
 
 controllerWorker :: IO ThreadId
 controllerWorker = forever (pure ())
 
-sensorWorker :: Parameter -> IO ThreadId
+sensorWorker :: T.Parameter -> IO ThreadId
 sensorWorker _ = forever (pure ())
 
 
 
 makeControllerSim
-  :: ControllerName
-  -> ComponentPassport
+  :: T.ControllerName
+  -> T.ComponentPassport
   -> IO (Either String ControllerSim)
-makeControllerSim ctrlName ctrlPassp@(ComponentPassport Controllers _ _ _) = do
+makeControllerSim ctrlName ctrlPassp@(T.ComponentPassport T.Controllers _ _ _) = do
   devicePartsVar <- newMVar Map.empty
   requestVar <- newEmptyMVar
   threadId <- forkIO (controllerWorker requestVar)
@@ -43,9 +45,9 @@ makeControllerSim _ _ = pure $ Left "Invalid/unknown component class for a contr
 
 
 makeDevicePartSim
-  :: ComponentPassport
+  :: T.ComponentPassport
   -> IO (Either String DevicePartSim)
-makeDevicePartSim passp@(ComponentPassport (Sensors param) _ _ _) = do
+makeDevicePartSim passp@(T.ComponentPassport (T.Sensors param) _ _ _) = do
   requestVar <- newEmptyMVar
   threadId <- forkIO (sensorWorker requestVar param)
   let sim = DevicePartSim
@@ -61,7 +63,7 @@ makeDevicePartSim _ _ = pure $ Left "Invalid/unknown component class for a devic
 interpretHdlMethod :: SimulatorRuntime -> L.HdlMethod a -> IO a
 
 interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = do
-  eCtrlSim <- SImpl.makeControllerSim service ctrlName passp
+  eCtrlSim <- makeControllerSim service ctrlName passp
   case eCtrlSim of
     Left err -> reportError runtime err
     Right ctrlSim -> do
@@ -79,15 +81,15 @@ interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
 
   let mbCtrlSim = Map.lookup ctrl controllerSims
   let tryRegisterComponent = case mbCtrlSim of
-    Nothing -> reportError runtime "Controller sim not found"
-    Just (ControllerSim thId def partsVar) -> do
-      eDeivcePartSim <- makeDevicePartSim service passp
-      case eDeivcePartSim of
-        Left err -> reportError runtime err
-        Right devicePartSim -> do
-          parts <- takeMVar partsVar
-          let parts' = Map.insert idx devicePartSim parts
-          putMVar partsVar parts'
+        Nothing -> reportError runtime "Controller sim not found"
+        Just (ControllerSim thId def partsVar) -> do
+          eDeivcePartSim <- makeDevicePartSim service passp
+          case eDeivcePartSim of
+            Left err -> reportError runtime err
+            Right devicePartSim -> do
+              parts <- takeMVar partsVar
+              let parts' = Map.insert idx devicePartSim parts
+              putMVar partsVar parts'
 
   tryRegisterComponent
   putMVar _controllerSimsVar controllerSims

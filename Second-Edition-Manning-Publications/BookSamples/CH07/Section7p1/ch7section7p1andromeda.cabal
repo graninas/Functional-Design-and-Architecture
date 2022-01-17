@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 17664729d1046c8e5bf1a893cbf5583c16609d39dc7ce21967cfb65b272eb537
+-- hash: 2b5b530a7d57931f6009e8f7c26c01c9895f8f99b385716e706c0e95574b38c4
 
 name:           ch7section7p1andromeda
 version:        1.0.0.0
@@ -49,13 +49,12 @@ library
       Andromeda.LogicControl.Impl.Interpreter
       Andromeda.LogicControl.Language
       Andromeda.Simulator
-      Andromeda.Simulator.Actions
+      Andromeda.Simulator.Control
       Andromeda.Simulator.Hardware.Device
+      Andromeda.Simulator.Hardware.Interpreters.DeviceControl
       Andromeda.Simulator.Hardware.Interpreters.Hdl
-      Andromeda.Simulator.Language
+      Andromeda.Simulator.LogicControl.Interpreter
       Andromeda.Simulator.Runtime
-      Andromeda.Simulator.Simulation
-      Andromeda.Simulator.SimulationModel
       Main
   other-modules:
       Paths_ch7section7p1andromeda
@@ -117,13 +116,12 @@ executable ch7section7p1andromeda
       Andromeda.LogicControl.Impl.Interpreter
       Andromeda.LogicControl.Language
       Andromeda.Simulator
-      Andromeda.Simulator.Actions
+      Andromeda.Simulator.Control
       Andromeda.Simulator.Hardware.Device
+      Andromeda.Simulator.Hardware.Interpreters.DeviceControl
       Andromeda.Simulator.Hardware.Interpreters.Hdl
-      Andromeda.Simulator.Language
+      Andromeda.Simulator.LogicControl.Interpreter
       Andromeda.Simulator.Runtime
-      Andromeda.Simulator.Simulation
-      Andromeda.Simulator.SimulationModel
       Paths_ch7section7p1andromeda
   hs-source-dirs:
       ./src

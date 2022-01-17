@@ -1,4 +1,4 @@
-module Andromeda.Hardware.LogicControl.Interpreter where
+module Andromeda.Simulator.LogicControl.Interpreter where
 
 import qualified Andromeda.LogicControl.Domain as T
 import qualified Andromeda.LogicControl.Language as L

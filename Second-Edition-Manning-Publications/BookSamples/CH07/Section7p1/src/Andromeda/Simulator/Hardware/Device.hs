@@ -37,11 +37,11 @@ data DevicePartSim = DevicePartSim
   }
 
 
-type DevicePartSims = Map ComponentIndex DevicePartSim
+type DevicePartSims = Map.Map ComponentIndex DevicePartSim
 
 data ControllerSim = ControllerSim
   { ctrlSimThreadId       :: ThreadId
   , ctrlSimDef            :: (ControllerName, ComponentPassport)
   , ctrlSimDevicePartsVar :: MVar DevicePartSims
-  , ctrlSimRequestVar     :: ControllerSimRequest ControllerSimRequestVar
+  , ctrlSimRequestVar     :: ControllerSimRequest
   }

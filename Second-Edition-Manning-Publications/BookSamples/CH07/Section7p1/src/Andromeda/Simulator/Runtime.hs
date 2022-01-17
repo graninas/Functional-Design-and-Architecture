@@ -19,17 +19,9 @@ data SimulatorRuntime = SimulatorRuntime
   }
 
 
-
 createSimulatorRuntime :: IO SimulatorRuntime
 createSimulatorRuntime = do
   simsVar <- newMVar Map.empty
   msgsVar <- newMVar []
   errsVar <- newMVar []
   pure $ SimulatorRuntime simsVar msgsVar errsVar
-
-
-reportError :: SimulatorRuntime -> String -> IO ()
-reportError SimulatorRuntime{_errorsVar} err = do
-  errs <- takeMVar _errorsVar
-  let errs' = err : errs
-  putMVar _errorsVar errs'
