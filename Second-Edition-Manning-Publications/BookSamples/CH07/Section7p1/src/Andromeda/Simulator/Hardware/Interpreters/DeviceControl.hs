@@ -16,31 +16,36 @@ import Control.Concurrent.MVar
 import Control.Monad.Free (foldFree)
 
 
-getDevice :: IORef RImpl.Devices -> T.Controller -> IO (Maybe (TImpl.ControllerImpl, TImpl.Device))
-getDevice devicesRef ctrl = do
-  devices <- readIORef devicesRef
-  pure $ Map.lookup ctrl devices
-
-
 interpretDeviceControlMethod :: RImpl.HardwareRuntime -> L.DeviceControlMethod a -> IO a
 
-interpretDeviceControlMethod runtime (L.GetStatus ctrl) =
-  -- TODO: dummy
-  pure $ Right T.ControllerOk
+interpretDeviceControlMethod runtime (L.GetStatus ctrl) = do
+  let SimulatorRuntime{_controllerSimsVar} = runtime
+  ctrlSims <- takeMVar _controllerSimsVar
 
-interpretDeviceControlMethod runtime (L.ReadSensor controller idx) = do
-  let RImpl.HardwareRuntime {_devicesRef, _hardwareServiceRef} = runtime
+  let tryGetStatus = case Map.lookup ctrl ctrlSims of
+        Nothing -> pure $ Left $ DeviceNotFound $ show ctrl
+        Just ControllerSim{ctrlSimRequestVar} -> do
+          statusResponseVar <- newEmptyMVar
+          putMVar ctrlSimRequestVar $ GetControlerSimStatus statusResponseVar
+          ctrlStatus <- takeMVar statusResponseVar
+          pure $ Right ctrlStatus
 
-  service <- readIORef _hardwareServiceRef
+  eStatus <- tryGetStatus
+  putMVar _controllerSimsVar ctrlSims
+  pure $ next eStatus
 
-  mbDevice <- getDevice _devicesRef controller
-  case mbDevice of
-    Nothing -> pure $ Left $ T.DeviceNotFound $ show controller
-    Just (_, device) -> do
-      mbDevicePart <- SImpl.getDevicePart service idx device
-      case mbDevicePart of
-        Nothing -> pure $ Left $ T.DevicePartNotFound $ show idx
-        Just devicePart -> do
-          measurement <- TImpl.withHandler devicePart $ \handler ->
-            CImpl.readMeasurement handler
-          pure $ Right measurement
+interpretDeviceControlMethod runtime (L.ReadSensor ctrl idx) = do
+  let SimulatorRuntime{_controllerSimsVar} = runtime
+  ctrlSims <- takeMVar _controllerSimsVar
+
+  let tryGetStatus = case Map.lookup ctrl ctrlSims of
+        Nothing -> pure $ Left $ DeviceNotFound $ show ctrl
+        Just ControllerSim{ctrlSimRequestVar} -> do
+          statusResponseVar <- newEmptyMVar
+          putMVar ctrlSimRequestVar $ ReadSimSensor idx statusResponseVar
+          ctrlStatus <- takeMVar statusResponseVar
+          pure $ Right ctrlStatus
+
+  eStatus <- tryGetStatus
+  putMVar _controllerSimsVar ctrlSims
+  pure $ next eStatus

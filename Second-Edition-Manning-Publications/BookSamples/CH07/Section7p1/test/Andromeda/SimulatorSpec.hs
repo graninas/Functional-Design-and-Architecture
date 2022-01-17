@@ -31,7 +31,7 @@ data SimulatorControl = SimulatorControl
 
 
 startSimulator :: SimImpl.SimulatorRuntime -> L.LogicControl () -> IO SimulatorControl
-startSimulator rt lc = do
+startSimulator runtime lc = do
   
 
 

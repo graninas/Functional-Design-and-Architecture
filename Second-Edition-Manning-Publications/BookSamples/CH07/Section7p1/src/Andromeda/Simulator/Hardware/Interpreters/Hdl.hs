@@ -63,32 +63,35 @@ interpretHdlMethod :: SimulatorRuntime -> L.HdlMethod a -> IO a
 interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = do
   eCtrlSim <- SImpl.makeControllerSim service ctrlName passp
   case eCtrlSim of
-    Left err -> error err     -- bad practice
+    Left err -> reportError runtime err
     Right ctrlSim -> do
-      let SimulatorRuntime {_controllerSimsRef} = runtime
-      controllerSims <- readIORef _controllerSimsRef
+      let SimulatorRuntime {_controllerSimsVar} = runtime
+      controllerSims <- takeMVar _controllerSimsVar
       let ctrl = T.Controller ctrlName
       let controllerSims' = Map.insert ctrl ctrlSim
-      writeIORef _controllerSimsRef controllerSims'
+      putMVar _controllerSimsVar controllerSims'
       pure $ next ctrl
 
 
 interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
-  let SimulatorRuntime {_controllerSimsRef} = runtime
-  controllerSims <- readIORef _controllerSimsRef
+  let SimulatorRuntime {_controllerSimsVar} = runtime
+  controllerSims <- takeMVar _controllerSimsVar
 
   let mbCtrlSim = Map.lookup ctrl controllerSims
-  case mbCtrlSim of
-    Nothing -> error "Controller sim not found"    -- bad practice
+  let tryRegisterComponent = case mbCtrlSim of
+    Nothing -> reportError runtime "Controller sim not found"
     Just (ControllerSim thId def partsVar) -> do
       eDeivcePartSim <- makeDevicePartSim service passp
       case eDeivcePartSim of
-        Left err -> error err    -- TODO: bad practice
+        Left err -> reportError runtime err
         Right devicePartSim -> do
           parts <- takeMVar partsVar
           let parts' = Map.insert idx devicePartSim parts
           putMVar partsVar parts'
-          pure $ next ()
+
+  tryRegisterComponent
+  putMVar _controllerSimsVar controllerSims
+  pure $ next ()
 
 
 

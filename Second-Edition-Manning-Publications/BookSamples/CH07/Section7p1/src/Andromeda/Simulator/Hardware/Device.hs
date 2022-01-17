@@ -21,17 +21,14 @@ import Control.Concurrent (ThreadId)
 
 -- Improved Req-Resp pattern
 
-data ControlerSimStatus
-  = ControlerSimStatusOk
-
 data ControllerSimRequest
-  = GetControlerSimStatus (MVar ControlerSimStatus)
+  = GetControlerSimStatus (MVar ControllerStatus)
+  | ReadSimSensor ComponentIndex (MVar Measurement)
 
-data DevicePartSimStatus
-  = DevicePartSimStatusOk
+data DummyDevicePartSimStatus = DummyDevicePartSimStatus
 
 data DevicePartSimRequest
-  = GetDevicePartSimStatus (MVar DevicePartSimStatus)
+  = DummyDeviceSimPartRequest (MVar DummyDevicePartSimStatus)
 
 data DevicePartSim = DevicePartSim
   { devicePartSimThreadId   :: ThreadId
