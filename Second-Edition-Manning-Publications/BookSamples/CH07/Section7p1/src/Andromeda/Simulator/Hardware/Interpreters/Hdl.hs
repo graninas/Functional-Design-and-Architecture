@@ -17,11 +17,11 @@ import Control.Monad (forever)
 
 
 
-controllerWorker :: IO ThreadId
-controllerWorker = forever (pure ())
+controllerWorker :: MVar ControllerSimRequest -> IO ()
+controllerWorker requestVar = forever (pure ())
 
-sensorWorker :: T.Parameter -> IO ThreadId
-sensorWorker _ = forever (pure ())
+sensorWorker :: MVar DevicePartSimRequest -> T.Parameter -> IO ()
+sensorWorker requestVar _ = forever (pure ())
 
 
 
@@ -56,21 +56,23 @@ makeDevicePartSim passp@(T.ComponentPassport (T.Sensors param) _ _ _) = do
         , devicePartSimRequestVar = requestVar
         }
   pure $ Right sim
-makeDevicePartSim _ _ = pure $ Left "Invalid/unknown component class for a device part"
+makeDevicePartSim _ = pure $ Left "Invalid/unknown component class for a device part"
 
 
 
 interpretHdlMethod :: SimulatorRuntime -> L.HdlMethod a -> IO a
 
 interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = do
-  eCtrlSim <- makeControllerSim service ctrlName passp
+  eCtrlSim <- makeControllerSim ctrlName passp
   case eCtrlSim of
-    Left err -> reportError runtime err
+    Left err -> do
+      reportError runtime err
+      error err                        -- bad practice
     Right ctrlSim -> do
       let SimulatorRuntime {_controllerSimsVar} = runtime
       controllerSims <- takeMVar _controllerSimsVar
       let ctrl = T.Controller ctrlName
-      let controllerSims' = Map.insert ctrl ctrlSim
+      let controllerSims' = Map.insert ctrl ctrlSim controllerSims
       putMVar _controllerSimsVar controllerSims'
       pure $ next ctrl
 
@@ -81,11 +83,15 @@ interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
 
   let mbCtrlSim = Map.lookup ctrl controllerSims
   let tryRegisterComponent = case mbCtrlSim of
-        Nothing -> reportError runtime "Controller sim not found"
-        Just (ControllerSim thId def partsVar) -> do
-          eDeivcePartSim <- makeDevicePartSim service passp
+        Nothing -> do
+          reportError runtime "Controller sim not found"
+          error "Controller sim not found"     -- bad practice
+        Just (ControllerSim _ _ partsVar _) -> do
+          eDeivcePartSim <- makeDevicePartSim passp
           case eDeivcePartSim of
-            Left err -> reportError runtime err
+            Left err -> do
+              reportError runtime err
+              error err                        -- bad practice
             Right devicePartSim -> do
               parts <- takeMVar partsVar
               let parts' = Map.insert idx devicePartSim parts

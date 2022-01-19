@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs #-}
+
 module Andromeda.Simulator.Control where
 
 import qualified Andromeda.LogicControl.Domain as T
@@ -11,11 +13,11 @@ import qualified Andromeda.Simulator.LogicControl.Interpreter as SimImpl
 import Data.IORef
 import Control.Concurrent.MVar
 import qualified Data.Map as Map
-import Control.Concurrent (ThreadId)
+import Control.Concurrent (ThreadId, forkIO, threadDelay)
 
 
 data SimulatorRequest
-  = RunSimulation (L.LogicControl a) (MVar a)
+  = forall a. RunSimulation (L.LogicControl a) (MVar a)
   | ShutdownSimulator
 
 
@@ -25,7 +27,7 @@ data SimulatorControl = SimulatorControl
   }
 
 
-simulatorWorker :: SimImpl.SimulatorRuntime -> MVar SimulatorRequest -> IO SimulatorControl
+simulatorWorker :: SimImpl.SimulatorRuntime -> MVar SimulatorRequest -> IO ()
 simulatorWorker runtime requestVar = do
   mbRequest <- tryReadMVar requestVar
   case mbRequest of
@@ -45,8 +47,9 @@ startSimulator runtime = do
   simThreadId <- forkIO $ simulatorWorker runtime simRequestVar
   pure $ SimulatorControl simThreadId simRequestVar
 
-reportError :: SimulatorRuntime -> String -> IO ()
-reportError SimulatorRuntime{_errorsVar} err = do
-  errs <- takeMVar _errorsVar
-  let errs' = err : errs
-  putMVar _errorsVar errs'
+runSimulation :: SimulatorControl -> L.LogicControl a -> IO a
+runSimulation control lc = do
+  let SimulatorControl {simulatorRequestVar} = control
+  resultVar <- newEmptyMVar
+  putMVar simulatorRequestVar $ RunSimulation lc resultVar
+  takeMVar resultVar

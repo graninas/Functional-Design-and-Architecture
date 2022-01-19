@@ -16,14 +16,14 @@ import Control.Concurrent.MVar
 import Control.Monad.Free (foldFree)
 
 
-interpretDeviceControlMethod :: RImpl.HardwareRuntime -> L.DeviceControlMethod a -> IO a
+interpretDeviceControlMethod :: SimulatorRuntime -> L.DeviceControlMethod a -> IO a
 
 interpretDeviceControlMethod runtime (L.GetStatus ctrl) = do
   let SimulatorRuntime{_controllerSimsVar} = runtime
   ctrlSims <- takeMVar _controllerSimsVar
 
   let tryGetStatus = case Map.lookup ctrl ctrlSims of
-        Nothing -> pure $ Left $ DeviceNotFound $ show ctrl
+        Nothing -> pure $ Left $ T.DeviceNotFound $ show ctrl
         Just ControllerSim{ctrlSimRequestVar} -> do
           statusResponseVar <- newEmptyMVar
           putMVar ctrlSimRequestVar $ GetControlerSimStatus statusResponseVar
@@ -32,20 +32,21 @@ interpretDeviceControlMethod runtime (L.GetStatus ctrl) = do
 
   eStatus <- tryGetStatus
   putMVar _controllerSimsVar ctrlSims
-  pure $ next eStatus
+  pure eStatus
 
 interpretDeviceControlMethod runtime (L.ReadSensor ctrl idx) = do
-  let SimulatorRuntime{_controllerSimsVar} = runtime
-  ctrlSims <- takeMVar _controllerSimsVar
-
-  let tryGetStatus = case Map.lookup ctrl ctrlSims of
-        Nothing -> pure $ Left $ DeviceNotFound $ show ctrl
-        Just ControllerSim{ctrlSimRequestVar} -> do
-          statusResponseVar <- newEmptyMVar
-          putMVar ctrlSimRequestVar $ ReadSimSensor idx statusResponseVar
-          ctrlStatus <- takeMVar statusResponseVar
-          pure $ Right ctrlStatus
-
-  eStatus <- tryGetStatus
-  putMVar _controllerSimsVar ctrlSims
-  pure $ next eStatus
+  error "Not implemented"
+  -- let SimulatorRuntime{_controllerSimsVar} = runtime
+  -- ctrlSims <- takeMVar _controllerSimsVar
+  --
+  -- let tryGetStatus = case Map.lookup ctrl ctrlSims of
+  --       Nothing -> pure $ Left $ T.DeviceNotFound $ show ctrl
+  --       Just ControllerSim{ctrlSimRequestVar} -> do
+  --         statusResponseVar <- newEmptyMVar
+  --         putMVar ctrlSimRequestVar $ ReadSimSensor idx statusResponseVar
+  --         ctrlStatus <- takeMVar statusResponseVar
+  --         pure $ Right ctrlStatus
+  --
+  -- eStatus <- tryGetStatus
+  -- putMVar _controllerSimsVar ctrlSims
+  -- pure eStatus

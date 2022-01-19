@@ -43,5 +43,5 @@ data ControllerSim = ControllerSim
   { ctrlSimThreadId       :: ThreadId
   , ctrlSimDef            :: (ControllerName, ComponentPassport)
   , ctrlSimDevicePartsVar :: MVar DevicePartSims
-  , ctrlSimRequestVar     :: ControllerSimRequest
+  , ctrlSimRequestVar     :: MVar ControllerSimRequest
   }

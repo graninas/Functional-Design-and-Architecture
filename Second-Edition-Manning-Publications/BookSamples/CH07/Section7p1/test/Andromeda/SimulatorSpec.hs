@@ -6,25 +6,16 @@ import Andromeda
 
 import qualified Andromeda.LogicControl.Domain as T
 import qualified Andromeda.LogicControl.Language as L
+import qualified Andromeda.Hardware.Language.Hdl as L
+import qualified Andromeda.Hardware.Language.DeviceControl as L
 
 import qualified Andromeda.Simulator.Runtime as SimImpl
+import qualified Andromeda.Simulator.Control as SimImpl
 
 import Data.IORef
 import qualified Data.Map as Map
 import Control.Concurrent.MVar
 import Control.Concurrent (ThreadId)
-
-
-createBoosters :: Hdl (Controller, Controller)
-createBoosters = do
-  lCtrl <- L.setupController lBooster lBoosterController aaaController86Passport
-  L.registerComponent lCtrl nozzle1p aaaTemperature25Passport
-  L.registerComponent lCtrl nozzle1t aaaPressure02Passport
-
-  rCtrl <- L.setupController rBooster rBoosterController aaaController86Passport
-  L.registerComponent rCtrl nozzle2p aaaTemperature25Passport
-  L.registerComponent rCtrl nozzle2t aaaPressure02Passport
-  pure (lCtrl, rCtrl)
 
 
 
@@ -33,7 +24,7 @@ reportBoostersStatus (lBoosterCtrl, rBoosterCtrl) = do
   eLStatus <- L.getStatus lBoosterCtrl
   eRStatus <- L.getStatus rBoosterCtrl
   case (eRStatus, eLStatus) of
-    (Left lErr, Left rErr) -> L.report ("Hardware failure: " <> show (lErr, rErr)
+    (Left lErr, Left rErr) -> L.report ("Hardware failure: " <> show (lErr, rErr))
     (Left lErr, _)         -> L.report ("Hardware failure: " <> show lErr)
     (_, Left rErr)         -> L.report ("Hardware failure: " <> show rErr)
     (Right ControllerOk, Right ControllerOk) -> L.report "Boosters are okay"
@@ -41,8 +32,8 @@ reportBoostersStatus (lBoosterCtrl, rBoosterCtrl) = do
 
 
 
-logicControl :: L.LogicControl ()
-logicControl = do
+logicControlScript :: L.LogicControl ()
+logicControlScript = do
   boostersCtrls <- L.evalHdl createBoosters
   reportBoostersStatus boostersCtrls
 
@@ -53,11 +44,7 @@ spec =
 
     it "Controller status check" $ do
       simRt <- SimImpl.createSimulatorRuntime
+      simControl <- SimImpl.startSimulator simRt
+      simResult <- SimImpl.runSimulation simControl logicControlScript
 
-      simControl <- startSimulator simRt logicControl
-
-      simResult <- runSimulation leftBoosterMallfunction
-
-      case simResult of
-        Nothing -> error "Unexpected absence of results"
-        Just () -> pure ()
+      pure ()
