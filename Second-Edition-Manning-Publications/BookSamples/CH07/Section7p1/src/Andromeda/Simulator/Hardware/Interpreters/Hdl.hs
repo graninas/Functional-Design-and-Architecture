@@ -139,18 +139,18 @@ interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = 
       reportError runtime err
       error err                        -- bad practice
     Right ctrlSim -> do
-      let SimulatorRuntime {_controllerSimsVar} = runtime
-      controllerSims <- takeMVar _controllerSimsVar
+      let SimulatorRuntime {simRtControllerSimsVar} = runtime
+      controllerSims <- takeMVar simRtControllerSimsVar
       let ctrl = T.Controller ctrlName
       let controllerSims' = Map.insert ctrl ctrlSim controllerSims
-      putMVar _controllerSimsVar controllerSims'
+      putMVar simRtControllerSimsVar controllerSims'
       pure $ next ctrl
 
 
 interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
-  let SimulatorRuntime {_controllerSimsVar} = runtime
+  let SimulatorRuntime {simRtControllerSimsVar} = runtime
 
-  controllerSims <- takeMVar _controllerSimsVar
+  controllerSims <- takeMVar simRtControllerSimsVar
 
   let mbCtrlSim = Map.lookup ctrl controllerSims
   let tryRegisterComponent = case mbCtrlSim of
@@ -169,7 +169,7 @@ interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
               putMVar partsVar parts'
 
   tryRegisterComponent
-  putMVar _controllerSimsVar controllerSims
+  putMVar simRtControllerSimsVar controllerSims
   pure $ next ()
 
 

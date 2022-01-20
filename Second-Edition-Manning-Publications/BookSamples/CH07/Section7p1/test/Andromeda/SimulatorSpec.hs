@@ -40,11 +40,17 @@ logicControlScript = do
 
 spec :: Spec
 spec =
-  describe "Logic Control tests" $ do
+  describe "Simulator tests" $ do
 
-    it "Controller status check" $ do
+    it "Simple simulation test" $ do
       simRt <- SimImpl.createSimulatorRuntime
       simControl <- SimImpl.startSimulator simRt
-      simResult <- SimImpl.runSimulation simControl logicControlScript
+      SimImpl.runSimulation simControl logicControlScript
+      simControl <- SimImpl.stopSimulator simRt simControl
 
-      pure ()
+      let SimImpl.SimulatorRuntime{simRtMessagesVar, simRtErrorsVar} = simRt
+      mbMsgs <- tryReadMVar simRtMessagesVar
+      mbErrs <- tryReadMVar simRtErrorsVar
+      case (mbMsgs, mbErrs) of
+        (Just msgs, Just []) -> msgs `shouldBe` ["Boosters are okay"]
+        _ -> error "test failed"

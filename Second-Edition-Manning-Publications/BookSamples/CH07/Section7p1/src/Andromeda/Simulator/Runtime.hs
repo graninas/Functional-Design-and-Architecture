@@ -13,9 +13,9 @@ import qualified Data.Map as Map
 
 
 data SimulatorRuntime = SimulatorRuntime
-  { _controllerSimsVar :: MVar (Map.Map T.Controller ControllerSim)
-  , _messagesVar       :: MVar [String]
-  , _errorsVar         :: MVar [String]
+  { simRtControllerSimsVar :: MVar (Map.Map T.Controller ControllerSim)
+  , simRtMessagesVar       :: MVar [String]
+  , simRtErrorsVar         :: MVar [String]
   }
 
 
@@ -28,7 +28,7 @@ createSimulatorRuntime = do
 
 
 reportError :: SimulatorRuntime -> String -> IO ()
-reportError SimulatorRuntime{_errorsVar} err = do
-  errs <- takeMVar _errorsVar
+reportError SimulatorRuntime{simRtErrorsVar} err = do
+  errs <- takeMVar simRtErrorsVar
   let errs' = err : errs
-  putMVar _errorsVar errs'
+  putMVar simRtErrorsVar errs'

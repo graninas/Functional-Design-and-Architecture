@@ -6,6 +6,7 @@ import qualified Andromeda.LogicControl.Domain as T
 import qualified Andromeda.LogicControl.Language as L
 
 import qualified Andromeda.Simulator.Runtime as SimImpl
+import qualified Andromeda.Simulator.Hardware.Device as SimImpl
 import qualified Andromeda.Simulator.Hardware.Interpreters.Hdl as SimImpl
 import qualified Andromeda.Simulator.Hardware.Interpreters.DeviceControl as SimImpl
 import qualified Andromeda.Simulator.LogicControl.Interpreter as SimImpl
@@ -13,7 +14,7 @@ import qualified Andromeda.Simulator.LogicControl.Interpreter as SimImpl
 import Data.IORef
 import Control.Concurrent.MVar
 import qualified Data.Map as Map
-import Control.Concurrent (ThreadId, forkIO, threadDelay)
+import Control.Concurrent (ThreadId, forkIO, threadDelay, killThread)
 
 
 data SimulatorRequest
@@ -53,3 +54,24 @@ runSimulation control lc = do
   resultVar <- newEmptyMVar
   putMVar simulatorRequestVar $ RunSimulation lc resultVar
   takeMVar resultVar
+
+
+
+
+
+stopSimulator :: SimImpl.SimulatorRuntime -> SimulatorControl -> IO ()
+stopSimulator runtime SimulatorControl {simulatorThreadId} = do
+  killThread simulatorThreadId
+  stopAllSims runtime
+
+stopAllSims :: SimImpl.SimulatorRuntime -> IO ()
+stopAllSims SimImpl.SimulatorRuntime {simRtControllerSimsVar} = do
+  sims <- readMVar simRtControllerSimsVar
+  mapM_ stopSim $ Map.elems sims
+  where
+    stopDevicePartSim SimImpl.DevicePartSim {devicePartSimThreadId} =
+      killThread devicePartSimThreadId
+    stopSim SimImpl.ControllerSim {ctrlSimThreadId, ctrlSimDevicePartsVar} = do
+      killThread ctrlSimThreadId
+      parts <- readMVar ctrlSimDevicePartsVar
+      mapM_ stopDevicePartSim $ Map.elems parts

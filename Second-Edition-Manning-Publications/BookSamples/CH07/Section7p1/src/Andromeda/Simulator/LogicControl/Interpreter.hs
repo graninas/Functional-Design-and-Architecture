@@ -27,10 +27,10 @@ interpretLogicControlMethod runtime (L.EvalDeviceControlMethod dc next) = do
   pure $ next res
 
 interpretLogicControlMethod runtime (L.Report msg next) = do
-  let SimulatorRuntime{_messagesVar} = runtime
-  msgs <- takeMVar _messagesVar
+  let SimulatorRuntime{simRtMessagesVar} = runtime
+  msgs <- takeMVar simRtMessagesVar
   let msgs' = msg : msgs
-  putMVar _messagesVar msgs'
+  putMVar simRtMessagesVar msgs'
   pure $ next ()
 
 interpretLogicControlMethod runtime

@@ -19,8 +19,8 @@ import Control.Monad.Free (foldFree)
 interpretDeviceControlMethod :: SimulatorRuntime -> L.DeviceControlMethod a -> IO a
 
 interpretDeviceControlMethod runtime (L.GetStatus ctrl) = do
-  let SimulatorRuntime{_controllerSimsVar} = runtime
-  ctrlSims <- readMVar _controllerSimsVar
+  let SimulatorRuntime{simRtControllerSimsVar} = runtime
+  ctrlSims <- readMVar simRtControllerSimsVar
 
   let tryGetStatus = case Map.lookup ctrl ctrlSims of
         Nothing -> pure $ Left $ T.DeviceNotFound $ show ctrl
@@ -34,8 +34,8 @@ interpretDeviceControlMethod runtime (L.GetStatus ctrl) = do
   pure eStatus
 
 interpretDeviceControlMethod runtime (L.ReadSensor ctrl idx) = do
-  let SimulatorRuntime{_controllerSimsVar} = runtime
-  ctrlSims <- readMVar _controllerSimsVar
+  let SimulatorRuntime{simRtControllerSimsVar} = runtime
+  ctrlSims <- readMVar simRtControllerSimsVar
 
   let tryReadSensor = case Map.lookup ctrl ctrlSims of
         Nothing -> pure $ Left $ T.DeviceNotFound $ show ctrl
