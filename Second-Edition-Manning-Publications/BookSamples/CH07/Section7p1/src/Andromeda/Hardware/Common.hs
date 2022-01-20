@@ -28,3 +28,6 @@ data Measurement = Measurement Parameter Float
 
 data Period = Secondly
   deriving (Show, Eq, Ord)
+
+
+type Frequency = Int

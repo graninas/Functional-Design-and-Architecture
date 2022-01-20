@@ -11,18 +11,79 @@ import Andromeda.Simulator.Runtime
 import Data.IORef
 import qualified Data.Map as Map
 import Control.Concurrent.MVar
-import Control.Concurrent (forkIO, ThreadId)
+import Control.Concurrent (ThreadId, forkIO, threadDelay)
 import Control.Monad.Free (foldFree)
-import Control.Monad (forever)
+import System.Random (randomRIO)
+
+
+readSensorSimMeasurement
+  :: MVar DevicePartSims
+  -> T.ComponentIndex
+  -> MVar (Maybe T.Measurement)
+  -> IO ()
+readSensorSimMeasurement partSimsVar idx mbMeasurementVar = do
+  partSims <- readMVar partSimsVar
+  case Map.lookup idx partSims of
+    Nothing -> putMVar mbMeasurementVar Nothing
+    Just DevicePartSim{devicePartSimRequestVar} ->
+      putMVar devicePartSimRequestVar $ ProduceMeasurement mbMeasurementVar
+
+
+controllerWorker
+  :: MVar DevicePartSims
+  -> MVar ControllerSimRequest
+  -> T.Frequency
+  -> T.ControllerStatus
+  -> IO ()
+controllerWorker partSimsVar requestVar frequency status = do
+  let cont = controllerWorker partSimsVar requestVar frequency status
+
+  mbRequest <- tryTakeMVar requestVar
+  let (act, next) = case mbRequest of
+        Nothing -> (pure (), cont)
+        Just (SetControlerSimStatus newStatus) ->
+          ( pure ()
+          , controllerWorker partSimsVar requestVar frequency newStatus
+          )
+        Just (GetControlerSimStatus statusVar) ->
+          ( putMVar statusVar status
+          , cont
+          )
+        Just (ReadSimSensor idx mbMeasurementVar) ->
+          ( readSensorSimMeasurement partSimsVar idx mbMeasurementVar
+          , cont
+          )
+  act
+  threadDelay frequency
+  next
 
 
 
-controllerWorker :: MVar ControllerSimRequest -> IO ()
-controllerWorker requestVar = forever (pure ())
+sensorWorker
+  :: MVar DevicePartSimRequest
+  -> T.Parameter
+  -> T.Frequency
+  -> (Int, Int)
+  -> IO ()
+sensorWorker requestVar param frequency range = do
+  let cont = sensorWorker requestVar param frequency range
 
-sensorWorker :: MVar DevicePartSimRequest -> T.Parameter -> IO ()
-sensorWorker requestVar _ = forever (pure ())
-
+  mbRequest <- tryTakeMVar requestVar
+  let (act, next) = case mbRequest of
+        Nothing -> (pure (), cont)
+        Just (SetSensorSimRange newRange) ->
+          ( pure ()
+          , sensorWorker requestVar param frequency newRange
+          )
+        Just (ProduceMeasurement measurementVar) ->
+          ( do
+              val <- randomRIO range
+              putMVar measurementVar $ Just $ T.Measurement param $ fromIntegral val
+          , cont
+          )
+  act
+  threadDelay frequency
+  next
 
 
 makeControllerSim
@@ -30,9 +91,13 @@ makeControllerSim
   -> T.ComponentPassport
   -> IO (Either String ControllerSim)
 makeControllerSim ctrlName ctrlPassp@(T.ComponentPassport T.Controllers _ _ _) = do
+
+  -- default values, should be configured via the simulation model
+  let frequency = 100000               -- 1ms
+
   devicePartsVar <- newMVar Map.empty
   requestVar <- newEmptyMVar
-  threadId <- forkIO (controllerWorker requestVar)
+  threadId <- forkIO (controllerWorker devicePartsVar requestVar frequency T.ControllerOk)
   let sim = ControllerSim
         { ctrlSimThreadId = threadId
         , ctrlSimDef = (ctrlName, ctrlPassp)
@@ -48,8 +113,13 @@ makeDevicePartSim
   :: T.ComponentPassport
   -> IO (Either String DevicePartSim)
 makeDevicePartSim passp@(T.ComponentPassport (T.Sensors param) _ _ _) = do
+
+  -- default values, should be configured via the simulation model
+  let frequency = 100000               -- 1ms
+  let measurementRange = (100, 200)
+
   requestVar <- newEmptyMVar
-  threadId <- forkIO (sensorWorker requestVar param)
+  threadId <- forkIO (sensorWorker requestVar param frequency measurementRange)
   let sim = DevicePartSim
         { devicePartSimThreadId = threadId
         , devicePartSimDef = passp
@@ -79,6 +149,7 @@ interpretHdlMethod runtime (L.SetupController deviceName ctrlName passp next) = 
 
 interpretHdlMethod runtime (L.RegisterComponent ctrl idx passp next) = do
   let SimulatorRuntime {_controllerSimsVar} = runtime
+
   controllerSims <- takeMVar _controllerSimsVar
 
   let mbCtrlSim = Map.lookup ctrl controllerSims

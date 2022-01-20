@@ -26,4 +26,5 @@ data ControllerStatus
 data HardwareFailure
   = DeviceNotFound String
   | DevicePartNotFound String
+  | NoDataFromSensor String
   deriving (Show, Eq, Ord)
