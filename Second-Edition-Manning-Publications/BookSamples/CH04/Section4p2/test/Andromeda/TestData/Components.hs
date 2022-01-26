@@ -11,7 +11,7 @@ thermometer1Passp =
 
 pressure1Passp :: ComponentPassport
 pressure1Passp =
-  ComponentPassport (Sensors Temperature) "p1" "p1" "p1"
+  ComponentPassport (Sensors Pressure) "p1" "p1" "p1"
 
 
 thermometer1Handler :: SensorAPI
