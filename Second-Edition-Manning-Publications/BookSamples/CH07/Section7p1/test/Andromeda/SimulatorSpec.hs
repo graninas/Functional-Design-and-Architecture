@@ -19,33 +19,59 @@ import Control.Concurrent (ThreadId)
 
 
 
-reportBoostersStatus :: (Controller, Controller) -> L.LogicControl ()
-reportBoostersStatus (lBoosterCtrl, rBoosterCtrl) = do
+getBoostersStatus :: (Controller, Controller) -> L.LogicControl (Either String ControllerStatus)
+getBoostersStatus (lBoosterCtrl, rBoosterCtrl) = do
   eLStatus <- L.getStatus lBoosterCtrl
   eRStatus <- L.getStatus rBoosterCtrl
+
   case (eRStatus, eLStatus) of
-    (Left lErr, Left rErr) -> L.report ("Hardware failure: " <> show (lErr, rErr))
-    (Left lErr, _)         -> L.report ("Hardware failure: " <> show lErr)
-    (_, Left rErr)         -> L.report ("Hardware failure: " <> show rErr)
-    (Right ControllerOk, Right ControllerOk) -> L.report "Boosters are okay"
-    err -> L.report ("Boosters are in the wrong status: " <> show err)
+    (Right ControllerOk, Right ControllerOk) -> pure $ Right ControllerOk
+    (Left lErr, Left rErr) -> pure $ Left $ "Hardware failure: " <> show (lErr, rErr)
+    (Left lErr, _)         -> pure $ Left $ "Left booster failure: " <> show lErr
+    (_, Left rErr)         -> pure $ Left $ "Right booster failure: " <> show rErr
+    err -> pure $ Left $ "Boosters are in the wrong status: " <> show err
 
-
-
-logicControlScript :: L.LogicControl ()
-logicControlScript = do
+reportBoostersStatus :: L.LogicControl ()
+reportBoostersStatus = do
   boostersCtrls <- L.evalHdl createBoosters
-  reportBoostersStatus boostersCtrls
+  eStatus <- getBoostersStatus boostersCtrls
+  case eStatus of
+    Right ControllerOk -> L.report "Boosters are okay"
+    Left err           -> L.report err
+
+
+readBoostersTemperature :: (Controller, Controller) -> L.LogicControl (Either String (Float, Float))
+readBoostersTemperature (lBoosterCtrl, rBoosterCtrl) = do
+  eLTemperature <- L.readSensor lBoosterCtrl nozzle1t
+  eRTemperature <- L.readSensor rBoosterCtrl nozzle2t
+
+  case (eLTemperature, eRTemperature) of
+    (Right (Measurement Temperature lVal), Right (Measurement Temperature rVal))
+        -> pure $ Right (lVal, rVal)
+    (Left lErr, Left rErr) -> pure $ Left $ "Hardware failure: " <> show (lErr, rErr)
+    (Left lErr, _)         -> pure $ Left $ "Left booster failure: " <> show lErr
+    (_, Left rErr)         -> pure $ Left $ "Right booster failure: " <> show rErr
+    err -> pure $ Left $ "Wrong boosters response: " <> show err
+
+reportBoostersTemperature :: L.LogicControl ()
+reportBoostersTemperature = do
+  boostersCtrls <- L.evalHdl createBoosters
+  eTemperature <- readBoostersTemperature boostersCtrls
+  case eTemperature of
+    Right (v1, v2) -> L.report $ "T1 = " <> show v1 <> ", T2 = " <> show v2
+    Left err       -> L.report err
 
 
 spec :: Spec
 spec =
   describe "Simulator tests" $ do
 
-    it "Simple simulation test" $ do
+    it "Boosters status check" $ do
       simRt <- SimImpl.createSimulatorRuntime
       simControl <- SimImpl.startSimulator simRt
-      SimImpl.runSimulation simControl logicControlScript
+
+      SimImpl.runSimulation simControl reportBoostersStatus
+
       simControl <- SimImpl.stopSimulator simRt simControl
 
       let SimImpl.SimulatorRuntime{simRtMessagesVar, simRtErrorsVar} = simRt
@@ -53,4 +79,19 @@ spec =
       mbErrs <- tryReadMVar simRtErrorsVar
       case (mbMsgs, mbErrs) of
         (Just msgs, Just []) -> msgs `shouldBe` ["Boosters are okay"]
-        _ -> error "test failed"
+        results -> error $ "Unexpected results: " <> show results
+
+    it "Boosters temperature check" $ do
+      simRt <- SimImpl.createSimulatorRuntime
+      simControl <- SimImpl.startSimulator simRt
+
+      SimImpl.runSimulation simControl reportBoostersTemperature
+
+      simControl <- SimImpl.stopSimulator simRt simControl
+
+      let SimImpl.SimulatorRuntime{simRtMessagesVar, simRtErrorsVar} = simRt
+      mbMsgs <- tryReadMVar simRtMessagesVar
+      mbErrs <- tryReadMVar simRtErrorsVar
+      case (mbMsgs, mbErrs) of
+        (Just msgs, Just []) -> msgs `shouldBe` ["Test"]
+        results -> error $ "Unexpected results: " <> show results

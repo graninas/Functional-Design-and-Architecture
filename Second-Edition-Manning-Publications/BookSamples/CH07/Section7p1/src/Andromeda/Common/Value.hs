@@ -11,6 +11,7 @@ data Value = BoolValue Bool
            | IntValue Int
            | FloatValue Float
            | StringValue String
+  deriving (Show, Eq, Ord)
 
 
 boolValue :: Bool -> Value
