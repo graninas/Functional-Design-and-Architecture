@@ -58,8 +58,10 @@ reportBoostersTemperature = do
   boostersCtrls <- L.evalHdl createBoosters
   eTemperature <- readBoostersTemperature boostersCtrls
   case eTemperature of
-    Right (v1, v2) -> L.report $ "T1 = " <> show v1 <> ", T2 = " <> show v2
     Left err       -> L.report err
+    Right (v1, v2) -> do
+      L.report $ "T1 = " <> show v1 <> ", T2 = " <> show v2
+      L.report "Temperature values are okay."
 
 
 spec :: Spec
@@ -93,5 +95,5 @@ spec =
       mbMsgs <- tryReadMVar simRtMessagesVar
       mbErrs <- tryReadMVar simRtErrorsVar
       case (mbMsgs, mbErrs) of
-        (Just msgs, Just []) -> msgs `shouldBe` ["Test"]
+        (Just [msg,_], Just []) -> msg `shouldBe` "Temperature values are okay."
         results -> error $ "Unexpected results: " <> show results

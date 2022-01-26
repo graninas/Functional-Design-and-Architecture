@@ -18,21 +18,21 @@ rBoosterController :: ControllerName
 rBoosterController = ControllerName "right b ctrl"
 
 nozzle1p, nozzle1t :: ComponentIndex
-nozzle1p = ComponentIndex "nozzle1-t"
-nozzle1t = ComponentIndex "nozzle1-p"
+nozzle1p = ComponentIndex "nozzle1-p"
+nozzle1t = ComponentIndex "nozzle1-t"
 
 nozzle2p, nozzle2t :: ComponentIndex
-nozzle2p = ComponentIndex "nozzle2-t"
-nozzle2t = ComponentIndex "nozzle2-p"
+nozzle2p = ComponentIndex "nozzle2-p"
+nozzle2t = ComponentIndex "nozzle2-t"
 
 
 createBoosters :: Hdl Boosters
 createBoosters = do
   lCtrl <- setupController lBooster lBoosterController aaaController86Passport
-  registerComponent lCtrl nozzle1p aaaTemperature25Passport
-  registerComponent lCtrl nozzle1t aaaPressure02Passport
+  registerComponent lCtrl nozzle1p aaaPressure02Passport
+  registerComponent lCtrl nozzle1t aaaTemperature25Passport
 
   rCtrl <- setupController rBooster rBoosterController aaaController86Passport
-  registerComponent rCtrl nozzle2p aaaTemperature25Passport
-  registerComponent rCtrl nozzle2t aaaPressure02Passport
+  registerComponent rCtrl nozzle2p aaaPressure02Passport
+  registerComponent rCtrl nozzle2t aaaTemperature25Passport
   pure (lCtrl, rCtrl)
