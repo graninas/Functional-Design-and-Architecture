@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0dd1e28ee1999e19754dcff886122e94b869c4c6710d892e0dac7dd3644c6fff
+-- hash: 6dccddbc415bf5d28c9c8f3e32db891aec17450d72a8e330130a8be3d022e35d
 
 name:           ch6section6p1p2
 version:        1.0.0.0
@@ -17,8 +17,9 @@ build-type:     Simple
 library
   exposed-modules:
       Main
+      Sandwich.ImpureInterpreter
       Sandwich.Language
-      Sandwich.StatefulInterpreter
+      Sandwich.PureInterpreter
   other-modules:
       Paths_ch6section6p1p2
   hs-source-dirs:
@@ -46,8 +47,9 @@ library
 executable ch6section6p1p2
   main-is: Main.hs
   other-modules:
+      Sandwich.ImpureInterpreter
       Sandwich.Language
-      Sandwich.StatefulInterpreter
+      Sandwich.PureInterpreter
       Paths_ch6section6p1p2
   hs-source-dirs:
       ./src

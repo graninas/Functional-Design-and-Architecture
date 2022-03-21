@@ -27,7 +27,10 @@ data Component
 
 
 data SandwichBody = SandwichBody BreadType [Component]
+  deriving (Show, Eq, Ord)
+  
 data Sandwich = Sandwich BreadType (Maybe BreadType) [Component]
+  deriving (Show, Eq, Ord)
 
 data SandwichConstructor next
   = StartNewSandwich BreadType Component (SandwichBody -> next)

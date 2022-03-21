@@ -5,7 +5,7 @@ import Test.Hspec
 import Control.Monad.Free (Free (..), liftF)
 
 import Sandwich.Language
-import Sandwich.StatefulInterpreter
+import Sandwich.ImpureInterpreter
 
 
 

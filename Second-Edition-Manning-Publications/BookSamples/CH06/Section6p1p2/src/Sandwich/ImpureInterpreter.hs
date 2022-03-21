@@ -1,4 +1,4 @@
-module Sandwich.StatefulInterpreter where
+module Sandwich.ImpureInterpreter where
 
 import Sandwich.Language
 
@@ -13,7 +13,7 @@ withdrawIngredient :: IORef Ingredients -> Component -> IO ()
 withdrawIngredient ingredsRef component = do
   ingreds <- readIORef ingredsRef
   case Map.lookup component ingreds of
-    Nothing -> error ("Ingredient not found: " <> show component)
+    Nothing -> error ("No ingredient: " <> show component)
     Just count | count <= 0 -> error ("No ingredient: " <> show component)
                | otherwise  -> do
       let ingreds' = Map.insert component (count - 1) ingreds
@@ -48,5 +48,5 @@ interpretRecipe ingredsRef (Free step) = do
   interpretRecipe ingredsRef next
 
 
-createSandwich :: IORef Ingredients -> SandwichRecipe Sandwich -> IO Sandwich
-createSandwich ingredsRef recipe = interpretRecipe ingredsRef recipe
+makeSandwich :: IORef Ingredients -> SandwichRecipe Sandwich -> IO Sandwich
+makeSandwich ingredsRef recipe = interpretRecipe ingredsRef recipe
