@@ -13,11 +13,10 @@ withdrawIngredient :: IORef Ingredients -> Component -> IO ()
 withdrawIngredient ingredsRef component = do
   ingreds <- readIORef ingredsRef
   case Map.lookup component ingreds of
-    Nothing -> error ("No ingredient: " <> show component)
-    Just count | count <= 0 -> error ("No ingredient: " <> show component)
-               | otherwise  -> do
+    Just count | count > 0 -> do
       let ingreds' = Map.insert component (count - 1) ingreds
       writeIORef ingredsRef ingreds'
+    _ -> error ("No ingredient: " <> show component)
 
 interpretStep :: IORef Ingredients -> SandwichConstructor a -> IO a
 interpretStep ingredsRef (StartNewSandwich bread component next) = do

@@ -4,7 +4,6 @@ import Sandwich.Language
 
 import Control.Monad.Free
 import qualified Data.Map as Map
-import Data.IORef
 
 
 type Ingredients = Map.Map Component Int
@@ -16,17 +15,34 @@ withdrawIngredient
   -> Either CookingProblem Ingredients
 withdrawIngredient ingreds component =
   case Map.lookup component ingreds of
-    Nothing -> Left ("No ingredient: " <> show component)
-    Just count | count <= 0 -> Left ("No ingredient: " <> show component)
-               | otherwise  -> let
+    Just count | count > 0 -> let
       ingreds' = Map.insert component (count - 1) ingreds
       in Right ingreds'
+    _ -> Left ("No ingredient: " <> show component)
 
 interpretStep
   :: Ingredients
   -> SandwichConstructor a
   -> Either CookingProblem (Ingredients, a)
-interpretStep = undefined
+interpretStep ingreds (StartNewSandwich bread component next) = do
+  ingreds1 <- withdrawIngredient ingreds component
+  ingreds2 <- withdrawIngredient ingreds1 (Bread bread)
+  let body = SandwichBody bread [component]
+  pure (ingreds2, next body)
+
+interpretStep ingreds (AddComponent component body next) = do
+  ingreds1 <- withdrawIngredient ingreds component
+  let SandwichBody bread components = body
+  let body' = SandwichBody bread (component : components)
+  pure (ingreds1, next body')
+
+interpretStep ingreds (FinishSandwich mbBread body next) = do
+  let SandwichBody bread components = body
+  ingreds' <- case mbBread of
+    Nothing     -> Right ingreds
+    Just bread' -> withdrawIngredient ingreds (Bread bread')
+  pure (ingreds', next (Sandwich bread mbBread components))
+
 
 
 interpretRecipe
@@ -34,12 +50,10 @@ interpretRecipe
   -> SandwichRecipe Sandwich
   -> Either CookingProblem (Ingredients, Sandwich)
 interpretRecipe ingreds (Pure sandwich) = Right (ingreds, sandwich)
-interpretRecipe ingreds (Free step) = eResult
-  where
-    eStepResult = interpretStep ingreds step
-    eResult = case eStepResult of
-      Left err -> Left err
-      Right (ingreds', next) -> interpretRecipe ingreds' next
+interpretRecipe ingreds (Free step) =
+  case interpretStep ingreds step of
+    Left err -> Left err
+    Right (ingreds', next) -> interpretRecipe ingreds' next
 
 
 makeSandwich
