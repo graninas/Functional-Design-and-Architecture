@@ -23,10 +23,10 @@ guid3 = "bbb_guid3"
 
 
 bbbTemperature25Passport :: ComponentPassport
-bbbTemperature25Passport = ComponentPassport (Sensors Temperature) bbbTemperature25Name guid2 bbbInc
+bbbTemperature25Passport = ComponentPassport (Sensors TemperatureSensor) bbbTemperature25Name guid2 bbbInc
 
 bbbPressure02Passport :: ComponentPassport
-bbbPressure02Passport = ComponentPassport (Sensors Pressure) bbbPressure02Name guid1 bbbInc
+bbbPressure02Passport = ComponentPassport (Sensors TemperatureSensor) bbbPressure02Name guid1 bbbInc
 
 bbbController86Passport :: ComponentPassport
 bbbController86Passport = ComponentPassport Controllers bbbController86Name guid3 bbbInc

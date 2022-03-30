@@ -24,13 +24,13 @@ import Control.Concurrent (ThreadId)
 data ControllerSimRequest
   = GetControlerSimStatus (MVar ControllerStatus)
   | SetControlerSimStatus ControllerStatus
-  | ReadSimSensor ComponentIndex (MVar (Maybe Measurement))
+  | ReadSimSensor ComponentIndex (MVar (Maybe SensorMeasurement))
 
 data DummyDevicePartSimStatus = DummyDevicePartSimStatus
 
 data DevicePartSimRequest
   = SetSensorSimRange (Int, Int)
-  | ProduceMeasurement (MVar (Maybe Measurement))
+  | ProduceMeasurement (MVar (Maybe SensorMeasurement))
 
 data DevicePartSim = DevicePartSim
   { devicePartSimThreadId   :: ThreadId

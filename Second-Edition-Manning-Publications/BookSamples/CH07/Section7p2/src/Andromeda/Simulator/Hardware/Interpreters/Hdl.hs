@@ -2,6 +2,9 @@ module Andromeda.Simulator.Hardware.Interpreters.Hdl where
 
 import qualified Andromeda.Hardware.Language.Hdl as L
 
+import qualified Andromeda.Common.Value as T
+import qualified Andromeda.Common.Property as T
+import qualified Andromeda.Common.Physics as T
 import qualified Andromeda.Hardware.Common as T
 import qualified Andromeda.Hardware.Domain as T
 
@@ -19,7 +22,7 @@ import System.Random (randomRIO)
 readSensorSimMeasurement
   :: MVar DevicePartSims
   -> T.ComponentIndex
-  -> MVar (Maybe T.Measurement)
+  -> MVar (Maybe T.SensorMeasurement)
   -> IO ()
 readSensorSimMeasurement partSimsVar idx mbMeasurementVar = do
   partSims <- readMVar partSimsVar
@@ -35,15 +38,15 @@ controllerWorker
   -> T.Frequency
   -> T.ControllerStatus
   -> IO ()
-controllerWorker partSimsVar requestVar frequency status = do
-  let cont = controllerWorker partSimsVar requestVar frequency status
+controllerWorker partSimsVar requestVar hertz@(T.Hertz frequency) status = do
+  let cont = controllerWorker partSimsVar requestVar hertz status
 
   mbRequest <- tryTakeMVar requestVar
   let (act, next) = case mbRequest of
         Nothing -> (pure (), cont)
         Just (SetControlerSimStatus newStatus) ->
           ( pure ()
-          , controllerWorker partSimsVar requestVar frequency newStatus
+          , controllerWorker partSimsVar requestVar hertz newStatus
           )
         Just (GetControlerSimStatus statusVar) ->
           ( putMVar statusVar status
@@ -54,35 +57,40 @@ controllerWorker partSimsVar requestVar frequency status = do
           , cont
           )
   act
-  threadDelay frequency
+  -- TODO: correct formula
+  threadDelay $ ceiling $ (1.0 / (fromIntegral frequency)) * 1000.0
   next
 
 
 
 sensorWorker
   :: MVar DevicePartSimRequest
-  -> T.Parameter
+  -> T.SensorType
   -> T.Frequency
   -> (Int, Int)
   -> IO ()
-sensorWorker requestVar param frequency range = do
-  let cont = sensorWorker requestVar param frequency range
+sensorWorker requestVar sensorType hertz@(T.Hertz frequency) range = do
+  let cont = sensorWorker requestVar sensorType hertz range
 
   mbRequest <- tryTakeMVar requestVar
   let (act, next) = case mbRequest of
         Nothing -> (pure (), cont)
         Just (SetSensorSimRange newRange) ->
           ( pure ()
-          , sensorWorker requestVar param frequency newRange
+          , sensorWorker requestVar sensorType hertz newRange
           )
         Just (ProduceMeasurement measurementVar) ->
           ( do
-              val <- randomRIO range
-              putMVar measurementVar $ Just $ T.Measurement param $ fromIntegral val
+              rndVal <- randomRIO range
+              let valF = case sensorType of
+                   T.TemperatureSensor -> T.SensorMeasurement . T.UnitTemperature . T.Kelvin
+                   T.PressureSensor    -> T.SensorMeasurement . T.UnitPressure . T.Pascal
+              putMVar measurementVar $ Just $ valF $ fromIntegral rndVal
           , cont
           )
   act
-  threadDelay frequency
+  -- TODO: correct formula
+  threadDelay $ ceiling $ (1.0 / (fromIntegral frequency)) * 1000.0
   next
 
 
@@ -93,7 +101,7 @@ makeControllerSim
 makeControllerSim ctrlName ctrlPassp@(T.ComponentPassport T.Controllers _ _ _) = do
 
   -- default values, should be configured via the simulation model
-  let frequency = 100000               -- 1ms
+  let frequency = T.Hertz 1000
 
   devicePartsVar <- newMVar Map.empty
   requestVar <- newEmptyMVar
@@ -112,14 +120,14 @@ makeControllerSim _ _ = pure $ Left "Invalid/unknown component class for a contr
 makeDevicePartSim
   :: T.ComponentPassport
   -> IO (Either String DevicePartSim)
-makeDevicePartSim passp@(T.ComponentPassport (T.Sensors param) _ _ _) = do
+makeDevicePartSim passp@(T.ComponentPassport (T.Sensors sensorType) _ _ _) = do
 
   -- default values, should be configured via the simulation model
-  let frequency = 100000               -- 1ms
+  let frequency = T.Hertz 1000
   let measurementRange = (100, 200)
 
   requestVar <- newEmptyMVar
-  threadId <- forkIO (sensorWorker requestVar param frequency measurementRange)
+  threadId <- forkIO (sensorWorker requestVar sensorType frequency measurementRange)
   let sim = DevicePartSim
         { devicePartSimThreadId = threadId
         , devicePartSimDef = passp

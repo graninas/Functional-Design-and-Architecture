@@ -23,5 +23,5 @@ createBoosters = do
   pure (lCtrl, rCtrl)
 
 
-getControllerStatus :: Controller -> LogicControl (Either HardwareFailure ControllerStatus)
+getControllerStatus :: Controller -> LogicControl (Either LogicControlFailure ControllerStatus)
 getControllerStatus ctrl = L.getStatus ctrl

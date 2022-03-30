@@ -1,5 +1,6 @@
 module Andromeda.Assets.Vendors.AAA.ComponentsAPI where
 
+import Andromeda.Common.Physics
 import Andromeda.Hardware.Common
 import Andromeda.Assets.Vendors.AAA.Common
 import Andromeda.Assets.Vendors.AAA.Components
@@ -10,14 +11,14 @@ import qualified Data.Map as Map
 aaaTemperature25Handler :: SensorAPI
 aaaTemperature25Handler = SensorAPI
   { reset = putStrLn $ aaaTemperature25Name <> " reset."
-  , readMeasurement = pure $ Measurement Temperature 100.0   -- dummy
+  , readMeasurement = pure $ SensorMeasurement $ UnitTemperature $ Kelvin 3000.0   -- dummy
   , setCallback = \_ _ -> putStrLn $ aaaTemperature25Name <> " callback."
   }
 
 aaaPressure02Handler :: SensorAPI
 aaaPressure02Handler = SensorAPI
   { reset = putStrLn $ aaaPressure02Name <> " reset."
-  , readMeasurement = pure $ Measurement Temperature 100.0   -- dummy
+  , readMeasurement = pure $ SensorMeasurement $ UnitPressure $ Pascal 40000.0   -- dummy
   , setCallback = \_ _ -> putStrLn $ aaaPressure02Name <> " callback."
   }
 

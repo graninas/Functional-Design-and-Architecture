@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a15941f4872a0c0cd76170bd13941f15df7975d8c9d4a0af2ce778fe82734b48
+-- hash: 3195709fbf0d3d66e8619af89296da16cab4d4ad63627a289ff908dbf1d300e2
 
 name:           ch7section7p2andromeda
 version:        1.0.0.0
@@ -30,6 +30,8 @@ library
       Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
+      Andromeda.Common.Physics
+      Andromeda.Common.Property
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common
@@ -97,6 +99,8 @@ executable ch7section7p2andromeda
       Andromeda.Assets.Vendors.GenHardwareService
       Andromeda.Calculations
       Andromeda.Common
+      Andromeda.Common.Physics
+      Andromeda.Common.Property
       Andromeda.Common.Value
       Andromeda.Hardware
       Andromeda.Hardware.Common
@@ -151,6 +155,7 @@ test-suite functional
   other-modules:
       Andromeda.HardwareSpec
       Andromeda.LogicControlSpec
+      Andromeda.ScriptsSpec
       Andromeda.SimulatorSpec
       Andromeda.Test.HardwareService
       Andromeda.TestData.Components

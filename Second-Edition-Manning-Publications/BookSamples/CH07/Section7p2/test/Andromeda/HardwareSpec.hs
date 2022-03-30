@@ -25,7 +25,7 @@ import qualified Data.Map as Map
 verifyTemperature :: Float -> SensorAPI -> IO ()
 verifyTemperature temp handler = do
   measurement <- readMeasurement handler
-  measurement `shouldBe` (Measurement Temperature temp)
+  measurement `shouldBe` (SensorMeasurement $ UnitTemperature $ Kelvin temp)
 
 
 getDevice :: RImpl.HardwareRuntime -> Controller -> IO (TImpl.ControllerImpl, TImpl.Device)
@@ -81,4 +81,4 @@ spec =
 
       case mbThermometer of
         Nothing -> fail "There is no such component"
-        Just thermometer -> TImpl.withHandler thermometer (verifyTemperature 100.0)
+        Just thermometer -> TImpl.withHandler thermometer (verifyTemperature 3000.0)

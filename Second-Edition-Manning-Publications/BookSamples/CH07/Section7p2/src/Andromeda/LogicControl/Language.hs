@@ -5,7 +5,7 @@ module Andromeda.LogicControl.Language where
 import Andromeda.Hardware.Common
 import Andromeda.Hardware.Domain
 import Andromeda.LogicControl.Domain
-import Andromeda.Common.Value
+import Andromeda.Common
 
 import qualified Andromeda.Hardware.Language.Hdl as L
 import qualified Andromeda.Hardware.Language.DeviceControl as DC
@@ -46,10 +46,26 @@ store key value = liftF $ Store key value id
 
 
 
+wrapHardwareFailure :: Either HardwareFailure a -> Either LogicControlFailure a
+wrapHardwareFailure (Left err) = Left (HardwareFailure err)
+wrapHardwareFailure (Right v) = Right v
 
+getStatus :: Controller -> LogicControl (Either LogicControlFailure ControllerStatus)
+getStatus ctrl
+  = wrapHardwareFailure
+  <$> (evalDeviceControl $ DC.getStatus' ctrl)
 
-getStatus :: Controller -> LogicControl (Either HardwareFailure ControllerStatus)
-getStatus ctrl = evalDeviceControl $ DC.getStatus' ctrl
+readSensor :: Controller -> ComponentIndex -> LogicControl (Either LogicControlFailure SensorMeasurement)
+readSensor ctrl idx
+  = wrapHardwareFailure
+  <$> (evalDeviceControl $ DC.readSensor' ctrl idx)
 
-readSensor :: Controller -> ComponentIndex -> LogicControl (Either HardwareFailure Measurement)
-readSensor ctrl idx = evalDeviceControl $ DC.readSensor' ctrl idx
+getProperty :: Controller -> PropertyName -> [Param] -> LogicControl (Either LogicControlFailure (Maybe Property))
+getProperty ctrl propName params
+  = wrapHardwareFailure
+  <$> (evalDeviceControl $ DC.getProperty' ctrl propName params)
+
+evalCommand :: Controller -> Command -> [Param] -> LogicControl (Either LogicControlFailure CommandResult)
+evalCommand ctrl cmd params
+  = wrapHardwareFailure
+  <$> (evalDeviceControl $ DC.evalCommand' ctrl cmd params)

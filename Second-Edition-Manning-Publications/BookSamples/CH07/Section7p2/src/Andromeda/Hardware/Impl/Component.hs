@@ -3,15 +3,15 @@ module Andromeda.Hardware.Impl.Component where
 import Andromeda.Hardware.Common
 
 import Data.Map (Map)
-
+import Andromeda.Common.Physics
 
 -- This is just a demo of API.
 -- We'll redesign it later.
 
 data SensorAPI = SensorAPI
   { reset :: IO ()
-  , readMeasurement :: IO Measurement
-  , setCallback :: Period -> IO Measurement -> IO ()
+  , readMeasurement :: IO SensorMeasurement
+  , setCallback :: Period -> IO SensorMeasurement -> IO ()
   }
 
 data ControllerAPI = ControllerAPI

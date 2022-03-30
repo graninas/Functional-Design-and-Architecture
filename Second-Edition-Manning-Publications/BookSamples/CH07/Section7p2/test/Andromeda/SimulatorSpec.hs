@@ -19,7 +19,9 @@ import Control.Concurrent (ThreadId)
 
 
 
-getBoostersStatus :: (Controller, Controller) -> L.LogicControl (Either String ControllerStatus)
+getBoostersStatus
+  :: (Controller, Controller)
+  -> L.LogicControl (Either String ControllerStatus)
 getBoostersStatus (lBoosterCtrl, rBoosterCtrl) = do
   eLStatus <- L.getStatus lBoosterCtrl
   eRStatus <- L.getStatus rBoosterCtrl
@@ -40,13 +42,16 @@ reportBoostersStatus = do
     Left err           -> L.report err
 
 
-readBoostersTemperature :: (Controller, Controller) -> L.LogicControl (Either String (Float, Float))
+readBoostersTemperature
+  :: (Controller, Controller)
+  -> L.LogicControl (Either String (Float, Float))
 readBoostersTemperature (lBoosterCtrl, rBoosterCtrl) = do
   eLTemperature <- L.readSensor lBoosterCtrl nozzle1t
   eRTemperature <- L.readSensor rBoosterCtrl nozzle2t
 
   case (eLTemperature, eRTemperature) of
-    (Right (Measurement Temperature lVal), Right (Measurement Temperature rVal))
+    ( Right (SensorMeasurement (UnitTemperature (Kelvin lVal))),
+      Right (SensorMeasurement (UnitTemperature (Kelvin rVal))))
         -> pure $ Right (lVal, rVal)
     (Left lErr, Left rErr) -> pure $ Left $ "Hardware failure: " <> show (lErr, rErr)
     (Left lErr, _)         -> pure $ Left $ "Left booster failure: " <> show lErr

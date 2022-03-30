@@ -1,5 +1,6 @@
 module Andromeda.Hardware.Domain where
 
+import Andromeda.Common
 
 newtype DeviceName = DeviceName String
   deriving (Show, Eq, Ord)
@@ -14,7 +15,20 @@ newtype Controller = Controller ControllerName
   deriving (Show, Eq, Ord)
 
 
+type Command = String
+type ParamName = String
 
+data Param
+  = Param String
+  | ValueParam Value
+  | UnitParam PhysicalUnit Value
+  | ComponentIndexParam ComponentIndex
+  deriving (Show, Eq, Ord)
+
+data CommandResult
+  = CommandSuccess [Property]
+  | CommandFail String
+  deriving (Show, Eq, Ord)
 
 data ControllerStatus
   = ControllerOk
