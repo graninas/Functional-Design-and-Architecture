@@ -18,7 +18,7 @@ bbbTemperature25Handler = SensorAPI
 bbbPressure02Handler :: SensorAPI
 bbbPressure02Handler = SensorAPI
   { reset = putStrLn $ bbbPressure02Name <> " reset."
-  , readMeasurement = pure $ Measurement Temperature 25.0   -- dummy
+  , readMeasurement = pure $ Measurement Pressure 25.0   -- dummy
   , setCallback = \_ _ -> putStrLn $ bbbPressure02Name <> " callback."
   }
 
