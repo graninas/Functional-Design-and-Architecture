@@ -4,7 +4,6 @@ import Test.Hspec
 
 import Andromeda
 
-import Andromeda.Assets (createBoosters, aaaController86Name)
 import Andromeda.Assets.Vendors.AAA.HardwareService (aaaHardwareService)
 
 import qualified Andromeda.Hardware.Impl.Device.Types as TImpl

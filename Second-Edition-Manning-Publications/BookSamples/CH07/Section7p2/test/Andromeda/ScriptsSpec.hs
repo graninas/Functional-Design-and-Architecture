@@ -22,55 +22,24 @@ import qualified Andromeda.LogicControl.Language as L
 import qualified Andromeda.TestData.Scripts as Test
 
 
-data SpaceshipProperties = SpaceshipProperties
-  { spaceShipMass :: Mass
-  }
-
-validateTorque
-  :: Either LogicControlFailure (Maybe Property)
-  -> Either LogicControlFailure Torque
-validateTorque (Left err) = Left err
-validateTorque (Right (Just (PhysicalUnitProperty _ (UnitTorque (Torque t)))))
-  = Right (Torque t)
-validateTorque err = Left $ LogicControlFailure $ "Torque isn't correct: " <> show err
-
-calculateAngularImpulse
-  :: SpaceshipProperties
-  -> Torque
-  -> TimeInterval
-  -> AngularImpulse
-calculateAngularImpulse _ _ _ = AngularImpulse 0
-
-
-getAngularImpulse
-  :: Controller
-  -> ComponentIndex
-  -> SpaceshipProperties
-  -> TimeInterval
-  -> LogicControl (Either LogicControlFailure AngularImpulse)
-getAngularImpulse ctrl idx shipProps interval = do
-  eMbTorqueProp <- getProperty ctrl "torque" [ComponentIndexParam idx]
-  pure $ case validateTorque eMbTorqueProp of
-    Left err -> Left err
-    Right torque -> Right $ calculateAngularImpulse shipProps torque interval
+spaceshipRotation :: LogicControl (Either String ())
+spaceshipRotation = do
+  let shipProps = Test.SpaceshipProperties (Kilogram 100000.0)
+  mainEngineCtrl <- L.evalHdl Test.createMainEngine
+  thrusterCtrl   <- L.evalHdl Test.createRotaryThruster
+  let shipModel1 = Test.SpaceshipModel shipProps mainEngineCtrl thrusterCtrl
+  shipModel2 <- Test.performRotation shipModel1 (Radian 100.0)
+  pure $ Right ()
 
 
 spec :: Spec
 spec =
   describe "Scripts tests" $ do
-    describe "Calculate impulse script" $ do
+    describe "Spaceship rotation script" $ do
 
-      it "No torque providing component found" $ do
+      it "Missing vendor components" $ do
         runtime <- RImpl.createHardwareRuntime aaaHardwareService
-
-        let script = do
-              ctrl <- evalHdl $
-                setupController lBooster lBoosterController aaaController86Passport
-              let shipProps = SpaceshipProperties (Kilogram 100000)
-              let interval = Seconds 10
-              getAngularImpulse ctrl (ComponentIndex "1") shipProps interval
-
-        eResult <- LCImpl.runLogicControl runtime script
+        eResult <- LCImpl.runLogicControl runtime spaceshipRotation
         case eResult of
           Left e -> pure ()
           Right _ -> fail "Unexpected success"
