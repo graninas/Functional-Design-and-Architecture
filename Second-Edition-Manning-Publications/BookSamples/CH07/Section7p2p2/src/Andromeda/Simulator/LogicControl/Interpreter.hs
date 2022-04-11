@@ -44,5 +44,5 @@ runLogicControl
   :: SimulatorRuntime
   -> L.LogicControl a
   -> IO a
-runLogicControl runtime lControl =
+runLogicControl runtime (L.LogicControl lControl) =
   foldFree (interpretLogicControlMethod runtime) lControl

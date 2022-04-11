@@ -41,5 +41,5 @@ runLogicControl
   :: RImpl.HardwareRuntime
   -> L.LogicControl a
   -> IO a
-runLogicControl hardwareRuntime lControl =
+runLogicControl hardwareRuntime (L.LogicControl lControl) =
   foldFree (interpretLogicControlMethod hardwareRuntime) lControl

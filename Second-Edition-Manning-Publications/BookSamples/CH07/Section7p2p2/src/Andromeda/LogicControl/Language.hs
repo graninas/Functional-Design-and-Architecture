@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Andromeda.LogicControl.Language where
 
@@ -27,21 +28,21 @@ instance Functor LogicControlMethod where
   fmap f (Store key value next) = Store key value (f . next)
 
 
-type LogicControl a = Free LogicControlMethod a
-
+newtype LogicControl a = LogicControl (Free LogicControlMethod a)
+  deriving (Functor, Applicative, Monad)
 
 
 evalHdl :: L.Hdl a -> LogicControl a
-evalHdl hdl = liftF $ EvalHdl hdl id
+evalHdl hdl = LogicControl $ liftF $ EvalHdl hdl id
 
 evalDeviceControl :: DC.DeviceControlMethod a -> LogicControl a
-evalDeviceControl dc = liftF $ EvalDeviceControlMethod dc id
+evalDeviceControl dc = LogicControl $ liftF $ EvalDeviceControlMethod dc id
 
 report :: Message -> LogicControl ()
-report msg = liftF $ Report msg id
+report msg = LogicControl $ liftF $ Report msg id
 
 store :: Key -> Value -> LogicControl ()
-store key value = liftF $ Store key value id
+store key value = LogicControl $ liftF $ Store key value id
 
 
 

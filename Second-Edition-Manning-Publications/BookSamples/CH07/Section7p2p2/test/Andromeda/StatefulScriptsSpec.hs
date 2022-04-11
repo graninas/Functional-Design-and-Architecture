@@ -1,4 +1,4 @@
-module Andromeda.ScriptsSpec where
+module Andromeda.StatefulScriptsSpec where
 
 import Test.Hspec
 
@@ -22,6 +22,8 @@ import qualified Andromeda.LogicControl.Language as L
 import qualified Andromeda.TestData.Scripts as Test
 
 import Control.Exception
+import Control.Monad.State (StateT, put, get, execStateT, lift)
+
 
 
 data SpaceshipProperties = SpaceshipProperties
@@ -34,8 +36,11 @@ data SpaceshipModel = SpaceshipModel
   , smRotationThruster :: Controller
   }
 
-
 type Burn = Command
+
+type X a = StateT Int IO a
+
+type ShipControl a = StateT SpaceshipModel LogicControl a
 
 
 -- Unsafe function. Yes, I know
@@ -50,23 +55,14 @@ validateTorque (Left err) = error $ show err
 calcAngularImpulse
   :: Mass
   -> Torque
-  -> LogicControl AngularImpulse
-calcAngularImpulse _ _ = pure $ AngularImpulse 0
+  -> AngularImpulse
+calcAngularImpulse _ _ = AngularImpulse 0
 
-recalcMass :: Mass -> AngularImpulse -> LogicControl Mass
-recalcMass shipMass impulse = pure shipMass    -- Dummy
-
-getThrusterAngularImpulse
-  :: Controller
-  -> Mass
-  -> LogicControl AngularImpulse
-getThrusterAngularImpulse ctrl mass = do
-  eMbTorqueProp <- L.getProperty ctrl "torque" []
-  torque <- validateTorque eMbTorqueProp
-  calcAngularImpulse mass torque
+recalcMass :: Mass -> AngularImpulse -> Mass
+recalcMass shipMass impulse = shipMass    -- Dummy
 
 
-performBurn :: Controller -> Burn -> LogicControl ()
+performBurn :: Controller -> Burn -> ShipControl ()
 performBurn _ _ = pure () -- dummy
 
 wait :: Int -> LogicControl ()
@@ -76,40 +72,43 @@ calcBurn
   :: AngularImpulse
   -> AngularImpulse
   -> Angle
-  -> LogicControl (Burn, Burn, Int)
-calcBurn _ _ _ = pure (undefined, undefined, 0) -- dummy
+  -> (Burn, Burn, Int)
+calcBurn _ _ _ = (undefined, undefined, 0) -- dummy
 
-performRotation
-  :: SpaceshipModel
-  -> Angle
-  -> LogicControl SpaceshipModel
-performRotation model angle = do
+
+
+performRotation :: Angle -> ShipControl ()
+performRotation angle = do
+
+  model :: SpaceshipModel <- get
+
   let thrusterCtrl = smRotationThruster model
   let shipMass1 = spMass $ smSpaceshipProperties model
 
-  impulse1  <- getThrusterAngularImpulse thrusterCtrl shipMass1
-  shipMass2 <- recalcMass shipMass1 impulse1
-  impulse2  <- getThrusterAngularImpulse thrusterCtrl shipMass2
-  shipMass3 <- recalcMass shipMass2 impulse2
+  eMbTorqueProp <- lift (getProperty thrusterCtrl "torque" [])
+  torque        <- lift (validateTorque eMbTorqueProp)
 
-  (burnStart, burnStop, time) <- calcBurn impulse1 impulse2 angle
+  let impulse1  = calcAngularImpulse shipMass1 torque
+  let shipMass2 = recalcMass shipMass1 impulse1
+  let impulse2  = calcAngularImpulse shipMass1 torque
+  let shipMass3 = recalcMass shipMass2 impulse2
+  let (burnStart, burnStop, time) = calcBurn impulse1 impulse2 angle
 
-  performBurn thrusterCtrl burnStart
-  wait time
-  performBurn thrusterCtrl burnStop
-
-  pure $ model { smSpaceshipProperties = SpaceshipProperties shipMass3 }
+  performBurn thrusterCtrl burnStart            -- mass changes
+  lift $ wait time
+  performBurn thrusterCtrl burnStop             -- mass changes
 
 
 
-spaceshipRotation :: LogicControl (Either String ())
+
+spaceshipRotation :: LogicControl SpaceshipModel
 spaceshipRotation = do
-  let shipProps = SpaceshipProperties (Kilogram 100000.0)
   mainEngineCtrl <- L.evalHdl Test.createMainEngine
   thrusterCtrl   <- L.evalHdl Test.createRotaryThruster
+  let shipProps  = SpaceshipProperties (Kilogram 100000.0)
   let shipModel1 = SpaceshipModel shipProps mainEngineCtrl thrusterCtrl
-  shipModel2 <- performRotation shipModel1 (Radian 100.0)
-  pure $ Right ()
+  shipModel2 <- execStateT (performRotation (Radian 100.0)) shipModel1
+  pure shipModel2
 
 
 
