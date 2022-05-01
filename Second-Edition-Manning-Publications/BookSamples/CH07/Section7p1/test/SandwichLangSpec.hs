@@ -86,6 +86,6 @@ spec :: Spec
 spec =
   describe "Sandwich machine eDSL tests" $ do
 
-    it "Simple sandwich scenario" $ do
+    xit "Simple sandwich scenario" $ do
       let m = mySandwich
       1 `shouldBe` 1

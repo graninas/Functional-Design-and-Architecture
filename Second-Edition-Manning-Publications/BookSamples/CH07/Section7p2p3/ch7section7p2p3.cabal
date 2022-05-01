@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c37a416693f3caa0ac29d041c2be8ffd27abaa8520d2a8d7e6f5a58902dcb6c
+-- hash: 22d4c5309163af8faca840ff1ecf485d38d3689d4c697f592f6185a6f6d453cb
 
-name:           ch6section7p1
+name:           ch7section7p2p3
 version:        1.0.0.0
 author:         Alexander Granin
 maintainer:     graninas@gmail.com
@@ -17,11 +17,8 @@ build-type:     Simple
 library
   exposed-modules:
       Main
-      Sandwich.ImpureInterpreter
-      Sandwich.Language
-      Sandwich.PureInterpreter
   other-modules:
-      Paths_ch6section7p1
+      Paths_ch7section7p2p3
   hs-source-dirs:
       src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -44,13 +41,10 @@ library
     , void
   default-language: Haskell2010
 
-executable ch6section7p1
+executable ch7section7p2p3
   main-is: Main.hs
   other-modules:
-      Sandwich.ImpureInterpreter
-      Sandwich.Language
-      Sandwich.PureInterpreter
-      Paths_ch6section7p1
+      Paths_ch7section7p2p3
   hs-source-dirs:
       ./src
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -77,8 +71,8 @@ test-suite functional
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      SandwichLangSpec
-      Paths_ch6section7p1
+      BrainfuckSpec
+      Paths_ch7section7p2p3
   hs-source-dirs:
       test/
   default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
@@ -86,7 +80,7 @@ test-suite functional
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , ch6section7p1
+    , ch7section7p2p3
     , containers
     , free
     , hspec
