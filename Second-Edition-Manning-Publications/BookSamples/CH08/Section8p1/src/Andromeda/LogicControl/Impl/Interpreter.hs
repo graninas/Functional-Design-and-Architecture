@@ -34,7 +34,8 @@ interpretLogicControlMethod hardwareRuntime
   (L.Store key value next) = do
     pure $ next ()
 
-
+interpretLogicControlMethod hardwareRuntime
+  (L.Load key next) = error "Load not implemented"
 
 
 runLogicControl

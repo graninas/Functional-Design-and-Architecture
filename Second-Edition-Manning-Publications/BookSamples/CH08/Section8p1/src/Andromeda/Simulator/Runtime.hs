@@ -2,6 +2,8 @@ module Andromeda.Simulator.Runtime where
 
 import qualified Andromeda.Hardware.Common as T
 import qualified Andromeda.Hardware.Domain as T
+import qualified Andromeda.LogicControl.Domain as T
+import qualified Andromeda.Common as T
 
 import Andromeda.Simulator.Hardware.Device
 
@@ -16,6 +18,7 @@ data SimulatorRuntime = SimulatorRuntime
   , simRtMessagesVar       :: MVar [String]
   , simRtErrorsVar         :: MVar [String]
   , simSimulationsVar      :: MVar [ThreadId]
+  , simKeyValueDBVar       :: MVar (Map.Map T.Key T.Value)
   }
 
 
@@ -25,7 +28,8 @@ createSimulatorRuntime = do
   msgsVar <- newMVar []
   errsVar <- newMVar []
   detachedSimsVar <- newMVar []
-  pure $ SimulatorRuntime simsVar msgsVar errsVar detachedSimsVar
+  keyValueDBVar <- newMVar Map.empty
+  pure $ SimulatorRuntime simsVar msgsVar errsVar detachedSimsVar keyValueDBVar
 
 
 reportError :: SimulatorRuntime -> String -> IO ()

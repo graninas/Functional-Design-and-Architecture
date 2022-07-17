@@ -33,9 +33,16 @@ interpretLogicControlMethod runtime (L.Report msg next) = do
   putMVar simRtMessagesVar msgs'
   pure $ next ()
 
-interpretLogicControlMethod runtime
-  (L.Store key value next) = do
-    pure $ next ()
+interpretLogicControlMethod runtime (L.Store key value next) = do
+  let SimulatorRuntime{simKeyValueDBVar} = runtime
+  kvDB <- takeMVar simKeyValueDBVar
+  putMVar simKeyValueDBVar $ Map.insert key value kvDB
+  pure $ next ()
+
+interpretLogicControlMethod runtime (L.Load key next) = do
+  let SimulatorRuntime{simKeyValueDBVar} = runtime
+  kvDB <- readMVar simKeyValueDBVar
+  pure $ next $ Map.lookup key kvDB
 
 
 

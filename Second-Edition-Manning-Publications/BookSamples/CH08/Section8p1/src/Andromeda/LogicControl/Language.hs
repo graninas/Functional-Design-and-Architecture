@@ -19,6 +19,7 @@ data LogicControlMethod next
   | forall a. EvalDeviceControlMethod (DC.DeviceControlMethod a) (a -> next)
   | Report Message (() -> next)
   | Store Key Value (() -> next)
+  | Load Key (Maybe Value -> next)
 
 
 instance Functor LogicControlMethod where
@@ -26,6 +27,7 @@ instance Functor LogicControlMethod where
   fmap f (EvalDeviceControlMethod dc next) = EvalDeviceControlMethod dc (f . next)
   fmap f (Report msg next) = Report msg (f . next)
   fmap f (Store key value next) = Store key value (f . next)
+  fmap f (Load key next) = Load key (f . next)
 
 
 newtype LogicControl a = LogicControl (Free LogicControlMethod a)
@@ -43,6 +45,9 @@ report msg = LogicControl $ liftF $ Report msg id
 
 store :: Key -> Value -> LogicControl ()
 store key value = LogicControl $ liftF $ Store key value id
+
+load :: Key -> LogicControl (Maybe Value)
+load key = LogicControl $ liftF $ Load key id
 
 
 
