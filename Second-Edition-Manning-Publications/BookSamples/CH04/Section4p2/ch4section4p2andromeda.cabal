@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.35.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3b1f76d25fa98cf3a4eb04ffd8490c7d293b6f5ed2b28ff4d4ebeea819aefe54
+-- hash: acd1a5cf4c1f1b2d7bf18dc9215af0da4cb87763aa1055f19e455d6952bcd4be
 
 name:           ch4section4p2andromeda
 version:        1.0.0.0
@@ -53,7 +53,19 @@ library
       Paths_ch4section4p2andromeda
   hs-source-dirs:
       src
-  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  default-extensions:
+      DeriveFunctor
+      DeriveGeneric
+      OverloadedStrings
+      LambdaCase
+      MultiParamTypeClasses
+      ScopedTypeVariables
+      ExplicitNamespaces
+      NamedFieldPuns
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      RecordWildCards
   ghc-options: -Wall
   build-depends:
       base >=4.7 && <5
@@ -111,7 +123,19 @@ executable ch4section4p2andromeda
       Paths_ch4section4p2andromeda
   hs-source-dirs:
       ./src
-  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  default-extensions:
+      DeriveFunctor
+      DeriveGeneric
+      OverloadedStrings
+      LambdaCase
+      MultiParamTypeClasses
+      ScopedTypeVariables
+      ExplicitNamespaces
+      NamedFieldPuns
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      RecordWildCards
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
       base >=4.7 && <5
@@ -141,7 +165,19 @@ test-suite functional
       Paths_ch4section4p2andromeda
   hs-source-dirs:
       test/
-  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  default-extensions:
+      DeriveFunctor
+      DeriveGeneric
+      OverloadedStrings
+      LambdaCase
+      MultiParamTypeClasses
+      ScopedTypeVariables
+      ExplicitNamespaces
+      NamedFieldPuns
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      RecordWildCards
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5

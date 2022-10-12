@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.35.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7f0b7141cca1c9bd1a01adf85e2e6d799d4ad4a0dddd3a44addac839e8406f54
+-- hash: b1a08886d02568a8ea8bcde1d2bf2e62858d76cbc2ca73749dd78bb5b0f028ef
 
 name:           ch3section3p2andromeda
 version:        1.0.0.0
@@ -39,7 +39,19 @@ executable ch3section3p2andromeda
       Paths_ch3section3p2andromeda
   hs-source-dirs:
       ./
-  default-extensions: DeriveFunctor DeriveGeneric OverloadedStrings LambdaCase MultiParamTypeClasses ScopedTypeVariables ExplicitNamespaces NamedFieldPuns TupleSections ViewPatterns MultiWayIf RecordWildCards
+  default-extensions:
+      DeriveFunctor
+      DeriveGeneric
+      OverloadedStrings
+      LambdaCase
+      MultiParamTypeClasses
+      ScopedTypeVariables
+      ExplicitNamespaces
+      NamedFieldPuns
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      RecordWildCards
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
       base >=4.7 && <5
