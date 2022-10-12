@@ -4,30 +4,22 @@ import qualified Data.Text.IO as T
 import Control.Monad.Free.Church
 import Control.Monad
 
+import Framework.Logger.Types
 import Framework.Logger.Language
 
 
-
-data FileLoggerRuntime = FileLoggerRuntime
-  { logFile :: String
-  , logLevel :: LogLevel
-  }
-
-
 interpretLoggerMethod
-  :: FileLoggerRuntime
+  :: FilePath
   -> LoggerF a
   -> IO a
-interpretLoggerMethod loggerRt (LogMessage _ msg next) = do
-  T.appendFile (logFile loggerRt) msg
+interpretLoggerMethod logFile (LogMessage _ msg next) = do
+  T.appendFile logFile msg
   pure $ next ()
 
-
-
-
 runLogger
-  :: FileLoggerRuntime
+  :: FilePath
   -> LoggerL a
   -> IO a
-runLogger loggerRt logAction =
-  foldF (interpretLoggerMethod loggerRt) logAction
+runLogger logFile logAction =
+  foldF (interpretLoggerMethod logFile) logAction
+

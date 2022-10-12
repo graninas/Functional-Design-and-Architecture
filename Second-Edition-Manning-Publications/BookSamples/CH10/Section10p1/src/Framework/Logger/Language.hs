@@ -4,11 +4,8 @@ module Framework.Logger.Language where
 import Data.Text
 import Control.Monad.Free.Church
 
+import Framework.Logger.Types
 
-data LogLevel = Debug | Info | Warning | Error
-  deriving (Show, Eq, Ord)
-
-type Message = Text
 
 data LoggerF next where
   LogMessage

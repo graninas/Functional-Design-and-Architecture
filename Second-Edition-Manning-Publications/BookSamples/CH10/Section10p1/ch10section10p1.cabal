@@ -14,10 +14,13 @@ build-type:     Simple
 
 library
   exposed-modules:
+      Framework.Logger.Config
       Framework.Logger.Impl.ConsoleLogger1
       Framework.Logger.Impl.ConsoleLogger2
       Framework.Logger.Impl.FileLogger
       Framework.Logger.Language
+      Framework.Logger.Runtime
+      Framework.Logger.Types
       Main
   other-modules:
       Paths_ch10section10p1
@@ -38,7 +41,8 @@ library
       RecordWildCards
   ghc-options: -Wall
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , containers
     , free
@@ -58,10 +62,13 @@ library
 executable ch10section10p1
   main-is: Main.hs
   other-modules:
+      Framework.Logger.Config
       Framework.Logger.Impl.ConsoleLogger1
       Framework.Logger.Impl.ConsoleLogger2
       Framework.Logger.Impl.FileLogger
       Framework.Logger.Language
+      Framework.Logger.Runtime
+      Framework.Logger.Types
       Paths_ch10section10p1
   hs-source-dirs:
       ./src
@@ -80,7 +87,8 @@ executable ch10section10p1
       RecordWildCards
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , containers
     , free
@@ -120,7 +128,8 @@ test-suite functional
       RecordWildCards
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , ch10section10p1
     , containers

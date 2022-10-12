@@ -5,6 +5,7 @@ import qualified Data.Text as T
 import Control.Monad.Free.Church
 import Control.Monad
 
+import Framework.Logger.Types
 import Framework.Logger.Language
 
 
