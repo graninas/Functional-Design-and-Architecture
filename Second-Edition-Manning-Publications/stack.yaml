@@ -22,3 +22,7 @@ packages:
 - BookSamples/CH08/Section8p1p3
 - BookSamples/CH09/Section9
 - BookSamples/CH10/Section10p1
+
+
+extra-deps:
+- raven-haskell-0.1.4.0@sha256:64eca8650d140fc853a951af0cf4e2ce255b90491b9e3014d82be2e79593c43a,1251

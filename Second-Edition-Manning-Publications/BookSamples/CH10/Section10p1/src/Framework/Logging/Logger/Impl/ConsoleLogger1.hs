@@ -1,12 +1,12 @@
-module Framework.Logger.Impl.ConsoleLogger1 where
+module Framework.Logging.Logger.Impl.ConsoleLogger1 where
 
 import qualified Data.Text.IO as T
 import qualified Data.Text as T
 import Control.Monad.Free.Church
 import Control.Monad
 
-import Framework.Logger.Types
-import Framework.Logger.Language
+import Framework.Logging.Types
+import Framework.Logging.Logger.Language
 
 
 interpretLoggerMethod

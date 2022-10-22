@@ -27,6 +27,7 @@ dependencies:
 - time
 - scientific
 - containers
+- unordered-containers
 - free
 - transformers
 - template-haskell
@@ -36,6 +37,7 @@ dependencies:
 - void
 - random
 - lens
+- raven-haskell
 
 library:
   source-dirs:

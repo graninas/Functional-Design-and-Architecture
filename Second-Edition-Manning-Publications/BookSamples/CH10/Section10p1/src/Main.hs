@@ -5,13 +5,12 @@ import Data.Text
 import System.IO.Unsafe (unsafePerformIO)
 import Control.Exception (bracket)
 
-import qualified Framework.Logger.Types as Log
-import qualified Framework.Logger.Language as Log
-import qualified Framework.Logger.Config as Cfg
-import qualified Framework.Logger.Impl.ConsoleLogger1 as Log1
-import qualified Framework.Logger.Impl.ConsoleLogger2 as Log2
-
-import qualified Framework.Logger.Runtime as R
+import qualified Framework.Logging.Types as Log
+import qualified Framework.Logging.Logger.Language as Log
+import qualified Framework.Logging.Logger.Config as Cfg
+import qualified Framework.Logging.Logger.Impl.ConsoleLogger1 as Log1
+import qualified Framework.Logging.Logger.Impl.ConsoleLogger2 as Log2
+import qualified Framework.Logging.Logger.Runtime as R
 
 
 {-# NOINLINE staticLoggerRef #-}

@@ -14,13 +14,18 @@ build-type:     Simple
 
 library
   exposed-modules:
-      Framework.Logger.Config
-      Framework.Logger.Impl.ConsoleLogger1
-      Framework.Logger.Impl.ConsoleLogger2
-      Framework.Logger.Impl.FileLogger
-      Framework.Logger.Language
-      Framework.Logger.Runtime
-      Framework.Logger.Types
+      Framework.Logging.Logger.Config
+      Framework.Logging.Logger.Impl.ConsoleLogger1
+      Framework.Logging.Logger.Impl.ConsoleLogger2
+      Framework.Logging.Logger.Impl.FileLogger
+      Framework.Logging.Logger.Language
+      Framework.Logging.Logger.Runtime
+      Framework.Logging.StructuredLogger.Config
+      Framework.Logging.StructuredLogger.Fields
+      Framework.Logging.StructuredLogger.Impl.Sentry
+      Framework.Logging.StructuredLogger.Language
+      Framework.Logging.StructuredLogger.Runtime
+      Framework.Logging.Types
       Main
   other-modules:
       Paths_ch10section10p1
@@ -50,11 +55,13 @@ library
     , mtl
     , newtype-generics
     , random
+    , raven-haskell
     , scientific
     , template-haskell
     , text
     , time
     , transformers
+    , unordered-containers
     , uuid
     , void
   default-language: Haskell2010
@@ -62,13 +69,18 @@ library
 executable ch10section10p1
   main-is: Main.hs
   other-modules:
-      Framework.Logger.Config
-      Framework.Logger.Impl.ConsoleLogger1
-      Framework.Logger.Impl.ConsoleLogger2
-      Framework.Logger.Impl.FileLogger
-      Framework.Logger.Language
-      Framework.Logger.Runtime
-      Framework.Logger.Types
+      Framework.Logging.Logger.Config
+      Framework.Logging.Logger.Impl.ConsoleLogger1
+      Framework.Logging.Logger.Impl.ConsoleLogger2
+      Framework.Logging.Logger.Impl.FileLogger
+      Framework.Logging.Logger.Language
+      Framework.Logging.Logger.Runtime
+      Framework.Logging.StructuredLogger.Config
+      Framework.Logging.StructuredLogger.Fields
+      Framework.Logging.StructuredLogger.Impl.Sentry
+      Framework.Logging.StructuredLogger.Language
+      Framework.Logging.StructuredLogger.Runtime
+      Framework.Logging.Types
       Paths_ch10section10p1
   hs-source-dirs:
       ./src
@@ -96,11 +108,13 @@ executable ch10section10p1
     , mtl
     , newtype-generics
     , random
+    , raven-haskell
     , scientific
     , template-haskell
     , text
     , time
     , transformers
+    , unordered-containers
     , uuid
     , void
   default-language: Haskell2010
@@ -139,11 +153,13 @@ test-suite functional
     , mtl
     , newtype-generics
     , random
+    , raven-haskell
     , scientific
     , template-haskell
     , text
     , time
     , transformers
+    , unordered-containers
     , uuid
     , void
   default-language: Haskell2010

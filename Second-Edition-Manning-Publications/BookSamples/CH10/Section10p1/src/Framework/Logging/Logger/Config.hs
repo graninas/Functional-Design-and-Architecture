@@ -1,12 +1,12 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE DeriveAnyClass #-}
-module Framework.Logger.Config where
+module Framework.Logging.Logger.Config where
 
 import Data.Aeson
 import GHC.Generics
 
 
-import Framework.Logger.Types
+import Framework.Logging.Types
 
 
 data LoggerConfig = LoggerConfig

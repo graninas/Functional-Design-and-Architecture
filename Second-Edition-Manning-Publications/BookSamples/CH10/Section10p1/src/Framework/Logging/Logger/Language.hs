@@ -1,18 +1,21 @@
 {-# LANGUAGE GADTs #-}
-module Framework.Logger.Language where
+module Framework.Logging.Logger.Language where
 
 import Data.Text
 import Control.Monad.Free.Church
 
-import Framework.Logger.Types
+import Framework.Logging.Types
 
 
+-- | Logger interface
 data LoggerF next where
+  -- | Logging method.
   LogMessage
     :: LogLevel
     -> Message
     -> (() -> next)
     -> LoggerF next
+
 
 type LoggerL = F LoggerF
 
@@ -21,3 +24,4 @@ instance Functor LoggerF where
 
 logMessage :: LogLevel -> Message -> LoggerL ()
 logMessage level msg = liftF (LogMessage level msg id)
+

@@ -1,14 +1,14 @@
-module Framework.Logger.Runtime where
+module Framework.Logging.Logger.Runtime where
 
 import qualified Data.Text.IO as T
 import Control.Monad.Free.Church
 import Control.Monad
 
-import Framework.Logger.Types
-import qualified Framework.Logger.Config as Cfg
-import Framework.Logger.Language
-import qualified Framework.Logger.Impl.ConsoleLogger1 as CLog1
-import qualified Framework.Logger.Impl.FileLogger as FLog
+import Framework.Logging.Types
+import qualified Framework.Logging.Logger.Config as Cfg
+import Framework.Logging.Logger.Language
+import qualified Framework.Logging.Logger.Impl.ConsoleLogger1 as CLog1
+import qualified Framework.Logging.Logger.Impl.FileLogger as FLog
 
 
 -- A very simple approach to logger implementation.
