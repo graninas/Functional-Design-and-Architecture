@@ -15,9 +15,11 @@ type Message = Text
 
 type LoggerName = Text
 type Severity = LogLevel
-type AttributeKey = Text
-type AttributeValue = Text
-data Attribute = Attribute AttributeKey AttributeValue
-  deriving (Show, Eq, Ord)
-
+type FieldKey = Text
+type FieldValue = Text
+type Field = (FieldKey, FieldValue)
 type Timestamp = UTCTime
+
+
+field  :: FieldKey -> FieldValue -> Field
+field k v = (k, v)

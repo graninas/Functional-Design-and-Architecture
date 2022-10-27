@@ -2,6 +2,7 @@
 module Framework.Logging.StructuredLogger.Language where
 
 import Data.Text
+import qualified Data.Map as Map
 import Control.Monad.Free.Church
 
 import Framework.Logging.Types
@@ -10,11 +11,11 @@ import Framework.Logging.Types
 -- | Structured logger interface
 data StructuredLoggerF next where
   -- | Structured logging method to report specific messages to services like Sentry.
-  Report
+  LogStructured
     :: Severity
     -> LoggerName
     -> Message
-    -> [Attribute]
+    -> Map.Map FieldKey FieldValue
     -> (() -> next)
     -> StructuredLoggerF next
 
@@ -22,12 +23,13 @@ data StructuredLoggerF next where
 type StructuredLoggerL = F StructuredLoggerF
 
 instance Functor StructuredLoggerF where
-  fmap f (Report sev name msg attrs next) = Report sev name msg attrs (f . next)
+  fmap f (LogStructured sev name msg attrs next) =
+    LogStructured sev name msg attrs (f . next)
 
-report
+logStructured
   :: Severity
   -> LoggerName
   -> Message
-  -> [Attribute]
+  -> Map.Map FieldKey FieldValue
   -> StructuredLoggerL ()
-report sev name msg attrs = liftF (Report sev name msg attrs id)
+logStructured sev name msg attrs = liftF (LogStructured sev name msg attrs id)

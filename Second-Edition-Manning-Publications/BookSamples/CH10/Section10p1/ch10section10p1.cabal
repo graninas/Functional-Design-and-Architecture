@@ -21,7 +21,7 @@ library
       Framework.Logging.Logger.Language
       Framework.Logging.Logger.Runtime
       Framework.Logging.StructuredLogger.Config
-      Framework.Logging.StructuredLogger.Fields
+      Framework.Logging.StructuredLogger.Fields.Sentry
       Framework.Logging.StructuredLogger.Impl.Sentry
       Framework.Logging.StructuredLogger.Language
       Framework.Logging.StructuredLogger.Runtime
@@ -76,7 +76,7 @@ executable ch10section10p1
       Framework.Logging.Logger.Language
       Framework.Logging.Logger.Runtime
       Framework.Logging.StructuredLogger.Config
-      Framework.Logging.StructuredLogger.Fields
+      Framework.Logging.StructuredLogger.Fields.Sentry
       Framework.Logging.StructuredLogger.Impl.Sentry
       Framework.Logging.StructuredLogger.Language
       Framework.Logging.StructuredLogger.Runtime
@@ -124,6 +124,7 @@ test-suite functional
   main-is: Spec.hs
   other-modules:
       BracketSpec
+      StructuredLoggingSpec
       Paths_ch10section10p1
   hs-source-dirs:
       test/
