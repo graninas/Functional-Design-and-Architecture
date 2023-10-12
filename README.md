@@ -2,7 +2,7 @@
 
 Code and materials for my book ["Functional Design and Architecture" (1st and 2nd editions)](https://graninas.com/functional-design-and-architecture-book).
 
-- [Functional Design and Architecture (First Edition)](https://leanpub.com/functional-design-and-architecture)
+- [Functional Design and Architecture (First Edition, self-published)](https://leanpub.com/functional-design-and-architecture)
 - [Functional Design and Architecture (Second Edition with Manning Publications, full MEAP is available)](https://www.manning.com/books/functional-design-and-architecture)
 
 <p float="left">
