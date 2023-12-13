@@ -60,7 +60,7 @@ N.B. The project is quite outdated. Haskell has changed a lot since then. I'm wo
 
 ### The Hydra project
 
-The [Hydra](https://github.com/graninas/Hydra) project is the second project created for the book. It's a framework similar to the Node framework for building multithreaded and concurrent applications in Haskell using the approaches and patterns from the book. It's interesting that the project has three different engines: Final Tagless, Free Monad, and Church Encoded Free Monad, - and you can see the differences between these approaches by checking the different implementations of the same application.
+The [Hydra](https://github.com/graninas/Hydra) project is the second project created for the book. It's an application framework for building multithreaded and concurrent applications in Haskell using the approaches and patterns from the book. The project has three different engines: Final Tagless, Free Monad, and Church Encoded Free Monad, - and you can see the differences between these approaches by checking the different implementations of the same application.
 
 # Real-world applications of the ideas from the book
 
