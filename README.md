@@ -1,7 +1,8 @@
 # Functional Design and Architecture
 
-Code and materials for my book ["Functional Design and Architecture" (1st and 2nd editions)](https://graninas.com/functional-design-and-architecture-book).
+It is a fundamental book about Software Design in statically typed functional languages, such as Haskell, F#, OCaml, PureScript, Elm, Scala. The main idea of this book is to provide a comprehensive source of knowledge, and a complete methodology for building real-world applications with functional ideas and patterns.
 
+- [Info page about both editions](https://graninas.com/functional-design-and-architecture-book)
 - [Functional Design and Architecture (First Edition, self-published)](https://leanpub.com/functional-design-and-architecture)
 - [Functional Design and Architecture (Second Edition with Manning Publications)](https://www.manning.com/books/functional-design-and-architecture)
 
@@ -12,9 +13,8 @@ Code and materials for my book ["Functional Design and Architecture" (1st and 2n
     <img src="https://github.com/graninas/functional-declarative-design-methodology/blob/9942840a5cb11c8844afa452a579031548d16225/images/FDaA_FE_cover.png" width="200"></a>
 </p>
 
-### What this book is about?
+### Topics
 
-The book focuses on these topics:
 * Functional architectures
 * Functional design patterns and functional idioms
 * Accidental and essential complexity of FP programs
