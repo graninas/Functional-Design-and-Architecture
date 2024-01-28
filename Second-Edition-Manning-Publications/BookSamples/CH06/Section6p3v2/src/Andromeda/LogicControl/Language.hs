@@ -30,7 +30,6 @@ instance Functor LogicControlMethod where
 type LogicControl a = Free LogicControlMethod a
 
 
-
 evalHdl :: L.Hdl a -> LogicControl a
 evalHdl hdl = liftF $ EvalHdl hdl id
 
