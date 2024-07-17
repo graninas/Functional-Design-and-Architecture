@@ -3,8 +3,8 @@
 It is a fundamental book about Software Design in statically typed functional languages, such as Haskell, F#, OCaml, PureScript, Elm, Scala. The main idea of this book is to provide a comprehensive source of knowledge, and a complete methodology for building real-world applications with functional ideas and patterns.
 
 - [Info page about both editions](https://graninas.com/functional-design-and-architecture-book)
-- [Functional Design and Architecture (First Edition, self-published)](https://leanpub.com/functional-design-and-architecture)
-- [Functional Design and Architecture (Second Edition with Manning Publications)](https://www.manning.com/books/functional-design-and-architecture)
+- [Functional Design and Architecture (first writing, self-published)](https://leanpub.com/functional-design-and-architecture)
+- [Functional Design and Architecture (Manning Publications)](https://www.manning.com/books/functional-design-and-architecture)
 
 <p float="left">
   <a href="https://www.manning.com/books/functional-design-and-architecture">
