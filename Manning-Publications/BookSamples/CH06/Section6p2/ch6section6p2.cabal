@@ -99,6 +99,7 @@ test-suite functional
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      CookingMachineExtSpec
       SandwichLangSpec
       Paths_ch6section6p2
   hs-source-dirs:
