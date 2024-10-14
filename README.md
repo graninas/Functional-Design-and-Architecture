@@ -8,7 +8,7 @@ It is a fundamental book about Software Design in statically typed functional la
 
 <p float="left">
   <a href="https://www.manning.com/books/functional-design-and-architecture">
-    <img src="https://github.com/graninas/functional-declarative-design-methodology/blob/5a994d49d2de738105601f6dc3572df4b5a197d2/images/FDaA_cover.png" width="200"></a>
+    <img src="https://github.com/graninas/Functional-Design-and-Architecture/blob/91ace7d9a3756d0472fa8b046eb345a176914a84/Manning-Publications/FDaA%20Manning%20cover.png" width="200"></a>
   <a href="https://leanpub.com/functional-design-and-architecture">
     <img src="https://github.com/graninas/functional-declarative-design-methodology/blob/9942840a5cb11c8844afa452a579031548d16225/images/FDaA_FE_cover.png" width="200"></a>
 </p>
