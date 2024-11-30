@@ -56,8 +56,6 @@ This is the first project created specially for the book. It demonstrates the id
 
 [Andromeda SCADA-like system](https://github.com/graninas/Andromeda)
 
-N.B. The project is quite outdated. Haskell has changed a lot since then. I'm working on its resurrection currently.
-
 ### The Hydra project
 
 The [Hydra](https://github.com/graninas/Hydra) project is the second project created for the book. It's an application framework for building multithreaded and concurrent applications in Haskell using the approaches and patterns from the book. The project has three different engines: Final Tagless, Free Monad, and Church Encoded Free Monad, - and you can see the differences between these approaches by checking the different implementations of the same application.
